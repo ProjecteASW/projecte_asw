@@ -1,0 +1,13 @@
+<div
+  tg-lb-create-edit=""
+  class="lightbox lightbox-generic-form lightbox-create-edit open"
+  style="display: flex;"
+><%= link_to project_issues_path(@project), class: "close" do %>
+    <tg-svg svg-icon="icon-close">
+      <svg>
+        <use xlink:href="#icon-close"></use>
+      </svg>
+    </tg-svg>
+  <% end %>
+  <%= render "issues/form" %>
+</div>

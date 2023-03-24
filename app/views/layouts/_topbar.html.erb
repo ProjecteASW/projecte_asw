@@ -1,0 +1,60 @@
+<div class="tg-navigation-bar">
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="" class="logo">
+        <svg>
+          <use xlink:href="#emptylogo-svg"></use></svg>
+      </a>
+      <a href="/projects" class="dropdown-project-list-projects">
+        <tg-svg class="icon-folder" svg-icon="icon-folder">
+          <svg class="icon icon-folder">
+            <use href="#icon-folder"></use>
+          </svg>
+        </tg-svg>
+        <span>Projects</span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <a href="discover">
+        <tg-svg class="icon-compass" svg-icon="icon-compass">
+          <svg class="icon icon-compass">
+            <use href="#icon-compass"></use>
+          </svg>
+        </tg-svg>
+      </a>
+      <div class="topnav-dropdown-wrapper nav-bar-support">
+        <a href="https://community.taiga.io/" target="_blank" class="">
+          <tg-svg class="icon-help-circle" svg-icon="icon-help-circle">
+            <svg class="icon icon-help-circle">
+              <use href="#icon-help-circle"></use>
+            </svg>
+          </tg-svg>
+        </a>
+        <div class="navbar-dropdown navigation-help">
+          <ul>
+            <li>
+              <a href="https://community.taiga.io/" target="_blank" class="secondary">
+                <tg-svg svg-icon="icon-resources">
+                  <svg class="icon icon-resources">
+                    <use href="#icon-resources"></use>
+                  </svg>
+                </tg-svg>
+                <span>Taiga Community</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="topnav-dropdown-wrapper">
+        <a ng-mouseover="visible=true" href="notifications">
+          <tg-svg svg-icon="icon-bell">
+            <svg class="icon icon-bell">
+              <use href="#icon-bell"></use>
+            </svg>
+          </tg-svg>
+        </a>
+      </div>
+      <%= render "layouts/dropdown_profile" %>
+    </div>
+  </nav>
+</div>

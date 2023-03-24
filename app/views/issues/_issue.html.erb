@@ -1,0 +1,31 @@
+<div class="row">
+  <div data-fieldname="issue_type" class="level-field">
+    <%= issue.issue_type %>
+  </div>
+  <div data-fieldname="severity" class="level-field">
+    <%= issue.severity %>
+  </div>
+  <div data-fieldname="priority" class="level-field">
+    <%= issue.priority %>
+  </div>
+  <div data-fieldname="ref" class="subject">
+    <%= link_to edit_project_issue_path(@project, issue) do %>
+      <div>
+        <%= issue.subject %>
+      </div>
+    <% end %>
+  </div>
+  <div data-fieldname="status" class="level-field">
+    <%= form_for issue, url: {action: "update", id: issue.id}, method: :put do |f| %>
+      <%= f.select :status, options_for_select(Issue.statuses.keys, issue.status) %>
+      <%= f.submit "Update" %>
+    <% end %>
+  </div>
+  <div data-fieldname="modified_date" class="level-field">
+    <%= issue.updated_at.strftime("%d %b %Y") %>
+  </div>
+  <div data-fieldname="modified_date" class="level-field">
+    <%= User.find(issue.user_id).username %>
+  </div>
+
+</div>

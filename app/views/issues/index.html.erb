@@ -1,0 +1,51 @@
+<% content_for :sidebar do %>
+  <%= render partial: "layouts/sidebar" %>
+<% end %>
+<section class="main issue-main">
+<div class="issue-top">
+      <header class="issue-header">
+        <header>
+          <h1 tg-main-title="" i18n-section-name="Issues"><span>Issues</span></h1>
+        </header>
+      <div class="taskboard-actions">
+        <div class="issue-table-options-start">
+
+          <%= render "issues/searchbar" %>
+          <div class="display-tags-button">
+            <input
+              id="show-tags-input"
+              name="accept"
+              class="check js-check"
+              ng-class="{'active': ctrl.showTags}"
+              type="checkbox"
+              value="1"
+            />
+            <label for="show-tags-input">tags</label>
+          </div>
+        </div>
+
+        <div tg-check-permission="add_issue" class="new-issue">
+          <%= button_to raw(
+            '<svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg> NEW ISSUE'
+          ),
+          new_project_issue_path(params[:project_id]),
+          method: "get",
+          class: "btn-small" %>
+
+        </div>
+      </div>
+      <div class="issue-container">
+        <section class="issues-page">
+          <section class="issues-table basic-table">
+            <%= render "table_header" %>
+            <% @issues.each do |issue| %>
+              <%= render partial: "issues/issue", locals: { issue: issue } %>
+            <% end %>
+          </section>
+        </section>
+      </div>
+
+    </div>
+  </body>
+</section>
+

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subject: MyString
+  description: MyText
+  issue_type: 
+  severity: MyString
+  priority: MyString
+  limitDate: 2023-03-17
+
+two:
+  subject: MyString
+  description: MyText
+  issue_type: 
+  severity: MyString
+  priority: MyString
+  limitDate: 2023-03-17

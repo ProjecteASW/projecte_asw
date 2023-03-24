@@ -1,0 +1,14 @@
+<tg-input-search q="ctrl.filterQ" change="ctrl.changeQ(q)"><input
+    type="search"
+    placeholder="subject or reference"
+    ng-model="$ctrl.searchText"
+    ng-change="$ctrl.onChange($ctrl.searchText)"
+    class="ng-pristine ng-valid ng-empty ng-touched"
+    aria-invalid="false"
+    style=""
+  >
+  <tg-svg svg-icon="icon-search">
+    <svg>
+      <use xlink:href="#icon-search"></use>
+    </svg>
+  </tg-svg></tg-input-search>

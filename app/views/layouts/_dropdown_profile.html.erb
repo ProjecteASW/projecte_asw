@@ -1,0 +1,62 @@
+<div tg-dropdown-user="tg-dropdown-user">
+  <div class="dropdown-user-inner">
+    <div class="dropdown-user-navbar"><a tg-nav="profile" title="Asier Escofet" class="user-avatar" href="/profile"><img
+          tg-avatar="vm.user"
+          alt="Asier Escofet"
+          src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png"
+          title="Asier Escofet"
+          style="background: rgb(183, 203, 131);"
+        ></a>
+      <button class="chevron">
+        <tg-svg svg-icon="icon-chevron-down"><svg class="icon icon-chevron-down" style="fill: ">
+            <use
+              xlink:href="#icon-chevron-down"
+              ng-attr-xlink:href="{{ '#' + svgIcon }}"
+              ng-attr-href="{{ '#' + svgIcon }}"
+              href="#icon-chevron-down"
+            >
+              <!----> <!---->
+            </use>
+          </svg></tg-svg>
+      </button>
+    </div>
+    <div class="navbar-dropdown dropdown-user">
+      <div class="dropdown-user-profile"><a tg-nav="profile" href="#" class="profile-link avatar"><img
+            tg-avatar="vm.user"
+            alt="Asier Escofet"
+            src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png"
+            title="Asier Escofet"
+            style="background: rgb(183, 203, 131);"
+          ></a>
+        <div class="dropdown-user-data"><a tg-nav="profile" href="profile" class="profile-link full-name"><%= current_user.username %></a>
+          <div class="profile-link email"><%= current_user.email %></div>
+          <p><a
+              href="users/edit"
+              tg-nav="user-settings-user-profile"
+              title="Edit profile"
+              translate="PROJECT.NAVIGATION.EDIT_PROFILE"
+              class="edit-profile"
+            >Edit profile</a></p>
+        </div>
+      </div>
+      <ul>
+        <li class="user-profile-option"><a
+            href="user-settings/user-change-password"
+            tg-nav="user-settings-user-change-password"
+            title="Account settings"
+            translate="PROJECT.NAVIGATION.ACCOUNT_SETTINGS"
+            class="secondary"
+          >Account settings</a></li>
+        <li class="user-profile-option"><a
+            href="user-settings/mail-notifications"
+            tg-nav="user-settings-mail-notifications"
+            title="Edit your notification settings"
+            translate="PROJECT.NAVIGATION.NOTIFICATIONS"
+            class="secondary"
+          >Notifications</a></li>
+        <li class="user-profile-option">
+          <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+        </li>
+      </ul>
+    </div>
+  </div></div>

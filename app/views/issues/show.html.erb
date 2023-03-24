@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @issue %>
+
+<div>
+  <%= link_to "Edit this issue", edit_project_issue_path(@project, @issue) %>
+  |
+  <%= link_to "Back to issues", project_issues_path(@project) %>
+
+  <%= button_to "Destroy this issue", [@project, @issue], method: :delete %>
+</div>

@@ -1,0 +1,40 @@
+<div ng-view="" class="master" style="">
+  <div class="wrapper">
+    <div class="auth">
+      <div class="auth-container">
+        <div class="logo-svg"><!--?xml version="1.0" encoding="UTF-8" standalone="no"?-->
+          <svg>
+            <use xlink:href="#logo-svg"></use></svg></div>
+
+        <h1 class="logo">NOT Taiga</h1>
+        <h2 translate="COMMON.TAG_LINE_2" class="tagline">LOVE YOUR PROJECT</h2>
+        <div tg-login="" class="login-form-container">
+          <!----><%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="field">
+              <%= f.label :email %><br/>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+            </div>
+
+            <div class="field">
+              <%= f.label :password %><br/>
+              <%= f.password_field :password, autocomplete: "current-password" %>
+            </div>
+
+            <% if devise_mapping.rememberable? %>
+              <div class="field">
+                <%= f.check_box :remember_me %>
+                <%= f.label :remember_me %>
+              </div>
+            <% end %>
+
+            <div class="actions">
+              <%= f.submit "Log in" %>
+            </div>
+          <% end %>
+
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
