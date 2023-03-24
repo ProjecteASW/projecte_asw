@@ -1,5 +1,13 @@
 # README
 
+
+Commits 
+• Add the related Taiga’s task id in each commit command: git commit–m “task #34: Login form updated”
+
+Branches 
+• Una branca per tasca (incloure l'id de la tasca en el nom de la branca) • Pull requests (no fer merges directament al main)
+
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
