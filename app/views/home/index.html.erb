@@ -21,17 +21,13 @@
 
       <div tg-login="" class="login-form-container">
         <div class="end">
-          <button class="btn-small full"><%= link_to "Log in", new_user_session_path %></button>
+          <%= button_to "Log in", new_user_session_path, class: "btn-small full" %></button>
           <p></p>
-          <button class="btn-small full"><%= link_to "Sign up", new_user_registration_path %></button>
+          <%= button_to "Sign Up", new_user_registration_path, class: "btn-small full" %></button>
         </div>
         <div ng-if="authPlugins.length" class="contrib-plugins-wrapper">
           <label translate="LOGIN_COMMON.ALT_LOGIN" ng-if="defaultLoginEnabled">Sign in with</label>
-          <fieldset ng-repeat="plugin in authPlugins" ng-include="plugin.template">
-            <div tg-github-login-button="tg-github-login-button">
-              <a href="" title="Enter with your github account" class="button button-auth"><span>Sign in with Github</span></a>
-            </div>
-          </fieldset>
+          <%= button_to "Sign in with Github", omniauth_authorize_path(User, :github), method: :post, data: { disable_with: "Connecting..." }, class: "button button-auth"%>
         </div>
       </div>
     </div>

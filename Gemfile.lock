@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/omniauth/omniauth-github.git
+  revision: 0ac46b59ccdabd4cbe5be4a665df269355081915
+  branch: master
+  specs:
+    omniauth-github (2.0.1)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.8)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -151,11 +160,11 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
       rack-protection
-    omniauth-github (2.0.1)
-      omniauth (~> 2.0)
-      omniauth-oauth2 (~> 1.8)
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
+      omniauth (~> 2.0)
+    omniauth-rails_csrf_protection (1.0.1)
+      actionpack (>= 4.2)
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
     pg (1.4.6)
@@ -230,6 +239,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2023.2)
+      tzinfo (>= 1.0.0)
     version_gem (1.1.2)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -262,7 +273,8 @@ DEPENDENCIES
   erb-formatter
   importmap-rails
   jbuilder
-  omniauth-github
+  omniauth-github!
+  omniauth-rails_csrf_protection
   pg (~> 1.4)
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.3)
