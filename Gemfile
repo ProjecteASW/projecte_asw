@@ -44,7 +44,8 @@ gem "bootsnap", require: false
 
 gem 'erb-formatter'
 gem 'devise'
-gem 'omniauth-github'
+gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
+gem "omniauth-rails_csrf_protection"
 
 
 # Use Sass to process CSS
