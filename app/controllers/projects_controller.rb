@@ -7,6 +7,15 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects
   end
   
+  def add_member
+    @project = Project.find_by(id: params[:id])
+    if @project.nil?
+      redirect_to projects_path, alert: "Project not found"
+      return
+    end
+    @membership = Membership.new(project_id: @project.id)
+  end
+  
 
   # GET /projects/1 or /projects/1.json
   def show

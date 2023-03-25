@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row <%= issue.blocked ? 'is-blocked' : '' %>">
   <div data-fieldname="issue_type" class="level-field">
     <%= issue.issue_type %>
   </div>

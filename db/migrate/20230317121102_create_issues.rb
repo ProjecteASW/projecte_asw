@@ -8,6 +8,7 @@ class CreateIssues < ActiveRecord::Migration[7.0]
       t.integer :priority
       t.integer :status
       t.date :limitDate
+      t.boolean :blocked, default: false # Añade el atributo booleano "blocked" con valor por defecto "false"
       t.timestamps
     end
   end

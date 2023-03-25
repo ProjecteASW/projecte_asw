@@ -5,6 +5,7 @@
 <div id="projects">
   <% @projects.each do |project| %>
     <%= link_to project.name, project_issues_path(project_id: project.id) %>
+    <%= link_to "Add Member", add_member_project_path(project) %>
   <% end %>
 </div>
 

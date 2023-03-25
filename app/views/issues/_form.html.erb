@@ -1,4 +1,4 @@
-<%= form_for([@project, @issue]) do |form| %>
+<%= form_with(model: [@project, @issue]) do |form| %>
   <!----> <!----><div ng-if="mode != 'add-existing'">
     <div class="form-wrapper">
       <div class="main">
@@ -143,23 +143,11 @@
             </div>
           </div><!----> <!----> <!---->
         </div>
-        <tg-blocking-message-input
-          watch="obj.is_blocked"
-          ng-model="obj.blocked_note"
-          class="ng-pristine ng-untouched ng-valid ng-empty"
-          aria-invalid="false"
-        >
-          <fieldset class="blocked-note hidden">
-            <input
-              type="text"
-              name="blocked_note"
-              ng-attr-placeholder="{{'COMMON.BLOCKED_NOTE' | translate}}"
-              ng-model="obj.blocked_note"
-              class="ng-pristine ng-untouched ng-valid ng-empty"
-              placeholder="Why is this blocked?"
-              aria-invalid="false"
-            >
-          </fieldset></tg-blocking-message-input>
+        <label class="checkbox-container">
+          <%= form.check_box :blocked, { class: "item-unblock item-block" }, false, true %>
+          <span class="checkmark"></span>
+        </label>
+
       </sidebar>
     </div>
     <div class="btn-container">
