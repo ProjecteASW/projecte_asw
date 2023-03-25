@@ -1,8 +1,39 @@
-<div class="container">
-  <%= link_to "Sign up", new_user_registration_path %>
-  <%= link_to "Log in", new_user_session_path %>
-  <%= button_to user_github_omniauth_authorize_path, class: "btn btn-danger", method: :post, data: {turbo: "false"} do %>
-<i class="fab fa-google mobile-text"></i><span class = "mobile-font">&nbsp;Google</span>
-<% end %>
+<div ng-view="" class="master" style="">
+<div class="wrapper">
+  <div class="auth">
+    <div class="auth-container">
+      <div class="logo-svg">
+        <svg preserveAspectRatio="xMidYMid meet" version="1.1" viewBox="0 0 267.204 267.245" xmlns:svg="http://www.w3.org/2000/svg">
+            <path d="M228.256 39.167l-11.755 82.74-82.74 11.756 11.756-82.74z" fill="#a295ae" opacity=".8"></path>
+            <path d="M39.19 228.134l11.755-82.74 82.74-11.756-11.755 82.74z" fill="#5d6f6d" opacity=".8"></path>
+            <path d="M39.19 39.277l82.74 11.755 11.756 82.74-82.74-11.755z" fill="#8cd592" opacity=".8"></path>
+            <path d="M228.16 228.144l-82.74-11.755-11.756-82.742 82.74 11.756z" fill="#665e74" opacity=".8"></path>
+            <path d="M133.738 267.245l-50.194-66.82 50.194-66.817 50.194 66.818z" fill="#3c3647" opacity=".8"></path>
+            <path d="M267.204 133.48l-66.82 50.195-66.817-50.194 66.818-50.193z" fill="#837193" opacity=".8"></path>
+            <path d="M133.616 0l50.194 66.82-50.194 66.817L83.422 66.82z" fill="#a2f4ac" opacity=".8"></path>
+            <path d="M0 133.706l66.82-50.194 66.817 50.194L66.82 183.9z" fill="#7ea685" opacity=".8"></path>
+            <path d="M133.602 101.85l31.772 31.772-31.772 31.772-31.772-31.772z" fill="#3c3647"></path>
+        </svg>
+      </div>
 
-</div>
+      <h1 class="logo">NOT Taiga</h1>
+      <h2 translate="COMMON.TAG_LINE_2" class="tagline">LOVE YOUR PROJECT</h2>
+
+      <div tg-login="" class="login-form-container">
+        <div class="end">
+          <button class="btn-small full"><%= link_to "Log in", new_user_session_path %></button>
+          <p></p>
+          <button class="btn-small full"><%= link_to "Sign up", new_user_registration_path %></button>
+        </div>
+        <div ng-if="authPlugins.length" class="contrib-plugins-wrapper">
+          <label translate="LOGIN_COMMON.ALT_LOGIN" ng-if="defaultLoginEnabled">Sign in with</label>
+          <fieldset ng-repeat="plugin in authPlugins" ng-include="plugin.template">
+            <div tg-github-login-button="tg-github-login-button">
+              <a href="" title="Enter with your github account" class="button button-auth"><span>Sign in with Github</span></a>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
