@@ -1,6 +1,22 @@
 class User < ApplicationRecord 
-  has_many :projects
-  has_many :issues
+
+    has_many :projects, dependent: :destroy
+    has_many :memberships, dependent: :destroy
+    has_many :member_projects, through: :memberships, source: :project
+  
+    def create_project(name)
+      projects.create(name: name)
+    end
+  
+    def join_project(project)
+      member_projects << project
+    end
+  
+    def leave_project(project)
+      member_projects.delete(project)
+    end
+
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
