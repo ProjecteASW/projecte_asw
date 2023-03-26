@@ -1,5 +1,6 @@
 class ProfileController < ApplicationController
-  layout 'bar_layout'
+  layout 'topbar_layout'
   def show
+    @user = current_user
   end
 end
