@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ProjecteAsw</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= render "layouts/svg_icons" %>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <%= render partial: "layouts/topbar" %>
+    <div class="container">
+      <div class="main-content">
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>
