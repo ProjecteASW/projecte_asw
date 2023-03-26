@@ -21,9 +21,9 @@
 
       <div tg-login="" class="login-form-container">
         <div class="end">
-          <%= button_to "Log in", new_user_session_path, class: "btn-small full" %></button>
+          <%= link_to "Log in", new_user_session_path, class: "btn-small full" %></button>
           <p></p>
-          <%= button_to "Sign Up", new_user_registration_path, class: "btn-small full" %></button>
+          <%= link_to "Sign Up", new_user_registration_path, class: "btn-small full" %></button>
         </div>
         <div ng-if="authPlugins.length" class="contrib-plugins-wrapper">
           <label translate="LOGIN_COMMON.ALT_LOGIN" ng-if="defaultLoginEnabled">Sign in with</label>
