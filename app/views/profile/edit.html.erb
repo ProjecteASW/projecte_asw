@@ -1,0 +1,49 @@
+<div ng-view="" class="master" style="">
+   <div tg-user-profile="" ng-controller="UserSettingsController as ctrl" ng-init="section='user-settings'" class="wrapper">
+        <sidebar tg-user-settings-navigation="user-profile" class="menu-secondary sidebar settings-nav">
+            <section class="admin-menu">
+                <nav>
+                    <ul>
+                        <li id="usersettingsmenu-user-profile" class="active" style="border-bottom: 1px solid #a9aabc;"><a href="#" tg-nav="user-settings-user-profile" title="User Settings"><span translate="USER_SETTINGS.MENU.SECTION_TITLE" class="title">User Settings</span></a></li>
+                    </ul>
+                </nav>
+            </section>
+        </sidebar>
+        <section class="main user-profile">
+            <header>
+                <header>
+                <h1 tg-main-title="" i18n-section-name="USER_SETTINGS.MENU.SECTION_TITLE"><span>User Settings</span></h1>
+                </header>
+            </header>
+            <form class="ng-pristine ng-valid ng-valid-required ng-valid-maxlength ng-valid-email">
+
+                <div tg-user-avatar="" class="project-details-image">
+                <fieldset class="image-container">
+                    <img tg-avatar-big="user" alt="x" class="image" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="x" style="background: rgb(178, 176, 204);">
+                    <div class="loading-overlay"><img src="v-1678696193151/svg/spinner-circle.svg" alt="Loading..." class="loading-spinner"></div>
+                    <input type="file" id="avatar-field" tg-avatar-model="avatarAttachment" class="hidden">
+                </fieldset>
+                <button type="text" variant="secondary" title="Change photo" class="btn-small button-full js-change-avatar">Change photo</button>
+                </div>
+
+                <div class="project-details-form-data">
+                <fieldset>
+                    <label for="email" translate="USER_PROFILE.FIELD.EMAIL">Email</label>
+                    <input readonly type="email" name="email" id="email" ng-model="user.email" data-type="email" data-required="true" data-maxlength="255" value="<%= @profile.email %>" class="ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-email ng-valid-required ng-valid-maxlength" aria-invalid="false">
+                </fieldset>
+                <fieldset>
+                    <label for="username" translate="USER_PROFILE.FIELD.USERNAME">Username</label>
+                    <input type="text" autocorrect="off" autocapitalize="none" name="username" id="username" ng-model="user.username" data-required="true" data-maxlength="255" data-regexp="^[\w.-]+$" value="<%= @profile.username %>" class="ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required ng-valid-maxlength" aria-invalid="false">
+                </fieldset>
+                <fieldset>
+                    <label for="bio" translate="USER_PROFILE.FIELD.BIO">Bio (max. 210 chars)</label>
+                    <textarea name="bio" id="bio" ng-model="user.bio" ng-attr-placeholder="{{'USER_PROFILE.FIELD.PLACEHOLDER_BIO' | translate}}" ng-maxlength="210" maxlength="210" class="ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-maxlength" value="<%= @profile.bio %>" aria-invalid="false"></textarea>
+                </fieldset>
+                <fieldset class="submit">
+                    <button variant="primary" type="submit" title="Save" translate="COMMON.SAVE" class="btn-small">Save</button>
+                </fieldset>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

@@ -3,6 +3,8 @@ class User < ApplicationRecord
     has_many :projects, dependent: :destroy
     has_many :memberships, dependent: :destroy
     has_many :member_projects, through: :memberships, source: :project
+    attr_accessor :bio
+    validates :bio, length: {in: 0..210}
   
     def create_project(name)
       projects.create(name: name)
@@ -31,7 +33,9 @@ class User < ApplicationRecord
         unless user
           user = User.create(
                             email: data['email'],
-                            password: Devise.friendly_token[0,20]
+                            password: Devise.friendly_token[0,20],
+                            username: data['email'],
+                            bio: ''
                             )
         end
 
