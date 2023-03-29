@@ -18,6 +18,14 @@ class User < ApplicationRecord
       member_projects.delete(project)
     end
 
+    def leave_project(project)
+      member_projects.delete(project)
+    end
+
+    def watch_issue(issue)
+      issues << issue
+    end
+
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
