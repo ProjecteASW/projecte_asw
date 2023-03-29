@@ -35,7 +35,7 @@
                         <%= f.text_field :username, autofocus: true, autocomplete: "username", value: @profile.username, style: "margin-bottom: 1rem;" %>
 
                         <%= f.label :bio, "Bio (max. 210 chars)" %>
-                        <%= f.text_field :bio, autofocus: true, autocomplete: "bio", value: @profile.bio, style: "margin-bottom: 1rem;" %>
+                        <%= f.text_area :bio, autofocus: true, autocomplete: "bio", value: @profile.bio, style: "margin-bottom: 1rem;" %>
 
                         <%= f.submit "Save", class: "btn-small" %>
                     <% end %>
