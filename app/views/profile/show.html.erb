@@ -4,12 +4,18 @@
             <section class="profile-bar">
                 <div ng-class="::{'is-current-user': vm.isCurrentUser}" class="profile-image-wrapper is-current-user"><img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="Profile picture" style="background: rgb(178, 176, 204);"><a title="User Settings" tg-nav="user-settings-user-profile" translate="USER.PROFILE.USER_SETTINGS" class="profile-edition" href="#">User Settings</a></div>
                 <div class="profile-data">
-                <h1 ng-class="{'not-full-name': !vm.user.get('full_name')}" class="not-full-name"> <%= current_user.username %> </h1>
-                <div class="username">@<%= current_user.username %></div>
-                <h2>Product Owner</h2>
+                    <h1 ng-class="{'not-full-name': !vm.user.get('full_name')}" class="not-full-name"><%= @profile.username %></h1>
+                    <div class="username"><%= @profile.email %></div>
                 </div>
+                <% if @profile.bio %>
+                    <div ng-if="::vm.user.get('bio')" class="profile-quote" style="background: url(https://tree.taiga.io/v-1678696193151/images/quote.png) no-repeat top left">
+                        <span><%= @profile.bio %></span>
+                    </div>
+                <% end %>
             </section>
         </tg-profile-bar>
+        <div class="main">
+                    </tg-profile-bar>
         <div class="main">
             <tg-profile-tabs class="timeline-wrapper">
                 <div>
@@ -104,24 +110,19 @@
             
             <aside class="profile-sidebar">
                 <div ng-if="::vm.isCurrentUser">
-                <h4 translate="USER.PROFILE_SIDEBAR.TITLE">Your profile</h4>
-                <p translate="USER.PROFILE_SIDEBAR.DESCRIPTION">People can see everything you do and what you are working on. Add a nice bio to give an enhanced version of your information.</p>
-                <button tg-nav="user-settings-user-profile" class="btn-big edit-profile"><span translate="USER.PROFILE_SIDEBAR.ADD_INFO">Edit bio</span></button>
+                    <h4 translate="USER.PROFILE_SIDEBAR.TITLE">Your profile</h4>
+                    <p translate="USER.PROFILE_SIDEBAR.DESCRIPTION">People can see everything you do and what you are working on. Add a nice bio to give an enhanced version of your information.</p>
+                    <a href="/profile/<%= @profile.email %>/edit" class=btn-big edit-profile">Edit bio</a>
                 </div>
                 <div tg-profile-hints="tg-profile-hints" class="profile-hints">
-                <h4>
-                    <tg-svg svg-icon="icon-question">
-                        <svg class="icon icon-question" style="fill: ">
-                            <use xlink:href="#icon-question" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-question"></use>
-                        </svg>
-                    </tg-svg>
-                    <span translate="HINTS.SECTION_NAME">Hint</span>
-                </h4>
-                <p>Did you forget what were you working on?</p>
-                <p>
-                    Don't worry, on your dashboard you'll find your open tasks, issues, and user stories in the order you worked on them.
-                    &nbsp;
-                </p>
+                    <h4>
+                        <span translate="HINTS.SECTION_NAME">Hint</span>
+                    </h4>
+                    <p>Did you forget what were you working on?</p>
+                    <p>
+                        Don't worry, on your dashboard you'll find your open tasks, issues, and user stories in the order you worked on them.
+                        &nbsp;
+                    </p>
                 </div>
             </aside>
         </div>
