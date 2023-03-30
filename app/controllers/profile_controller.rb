@@ -3,6 +3,7 @@ class ProfileController < ApplicationController
   layout 'topbar_layout'
   def show
     @profile = get_profile
+    @issues = @profile.issues
   end
 
   def edit
