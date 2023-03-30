@@ -38,18 +38,46 @@
                                 <div tg-user-timeline="tg-user-timeline" user="vm.user" current-user="vm.isCurrentUser">
                                     <section class="profile-timeline">
                                         <div infinite-scroll="vm.loadTimeline()" infinite-scroll-disabled="vm.scrollDisabled" ng-if="vm.timelineList.size" class="" style="">
-                                            <div tg-repeat="timeline in vm.timelineList" tg-user-timeline-item="timeline">
-                                            <div class="activity-item">
-                                                <span class="activity-date">a day ago</span>
-                                                <div tg-user-timeline-title="timeline" class="activity-info"></div>
-                                                <div class="activity-info">
-                                                    <div ng-if="timeline.getIn(['data', 'user', 'is_profile_visible'])" class="profile-contact-picture">
-                                                        <a tg-nav="user-profile:username=timeline.getIn(['data', 'user', 'username'])" title="xaviergarciaorihuela" href="#"><img tg-avatar="timeline.getIn(['data', 'user'])" alt="undefined" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="undefined" style="background: rgb(178, 176, 204);"></a>
+                                            
+                                            <% @issues.each do |issue| %>
+
+                                                <div ng-switch-when="issue" tg-fav-item="item" item-type="issue">
+                                                    <div ng-class="{'blocked-project': vm.item.get('project_blocked_code')}" class="list-itemtype-ticket">
+                                                        <a href="#" ng-if="::vm.item.get('assigned_to')" tg-nav="user-profile:username=vm.item.get('assigned_to_username')" title="Asier Escofet" class="list-itemtype-avatar"><img tg-avatar="vm.item.get('assigned_to_extra_info')" alt="Asier Escofet" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Asier Escofet" style="background: rgb(183, 203, 131);"></a>
+                                                        <div class="list-itemtype-ticket-data">
+                                                            <div class="list-itemtype-data-meta">
+                                                                <span class="ticket-project"><%= issue.project.name %></span>
+                                                                <span class="ticket-type">Issue</span>
+                                                                <% if issue.open?  %>
+                                                                    <span class="ticket-status" style="color: grey";">Open</span>
+                                                                <% elsif issue.in_progress? %>
+                                                                    <span class="ticket-status" style="color: lightblue";">In Progress</span>
+                                                                <% elsif issue.testing? %>
+                                                                    <span class="ticket-status" style="color: yellow";">Testing</span> 
+                                                                <% elsif issue.resolved? %>
+                                                                    <span class="ticket-status" style="color: lightgreen";">Closed</span>
+                                                                <% end %>
+                                                            </div>
+                                                            <div class="list-itemtype-data-title">
+                                                                <span tg-bo-ref="vm.item.get('ref')" class="ticket-id">#<%= issue.id %></span>
+                                                                <a href="#" class="ticket-title"><%= issue.subject %></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="list-itemtype-track">
+                                                            <span ng-class="{'active': vm.item.get('is_voter')}" title="0 votes" class="list-itemtype-track-likers">
+                                                                <span>Votes</span>
+                                                                <span>0</span>
+                                                            </span>
+                                                            <span ng-class="{'active': vm.item.get('is_watcher')}" title="one watcher" class="list-itemtype-track-watchers active">
+                                                                <span>Watchers</span>
+                                                                <span>1</span>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <p tg-compile-html="timeline.get('title_html')"><a tg-nav="user-profile:username=timeline.getIn(['data', 'user', 'username'])" href="#"><span ng-non-bindable="true">xaviergarciaorihuela</span></a><span> has updated the attribute "Status" of the task </span><a tg-nav="project-tasks-detail:project=timeline.getIn(['data', 'project', 'slug']),ref=timeline.getIn(['obj', 'ref'])" href="#"><span ng-non-bindable="true">#55 Vista perfil usuari</span></a><span> which belongs to the user story </span><a tg-nav="project-userstories-detail:project=timeline.getIn(['data', 'project', 'slug']),ref=timeline.getIn(['obj', 'userstory', 'ref'])" href="project/oriolmoreno-asw/us/12"><span ng-non-bindable="true">#12 Veure la pàgina del perfil de qualsevol usuari.</span></a><span> to </span><span ng-non-bindable="true">Closed</span></p>
                                                 </div>
-                                            </div>
-                                            </div>
+
+                                            <% end %>
+                                        
                                         </div>
                                     </section>
                                 </div>
