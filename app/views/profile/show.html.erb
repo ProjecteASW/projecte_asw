@@ -2,13 +2,13 @@
     <div ng-if="vm.user" class="profile centered">
         <tg-profile-bar user="vm.user" iscurrentuser="vm.isCurrentUser">
             <section class="profile-bar">
-                <div ng-class="::{'is-current-user': vm.isCurrentUser}" class="profile-image-wrapper is-current-user"><img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="Profile picture" style="background: rgb(178, 176, 204);"><a title="User Settings" tg-nav="user-settings-user-profile" translate="USER.PROFILE.USER_SETTINGS" class="profile-edition" href="#">User Settings</a></div>
+                <div class="profile-image-wrapper is-current-user"><img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="Profile picture" style="background: rgb(178, 176, 204);"><a title="User Settings" tg-nav="user-settings-user-profile" translate="USER.PROFILE.USER_SETTINGS" class="profile-edition" href="#">User Settings</a></div>
                 <div class="profile-data">
-                    <h1 ng-class="{'not-full-name': !vm.user.get('full_name')}" class="not-full-name"><%= @profile.username %></h1>
+                    <h1 class="not-full-name"><%= @profile.username %></h1>
                     <div class="username"><%= @profile.email %></div>
                 </div>
-                <% if @profile.bio %>
-                    <div ng-if="::vm.user.get('bio')" class="profile-quote" style="background: url(https://tree.taiga.io/v-1678696193151/images/quote.png) no-repeat top left">
+                <% if @profile.bio.length != 0 %>
+                    <div class="profile-quote" style="background: url(https://tree.taiga.io/v-1678696193151/images/quote.png) no-repeat top left">
                         <span><%= @profile.bio %></span>
                     </div>
                 <% end %>

@@ -15,7 +15,8 @@
                 <h1 tg-main-title="" i18n-section-name="USER_SETTINGS.MENU.SECTION_TITLE"><span>User Settings</span></h1>
                 </header>
             </header>
-            <form class="ng-pristine ng-valid ng-valid-required ng-valid-maxlength ng-valid-email">
+            <form method="post" action="/profile/<%= @profile.email %>" class="ng-pristine ng-valid ng-valid-required ng-valid-maxlength ng-valid-email">
+                <input type="hidden" name="_method" value="patch" />
 
                 <div tg-user-avatar="" class="project-details-image">
                     <fieldset class="image-container">
@@ -27,18 +28,21 @@
                 </div>
 
                 <div class="project-details-form-data">
-                    <%= form_with url: "/profile/@profile.email", method: :patch do |f| %>
-                        <%= f.label :email, "Email" %>
-                        <%= f.text_field :email, autofocus: true, autocomplete: "email", value: @profile.email, :readonly => true, class: "ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-email ng-valid-required ng-valid-maxlength", style: "margin-bottom: 1rem;" %>
-
-                        <%= f.label :username, "Username" %>
-                        <%= f.text_field :username, autofocus: true, autocomplete: "username", value: @profile.username, style: "margin-bottom: 1rem;" %>
-
-                        <%= f.label :bio, "Bio (max. 210 chars)" %>
-                        <%= f.text_area :bio, autofocus: true, autocomplete: "bio", value: @profile.bio, style: "margin-bottom: 1rem;" %>
-
-                        <%= f.submit "Save", class: "btn-small" %>
-                    <% end %>
+                    <fieldset>
+                        <label for="email" translate="USER_PROFILE.FIELD.EMAIL">Email</label>
+                        <input readonly value="<%= @profile.email %>" type="text" name="email" id="email" ng-model="user.email" data-type="email" data-required="true" data-maxlength="255" class="ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-email ng-valid-required ng-valid-maxlength" aria-invalid="false">
+                    </fieldset>
+                    <fieldset>
+                        <label for="username" translate="USER_PROFILE.FIELD.USERNAME">Username</label>
+                        <input value="<%= @profile.username %>" type="text" autocorrect="off" autocapitalize="none" name="username" id="username" ng-model="user.username" data-required="true" data-maxlength="25" data-regexp="^[\w.-]+$" class="ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required ng-valid-maxlength" aria-invalid="false">
+                    </fieldset>
+                    <fieldset>
+                        <label for="bio" translate="USER_PROFILE.FIELD.BIO">Bio (max. 210 chars)</label>
+                        <textarea type="text" name="bio" id="bio" maxlength="210" class="ng-pristine ng-untouched ng-valid ng-empty ng-valid-maxlength" aria-invalid="false"><%= @profile.bio %></textarea>
+                    </fieldset>
+                    <fieldset class="submit">
+                        <button variant="primary" type="submit" title="Save" translate="COMMON.SAVE" class="btn-small">Save</button>
+                    </fieldset>
                 </div>
             </form>
         </section>
