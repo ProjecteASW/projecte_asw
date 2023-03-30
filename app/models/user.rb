@@ -3,7 +3,6 @@ class User < ApplicationRecord
     has_many :projects, dependent: :destroy
     has_many :memberships, dependent: :destroy
     has_many :member_projects, through: :memberships, source: :project
-    attr_accessor :bio
     validates :bio, length: {in: 0..210}
   
     def create_project(name)
