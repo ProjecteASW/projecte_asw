@@ -3,11 +3,14 @@ class ProfileController < ApplicationController
   layout 'topbar_layout'
   def show
     @profile = get_profile
-    @issues = @profile.issues
+  end
+
+  def issues_watched
+    @profile = get_profile
+    @watchedIssues = WatchedIssue.where(user: @profile)
   end
 
   def edit
-    # use this to populate a form in your view
     @profile = get_profile  
   end
 

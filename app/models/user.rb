@@ -4,6 +4,7 @@ class User < ApplicationRecord
     has_many :memberships, dependent: :destroy
     has_many :member_projects, through: :memberships, source: :project
     has_many :issues, dependent: :destroy
+    has_many :watched_issues, dependent: :destroy
     validates :bio, length: {in: 0..210}
   
     def create_project(name)

@@ -24,36 +24,50 @@
             <tg-profile-tabs class="timeline-wrapper">
                 <div>
                 <nav class="profile-content-tabs">
-                    <a href="/profile/<%= @profile.email %>" ng-repeat="tab in ::vm.tabs" title="Show all the activity of this user" ng-click="vm.toggleTab(tab)" ng-class="{active: tab.active}" class="tab active" style="">
+                    <a href="/profile/<%= @profile.email %>" ng-repeat="tab in ::vm.tabs" title="Show all the activity of this user" ng-click="vm.toggleTab(tab)" ng-class="{active: tab.active}" class="tab" style="">
                     <span>Timeline</span>
                     </a>
-                    <a href="/profile/<%= @profile.email %>/issues_watched" ng-repeat="tab in ::vm.tabs" title="List all issues watched by this user" ng-click="vm.toggleTab(tab)" ng-class="{active: tab.active}" class="tab" style="">
+                    <a href="/profile/<%= @profile.email %>/issues_watched" ng-repeat="tab in ::vm.tabs" title="List all issues watched by this user" ng-click="vm.toggleTab(tab)" ng-class="{active: tab.active}" class="tab active" style="">
                     <span>Issues Watched</span>
                     </a>
                 </nav>
                 <ng-transclude>
-                    <div tg-profile-tab="Timeline" tab-title="Show all the activity of this user" tab-icon="icon-timeline" tab-active="tab-active">
-                        <div ng-if="tab.active" class="" style="">
-                            <ng-transclude>
-                                <div tg-user-timeline="tg-user-timeline" user="vm.user" current-user="vm.isCurrentUser">
-                                    <section class="profile-timeline">
-                                        <div infinite-scroll="vm.loadTimeline()" infinite-scroll-disabled="vm.scrollDisabled" ng-if="vm.timelineList.size" class="" style="">
-                                            
 
-                                        
-                                        </div>
-                                    </section>
-                                </div>
-                            </ng-transclude>
-                        </div>
-                    </div>
-                    <div tg-profile-tab="Watched" tab-title="List all item watched by this user" tab-icon="icon-watch">
+                    <div tg-profile-tab="Watched" tab-title="List all item watched by this user" tab-icon="icon-watch" tab-active="tab-active">
                         <div ng-if="tab.active" class="" style="">
                             <ng-transclude>
                                 <div tg-profile-watched="tg-profile-watched" user="vm.user">
                                     <section class="profile-favs">
                                         <div infinite-scroll="vm.loadItems()" infinite-scroll-disabled="vm.scrollDisabled">
 
+                                            <% @watchedIssues.each do |watchedIssue| %>
+
+                                                <div ng-switch-when="issue" tg-fav-item="item" item-type="issue">
+                                                    <div ng-class="{'blocked-project': vm.item.get('project_blocked_code')}" class="list-itemtype-ticket">
+                                                        <a href="#" ng-if="::vm.item.get('assigned_to')" tg-nav="user-profile:username=vm.item.get('assigned_to_username')" title="Asier Escofet" class="list-itemtype-avatar"><img tg-avatar="vm.item.get('assigned_to_extra_info')" alt="Asier Escofet" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Asier Escofet" style="background: rgb(183, 203, 131);"></a>
+                                                        <div class="list-itemtype-ticket-data">
+                                                            <div class="list-itemtype-data-meta">
+                                                                <span class="ticket-project"><%= watchedIssue.issue.project.name %></span>
+                                                                <span class="ticket-type">Issue</span>
+                                                                <% if watchedIssue.issue.open?  %>
+                                                                    <span class="ticket-status" style="color: grey";">Open</span>
+                                                                <% elsif watchedIssue.issue.status.in_progress? %>
+                                                                    <span class="ticket-status" style="color: lightblue";">In Progress</span>
+                                                                <% elsif watchedIssue.issue.status.testing? %>
+                                                                    <span class="ticket-status" style="color: yellow";">Testing</span> 
+                                                                <% elsif watchedIssue.issue.status.resolved? %>
+                                                                    <span class="ticket-status" style="color: lightgreen";">Closed</span>
+                                                                <% end %>
+                                                            </div>
+                                                            <div class="list-itemtype-data-title">
+                                                                <span tg-bo-ref="vm.item.get('ref')" class="ticket-id">#<%= watchedIssue.issue.id %></span>
+                                                                <a href="#" class="ticket-title"><%= watchedIssue.issue.subject %></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            <% end %>
 
                                         </div>
                                     </section>
