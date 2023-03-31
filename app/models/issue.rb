@@ -9,6 +9,7 @@ class Issue < ApplicationRecord
     belongs_to :user
     has_many :tags
     has_many :watched_issue
+    has_many :timeline_events
     def update_status(params)
         update(status: params[:status])
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_31_082651) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_31_142058) do
   create_table "issues", force: :cascade do |t|
     t.string "subject", null: false
     t.text "description"
@@ -54,6 +54,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_082651) do
     t.index ["issue_id"], name: "index_tags_on_issue_id"
   end
 
+  create_table "timeline_events", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "issue_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "message", default: ""
+    t.index ["issue_id"], name: "index_timeline_events_on_issue_id"
+    t.index ["user_id"], name: "index_timeline_events_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -84,6 +94,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_082651) do
   add_foreign_key "memberships", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "tags", "issues"
+  add_foreign_key "timeline_events", "issues"
+  add_foreign_key "timeline_events", "users"
   add_foreign_key "watched_issues", "issues"
   add_foreign_key "watched_issues", "users"
 end

@@ -47,6 +47,7 @@ class IssuesController < ApplicationController
   
     respond_to do |format|
       if @issue.save
+        TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has created a new issue:")
         format.html { redirect_to project_issues_path(@project), notice: "Issue was successfully created." }
         format.json { render :show, status: :created, location: @issue }
       else
@@ -65,6 +66,7 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
     if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has updated the state of the issue")
       redirect_to project_issues_path(@project)
     else
       render 'edit'

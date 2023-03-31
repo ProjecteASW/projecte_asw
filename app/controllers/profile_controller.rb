@@ -3,6 +3,7 @@ class ProfileController < ApplicationController
   layout 'topbar_layout'
   def show
     @profile = get_profile
+    @timelineEvents = TimelineEvent.where(user: @profile).sort_by(&:created_at)
   end
 
   def issues_watched
