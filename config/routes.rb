@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   #Routes for profiles
   resources :profiles, only: [:show, :edit, :update]
   get '/profile/:email', to: 'profile#show', constraints: { email: /[^\/]+/}
+  get '/profile/:email/issues_watched', to: 'profile#issues_watched', constraints: { email: /[^\/]+/}
   get '/profile/:email/edit', to: 'profile#edit', constraints: { email: /[^\/]+/}
   patch '/profile/:email', to: 'profile#update', constraints: { email: /[^\/]+/}
 end
