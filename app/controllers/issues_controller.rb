@@ -11,7 +11,6 @@ class IssuesController < ApplicationController
       @issues = @project.issues
     else
       @issues = Issue.all
-      @issues = @project.issues
     end
   end
   
@@ -19,6 +18,7 @@ class IssuesController < ApplicationController
   # GET /issues/1 or /issues/1.json
   def show
     @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
   end
 
   # GET /issues/new
@@ -39,6 +39,11 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
   end
+
+  def date
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+  end
   # POST /issues or /issues.json
   def create
     @project = Project.find(params[:project_id])
@@ -47,7 +52,7 @@ class IssuesController < ApplicationController
   
     respond_to do |format|
       if @issue.save
-        TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has created a new issue:")
+        TimelineEvent.create(:issue => @issue, :user => current_user, :message => "created a new issue")
         format.html { redirect_to project_issues_path(@project), notice: "Issue was successfully created." }
         format.json { render :show, status: :created, location: @issue }
       else
@@ -66,21 +71,94 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
     if @issue.update(issue_params)
-      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has updated the state of the issue")
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the issue")
       redirect_to project_issues_path(@project)
     else
       render 'edit'
     end
   end
 
+  def update_status
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentStatus = @issue.status
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the status from " + @currentStatus.capitalize() + " to " + @issue.status.capitalize())
+    end
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
+  def update_type
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentType = @issue.issue_type
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the type from " + @currentType.capitalize() + " to " + @issue.issue_type.capitalize())
+    end
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
+  def update_severity
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentSeverity = @issue.severity
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the severity from " + @currentSeverity.capitalize() + " to " + @issue.severity.capitalize())
+    end
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
+  def update_priority
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentPriority = @issue.priority
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the priority from " + @currentPriority.capitalize() + " to " + @issue.priority.capitalize())
+    end
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
+  def update_block
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @issue.update_attribute(:blocked, !@issue.blocked)
+    if @issue.blocked?
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "blocked the issue")
+    else
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "unblocked the issue")
+    end
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
+  def update_deadline
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @issue.update_attribute(:limitDate, params[:limitDate])
+    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the deadline")
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
   # DELETE /issues/1 or /issues/1.json
   def destroy
-    @issue.destroy
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @issue.timeline_events.clear
+    @issue.watched_issue.clear
+    @issue.tags.clear
+    @issue.delete
 
     respond_to do |format|
-      format.html { redirect_to issues_url, notice: "Issue was successfully destroyed." }
+      format.html { redirect_to '/projects/' + @project.id.to_s + '/issues', notice: "Issue was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def delete_deadline
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @issue.update_attribute(:limitDate, nil)
+    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "deleted the deadline")
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
   private

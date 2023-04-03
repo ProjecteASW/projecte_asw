@@ -56,7 +56,7 @@
                                                                 <a tg-nav="user-profile:username=timeline.getIn(['data', 'user', 'username'])" href="/profile/<%= @profile.email %>">
                                                                     <span ng-non-bindable="true"><%= @profile.username %></span>
                                                                 </a>
-                                                                <span><%= timelineEvent.message %></span>
+                                                                <span><%= timelineEvent.message %> on issue </span>
                                                                 <a tg-nav="project-tasks-detail:project=timeline.getIn(['data', 'project', 'slug']),ref=timeline.getIn(['obj', 'ref'])" href="#">
                                                                     <span ng-non-bindable="true">#<%= timelineEvent.issue.id %> <%= timelineEvent.issue.subject %></span>
                                                                 </a>
