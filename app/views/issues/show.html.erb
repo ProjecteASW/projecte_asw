@@ -29,6 +29,15 @@
           <div class="detail-project">
             <div class="section-name">Issue</div>
           </div>
+
+          <% if @issue.blocked? %>
+            <div class="detail-header-line block-desc-container">
+              <span>
+                <span translate="COMMON.BLOCKED" class="block-description-title">Blocked</span>
+              </span>
+            </div>
+          <% end %>
+
         </div>
 
 
@@ -40,7 +49,7 @@
         </tg-tag-line>
         <tg-created-by-display ng-model="issue" class="ticket-created-by ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
           <div class="created-by">
-              <a href="profile/asieresco" title="Asier Escofet" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
+              <a href="/profile/<%= @issue.user.email %>" title="Asier Escofet" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
               <div class="created-date"><%= (@issue.created_at + Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></div>
           </div>
           <div class="user-avatar"><a href="profile/asieresco" title="Asier Escofet"><img ng-style="{'background': owner.bg}" alt="Asier Escofet" ng-src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" style="background: rgb(183, 203, 131);"></a></div>
@@ -54,7 +63,14 @@
               <tg-wysiwyg ng-if="editableDescription &amp;&amp; project" html-read-mode="true" project="project" placeholder="'COMMON.DESCRIPTION.EMPTY '| translate" version="version" storage-key="storageKey" content="item.description" on-save="saveDescription(text, cb)" on-upload-file="uploadFiles">
                 <div ng-class="{'edit-mode': editMode, 'read-mode': !editMode, 'html-read-mode': htmlReadMode}" class="editor read-mode html-read-mode">
                     <div ng-if="!markdown.length" class="wysiwyg js-wysiwyg-html">
-                      <p class="placeholder">Empty space is so boring... go on, be descriptive...</p>
+                      <%= form_for @issue, url: {action: 'update', id: @issue.id}, method: :put do |f| %>
+                        <% if @issue.description.length() != 0 %>
+                          <%= f.text_area :description, :value => @issue.description %>
+                        <% else %>
+                          <%= f.text_area :description, :placeholder => 'Empty space is so boring... go on, be descriptive...' %>
+                        <% end %>
+                        <%= f.submit 'Update description' %>
+                      <% end %>
                     </div>
                 </div>
               </tg-wysiwyg>
@@ -195,7 +211,6 @@
                     </tg-svg>
                     <span>Add assigned</span>
                   </a>
-                  <a ng-if="!isSelfAssigned" ng-click="selfAssign()" class="ticket-users-action"><span>Assign to me</span></a>
               </div>
             </div>
         </div>
@@ -219,51 +234,39 @@
                     </tg-svg>
                     <span>Add watchers</span>
                   </a>
-                  <a ng-if="!vm.item.is_watcher &amp;&amp; isAuthenticated" ng-click="vm.watch()" class="ticket-users-action">
-                    <tg-svg svg-icon="icon-watch" class="users-action icon">
-                        <svg class="icon icon-watch" style="fill: ">
-                          <use xlink:href="#icon-watch" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-watch">
-                          </use>
-                        </svg>
-                    </tg-svg>
-                    <span>Watch</span>
-                  </a>
               </div>
             </div>
         </div>
       </section>
-      <section class="ticket-section ticket-detail-settings">
-        <tg-due-date due-date="issue.due_date" format="button" is-closed="issue.is_closed" item="issue" obj-type="issue" tg-check-permission="modify_issue" class="">
-            <label ng-if="vm.visible()" ng-disabled="vm.disabled()" ng-style="{background: vm.color()}" ng-attr-title="{{ vm.title() }}" ng-click="vm.setDueDate()" ng-class="{'active': vm.color(), 'disabled': !!vm.disabled()}" class="btn-icon due-date-button is-editable" role="button" tabindex="0" title="Set due date" aria-disabled="false">
-              <tg-svg svg-icon="icon-clock">
-                  <svg class="icon icon-clock" style="fill: ">
-                    <use xlink:href="#icon-clock" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-clock">
-                    </use>
-                  </svg>
-              </tg-svg>
-            </label>
-        </tg-due-date>
+      <section class="ticket-section ticket-detail-settings" style="flex-direction: column;">
 
-        <tg-block-button tg-check-permission="modify_issue" ng-model="issue" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
-            <button ng-class="{'item-unblock': item.is_blocked,'item-block': !item.is_blocked}" title="Block this item, for example if it has a dependency that can not be satisfied" class="btn-icon button-lock item-block editable">
-              <tg-svg svg-icon="icon-lock">
-                  <svg class="icon icon-lock" style="fill: ">
-                    <use xlink:href="#icon-lock" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-lock">
-                    </use>
-                  </svg>
-              </tg-svg>
-            </button>
-        </tg-block-button>
-        <tg-delete-button tg-check-permission="delete_issue" on-delete-title="Delete issue" on-delete-go-to-url="onDeleteGoToUrl" ng-model="issue" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
-            <button variant="primary" class="btn-icon button-delete">
-              <tg-svg svg-icon="icon-trash">
-                  <svg class="icon icon-trash" style="fill: ">
-                    <use xlink:href="#icon-trash" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-trash">
-                    </use>
-                  </svg>
-              </tg-svg>
-            </button>
-        </tg-delete-button>
+
+        <div>
+          <% if @issue.limitDate? %>
+            <%= link_to 'Date', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon due-date-button is-editable active' %>
+          <% else %>
+            <%= link_to 'Date', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon button-delete' %>
+          <% end %>
+          
+        </div>
+
+        <p></p>
+
+        <div>
+          <div style="float: right; width: auto;">
+            <% if @issue.blocked? %>
+                <%= button_to 'Unblock', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/block', method: :put, class: 'btn-icon button-lock editable item-unblock' %>
+            <% else %>
+              <%= button_to 'Block', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/block', method: :put, class: 'btn-icon button-delete' %>
+            <% end %>
+          </div>
+        </div>
+
+        <p></p>
+
+        <div>
+            <%= button_to 'Delete', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s, method: :delete, class: 'btn-icon button-delete' %>
+        </div>
       </section>
     </sidebar>
   </div>

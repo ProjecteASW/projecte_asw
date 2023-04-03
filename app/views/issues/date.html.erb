@@ -1,0 +1,20 @@
+<form action="/projects/<%= @project.id.to_s %>/issues/<%= @issue.id.to_s %>/date", method="put", class="ng-pristine ng-valid" style="display: block;">
+    <h2 translate="LIGHTBOX.SET_DUE_DATE.TITLE" class="title">Set due date</h2>
+    <% if @issue.limitDate %>
+        <fieldset class="date">
+            <input type="date" name="limitDate" class="due-date no-focus" value=<%= @issue.limitDate %>>
+        </fieldset>
+    <% else %>
+        <fieldset class="date">
+            <input type="date" name="limitDate" class="due-date no-focus" placeholder="Select a date">
+        </fieldset>
+    <% end %>
+
+    <button type="submit" title="Save" translate="COMMON.SAVE" class="submit-button btn-big">Save</button>
+</form>
+<form action="/projects/<%= @project.id.to_s %>/issues/<%= @issue.id.to_s %>/date", method="delete", class="ng-pristine ng-valid" style="display: block;">
+    <% if @issue.limitDate %>
+        <button type="submit" title="Delete deadline", class="submit-button btn-big", style="background: #e44057; color: whitesmoke;">Delete deadline</button>
+    <% end %>
+</form>
+

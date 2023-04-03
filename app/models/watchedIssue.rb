@@ -1,7 +1,7 @@
 class WatchedIssue < ApplicationRecord
     
-    belongs_to :issue
-    belongs_to :user
+    belongs_to :issue, dependent: :destroy
+    belongs_to :user, dependent: :destroy
   
   end
   
