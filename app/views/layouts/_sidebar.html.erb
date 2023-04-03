@@ -1,6 +1,17 @@
 <tg-project-menu>
   <div ng-if="vm.project" class="sticky-project-menu">
     <tg-legacy-loader ng-class="{'menu-fixed': vm.fixed}" tg-load-element="vm.projectMenu" ng-version="10.0.14">
+      <div _ngcontent-ilo-c17="" class="nav-wrapper ng-tns-c17-16">
+        <div _ngcontent-ilo-c17="" class="nav-inner ng-tns-c17-16">
+            <ul _ngcontent-ilo-c17="" class="main-menu ng-tns-c17-16">
+              <li _ngcontent-ilo-c17="" class="menu-option ng-tns-c17-16 active ng-star-inserted" style="">
+                  <a _ngcontent-ilo-c17="" class="ng-tns-c17-16" title="Issues" href="/projects/<%= @project.id %>/issues">
+                    <span _ngcontent-ilo-c17="" data-animation="text" class="menu-option-text ng-tns-c17-16"> Issues </span>
+                  </a>
+              </li>
+            </ul>
+        </div>
+      </div>
     </tg-legacy-loader>
   </div>
 </tg-project-menu>
