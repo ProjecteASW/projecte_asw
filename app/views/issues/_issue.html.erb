@@ -1,12 +1,46 @@
 <div class="row <%= issue.blocked ? 'is-blocked' : '' %>">
   <div data-fieldname="issue_type" class="level-field">
-    <%= issue.issue_type %>
+    <div class="level-field">
+
+      <% if issue.bug? %>
+        <div class="level" style="background-color: rgb(228, 64, 87);" title="Bug"></div>
+      <% elsif issue.question? %>
+        <div class="level" style="background-color: rgb(81, 120, 211);" title="Question"></div>
+      <% else %>
+        <div class="level" style="background-color: rgb(64, 228, 206);" title="Enhancement"></div>
+      <% end %>
+
+    </div>
   </div>
   <div data-fieldname="severity" class="level-field">
-    <%= issue.severity %>
+    <div class="level-field">
+
+     <% if issue.wishlist? %>
+        <div class="level" style="background-color: rgb(112, 114, 143);" title="Wishlist"></div>
+      <% elsif issue.minor? %>
+        <div class="level" style="background-color: rgb(64, 168, 228);" title="Minar"></div>
+      <% elsif issue.norm? %>
+        <div class="level" style="background-color: rgb(64, 228, 124);" title="Normal"></div>
+      <% elsif issue.important? %>
+        <div class="level" style="background-color: rgb(228, 162, 64);" title="Important"></div>
+      <% else %>
+        <div class="level" style="background-color: rgb(211, 84, 80);" title="Critical"></div>
+      <% end %>
+
+    </div>
   </div>
   <div data-fieldname="priority" class="level-field">
-    <%= issue.priority %>
+    <div class="level-field">
+
+      <% if issue.low? %>
+        <div class="level" style="background-color: rgb(168, 228, 64);" title="Low"></div>
+      <% elsif issue.normal? %>
+        <div class="level" style="background-color: rgb(228, 206, 64);" title="Normal"></div>
+      <% else %>
+        <div class="level" style="background-color: rgb(228, 124, 64);" title="High"></div>
+      <% end %>
+
+    </div>
   </div>
   <div data-fieldname="ref" class="subject">
     <%= link_to edit_project_issue_path(@project, issue) do %>

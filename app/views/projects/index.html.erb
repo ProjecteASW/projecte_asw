@@ -1,12 +1,31 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Projects</h1>
-
-<div id="projects">
-  <% @projects.each do |project| %>
-    <%= link_to project.name, project_issues_path(project_id: project.id) %>
-    <%= link_to "Add Member", add_member_project_path(project) %>
-  <% end %>
+<div class="project-list-wrapper centered">
+  <div class="project-list-title">
+    <h1 translate="PROJECTS.MY_PROJECTS">My projects</h1>
+    <div class="create-options">
+      <%= link_to "New project", new_project_path, class: 'create-project-btn btn-small' %>
+    </div>
+  </div>
+  <section class="project-list-section">
+    <div class="project-list">
+      <ul>
+      <% @projects.each do |project| %>
+        <li class="list-itemtype-project tg-scope">
+          <div class="list-itemtype-project-left">
+            <div class="list-itemtype-project-data-wrapper">
+              <div class="list-itemtype-project-data">
+                <div class="list-itemtype-data-title">
+                  <%= link_to project.name, project_issues_path(project_id: project.id) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%= link_to "Add Member", add_member_project_path(project) %>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+    <aside class="help-area">
+      <p translate="PROJECT.HELP">Reorder your projects to set at the top the most used ones.<br> The top 4 projects will appear in the top navigation bar project list</p>
+    </aside>
+  </section>
 </div>
-
-<%= link_to "New project", new_project_path %>

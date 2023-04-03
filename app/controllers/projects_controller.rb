@@ -1,6 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project, only: %i[ show edit update destroy ]
+  layout 'topbar_layout'
 
   # GET /projects or /projects.json
   def index
