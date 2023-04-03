@@ -1,6 +1,274 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :sidebar do %>
+  <%= render partial: "layouts/sidebar" %>
+<% end %>
 
-<%= render @issue %>
+
+<div class="master" style="">
+  <div class="wrapper">
+
+
+
+    <div class="main-detail" style="flex: 1">
+      <div class="detail-header-container">
+        <div class="detail-header">
+          <div ng-class="{readonly: !vm.permissions.canEdit}" class="detail-title-wrapper ">
+            <h2 ng-show="!vm.editMode" ng-hide="vm.editMode" class="detail-title-text ng-animate-disabled" aria-hidden="false">
+                <div class="detail-ref">#<%= @issue.id %></div>
+                <span ng-click="vm.editSubject(true)" ng-if="vm.permissions.canEdit" ng-bind-html="vm.item.subject | emojify" class="detail-subject" role="button" tabindex="0" style=""><%= @issue.subject %></span>
+                
+                <a href="" ng-if="vm.permissions.canEdit" ng-click="vm.editSubject(true)" class="detail-edit" style="">
+                  <tg-svg svg-icon="icon-edit" class="">
+                      <svg class="icon icon-edit" style="fill: ">
+                        <use xlink:href="#icon-edit" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-edit">
+                        </use>
+                      </svg>
+                  </tg-svg>
+                </a>
+            </h2>
+          </div>
+          <div class="detail-project">
+            <div class="section-name">Issue</div>
+          </div>
+        </div>
+
+
+        <tg-tag-line ng-if="issue &amp;&amp; project" project="project" item="issue" permissions="modify_issue" class="tags-block">
+          <tg-tag-line-common project="vm.project" tags="vm.item.tags" permissions="modify_issue" loading-remove-tag="vm.loadingRemoveTag" loading-add-tag="vm.loadingAddTag" on-add-tag="vm.onAddTag(name, color)" on-delete-tag="vm.onDeleteTag(tag)" class="tags-block">
+              <div class="tags-container">
+              </div>
+          </tg-tag-line-common>
+        </tg-tag-line>
+        <tg-created-by-display ng-model="issue" class="ticket-created-by ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
+          <div class="created-by">
+              <a href="profile/asieresco" title="Asier Escofet" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
+              <div class="created-date"><%= (@issue.created_at + Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></div>
+          </div>
+          <div class="user-avatar"><a href="profile/asieresco" title="Asier Escofet"><img ng-style="{'background': owner.bg}" alt="Asier Escofet" ng-src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" style="background: rgb(183, 203, 131);"></a></div>
+        </tg-created-by-display>
+
+      </div>
+
+      <div class="detail-content">
+        <tg-item-wysiwyg type="issue" model="issue" required-perm="modify_issue">
+          <div>
+              <tg-wysiwyg ng-if="editableDescription &amp;&amp; project" html-read-mode="true" project="project" placeholder="'COMMON.DESCRIPTION.EMPTY '| translate" version="version" storage-key="storageKey" content="item.description" on-save="saveDescription(text, cb)" on-upload-file="uploadFiles">
+                <div ng-class="{'edit-mode': editMode, 'read-mode': !editMode, 'html-read-mode': htmlReadMode}" class="editor read-mode html-read-mode">
+                    <div ng-if="!markdown.length" class="wysiwyg js-wysiwyg-html">
+                      <p class="placeholder">Empty space is so boring... go on, be descriptive...</p>
+                    </div>
+                </div>
+              </tg-wysiwyg>
+          </div>
+        </tg-item-wysiwyg>
+
+        <section tg-attachments-drop="vm.addAttachments(files, false)" ng-show="vm.showAttachments()" class="attachments attachment-full" aria-hidden="false">
+          <div class="attachments-header">
+              <h3 class="attachments-title"><span class="attachments-num">0</span> <span translate="ATTACHMENT.SECTION_NAME" class="attachments-text">Attachments</span></h3>
+              <div class="options">
+                <div tg-check-permission="modify_issue" title="Add new attachment. " class="add-attach">
+                    <button type="button" variant="primary" ng-click="displayAttachmentInput()" class="btn-icon add-attachment-button">
+                      <tg-svg svg-icon="icon-add">
+                          <svg class="icon icon-add" style="fill: ">
+                            <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
+                            </use>
+                          </svg>
+                      </tg-svg>
+                    </button>
+                    <input id="add-attach" type="file" ng-model="files" multiple="multiple" tg-file-change="vm.addAttachments(files, true)" class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+                </div>
+              </div>
+          </div>
+        </section>
+
+        <section ng-if="vm.showHistorySection()" class="history">
+          <tg-history-tabs show-comment-tab="vm.showCommentTab()" show-activity-tab="vm.showActivityTab()" on-active-comments="vm.onActiveHistoryTab(true)" on-active-activities="vm.onActiveHistoryTab(false)" active-tab="vm.viewComments" on-order-comments="vm.onOrderComments()" comments-num="vm.commentsNum" activities-num="vm.activitiesNum" on-reverse="vm.reverse">
+              <nav class="history-tabs">
+                <a ng-if="showCommentTab()" href="" title="" ng-click="onActiveComments()" ng-class="{active: activeTab}" translate="COMMENTS.COMMENTS_COUNT" translate-values="{comments: commentsNum}" class="history-tab active" style="">0 Comments</a>
+                <a ng-if="showActivityTab()" href="" title="Activities" ng-click="onActiveActivities()" ng-class="{active: !activeTab}" translate="ACTIVITY.ACTIVITIES_COUNT" translate-values="{activities: activitiesNum}" class="history-tab" style="">0 Activities</a>
+              </nav>
+          </tg-history-tabs>
+        </section>
+
+
+
+      </div>
+    </div>
+
+
+
+    <sidebar class="sidebar ticket-data" style="">
+      <span class="ticket-title ng-pristine ng-untouched ng-valid ng-not-empty">
+        <span translate="COMMON.STATUS.CLOSED"><%= @issue.status.capitalize() %></span>
+        <span>
+          <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/status', method: :put do |f| %>
+            <%= f.select :status, options_for_select(Issue.statuses.keys, @issue.status), {}, :onchange => 'this.form.submit();' %>
+          <% end %>
+        </span>
+      </span>
+
+      <section class="ticket-section ticket-data-container">
+        <div tg-issue-type-button="" ng-model="issue" class="ticket-status ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
+            <div class="type-data clickable">
+              <div translate="COMMON.FIELDS.TYPE" class="label level-name">Type</div>
+
+              <div class="level-field" style="display: flex; align-items:center;">
+
+                <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/type', method: :put do |f| %>
+                  <%= f.select :issue_type, options_for_select(Issue.issue_types.keys, @issue.issue_type), {}, :onchange => 'this.form.submit();' %>
+                <% end %>
+
+                <% if @issue.bug? %>
+                  <div class="level" style="background-color: rgb(228, 64, 87); margin-left: 10px;" title="Bug"></div>
+                <% elsif @issue.question? %>
+                  <div class="level" style="background-color: rgb(81, 120, 211); margin-left: 10px;" title="Question"></div>
+                <% else %>
+                  <div class="level" style="background-color: rgb(64, 228, 206); margin-left: 10px;" title="Enhancement"></div>
+                <% end %>
+
+              </div>
+
+            </div>
+        </div>
+        <div tg-issue-severity-button="" ng-model="issue" class="ticket-status ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+            <div class="severity-data clickable">
+              <div translate="COMMON.FIELDS.SEVERITY" class="label level-name">Severity</div>
+
+                <div class="level-field" style="display: flex; align-items:center;">
+
+                  <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/severity', method: :put do |f| %>
+                    <%= f.select :severity, options_for_select(Issue.severities.keys, @issue.severity), {}, :onchange => 'this.form.submit();' %>
+                  <% end %>
+
+                  <% if @issue.wishlist? %>
+                    <div class="level" style="background-color: rgb(112, 114, 143); margin-left: 10px;" title="Wishlist"></div>
+                  <% elsif @issue.minor? %>
+                    <div class="level" style="background-color: rgb(64, 168, 228); margin-left: 10px;" title="Minor"></div>
+                  <% elsif @issue.norm? %>
+                    <div class="level" style="background-color: rgb(64, 228, 124); margin-left: 10px;" title="Normal"></div>
+                  <% elsif @issue.important? %>
+                    <div class="level" style="background-color: rgb(228, 162, 64); margin-left: 10px;" title="Important"></div>
+                  <% else %>
+                    <div class="level" style="background-color: rgb(211, 84, 80); margin-left: 10px;" title="Critical"></div>
+                  <% end %>
+
+                </div>
+
+            </div>
+        </div>
+        <div tg-issue-priority-button="" ng-model="issue" class="ticket-status ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+            <div class="priority-data clickable">
+              <div translate="COMMON.FIELDS.PRIORITY" class="label level-name">Priority</div>
+              
+                <div class="level-field" style="display: flex; align-items:center;">
+
+                  <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/priority', method: :put do |f| %>
+                    <%= f.select :priority, options_for_select(Issue.priorities.keys, @issue.priority), {}, :onchange => 'this.form.submit();' %>
+                  <% end %>
+
+                  <% if @issue.low? %>
+                    <div class="level" style="background-color: rgb(168, 228, 64); margin-left: 10px;" title="Low"></div>
+                  <% elsif @issue.normal? %>
+                    <div class="level" style="background-color: rgb(228, 206, 64); margin-left: 10px;" title="Normal"></div>
+                  <% else %>
+                    <div class="level" style="background-color: rgb(228, 124, 64); margin-left: 10px;" title="High"></div>
+                  <% end %>
+
+                </div>
+
+            </div>
+        </div>
+      </section>
+
+      <section tg-assigned-to="" ng-model="issue" required-perm="modify_issue" class="ticket-section ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
+        <div class="ticket-section-label"><span>Assigned</span></div>
+        <div class="ticket-user-list-container">
+            <div class="ticket-user-list-content">
+              <div class="ticket-user-list">
+              </div>
+              <div ng-if="isEditable" class="ticket-users-actions" style="">
+                  <a ng-click="openAssignedUsers()" class="ticket-users-action">
+                    <tg-svg svg-icon="icon-add" class="users-action icon">
+                        <svg class="icon icon-add" style="fill: ">
+                          <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
+                          </use>
+                        </svg>
+                    </tg-svg>
+                    <span>Add assigned</span>
+                  </a>
+                  <a ng-if="!isSelfAssigned" ng-click="selfAssign()" class="ticket-users-action"><span>Assign to me</span></a>
+              </div>
+            </div>
+        </div>
+      </section>
+
+      <section tg-watchers="" item="issue" active-users="activeUsers" on-watch="ctrl.onWatch" on-unwatch="ctrl.onUnwatch" required-perm="modify_issue" class="ticket-section ticket-watchers">
+        <div class="ticket-section-label">
+            <span>Watchers</span>
+        </div>
+        <div class="ticket-user-list-container">
+            <div class="ticket-user-list-content">
+              <div class="ticket-user-list">
+              </div>
+              <div class="ticket-users-actions">
+                  <a ng-if="isEditable" ng-click="vm.openWatchers()" class="ticket-users-action" style="">
+                    <tg-svg svg-icon="icon-add" class="users-action icon">
+                        <svg class="icon icon-add" style="fill: ">
+                          <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
+                          </use>
+                        </svg>
+                    </tg-svg>
+                    <span>Add watchers</span>
+                  </a>
+                  <a ng-if="!vm.item.is_watcher &amp;&amp; isAuthenticated" ng-click="vm.watch()" class="ticket-users-action">
+                    <tg-svg svg-icon="icon-watch" class="users-action icon">
+                        <svg class="icon icon-watch" style="fill: ">
+                          <use xlink:href="#icon-watch" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-watch">
+                          </use>
+                        </svg>
+                    </tg-svg>
+                    <span>Watch</span>
+                  </a>
+              </div>
+            </div>
+        </div>
+      </section>
+      <section class="ticket-section ticket-detail-settings">
+        <tg-due-date due-date="issue.due_date" format="button" is-closed="issue.is_closed" item="issue" obj-type="issue" tg-check-permission="modify_issue" class="">
+            <label ng-if="vm.visible()" ng-disabled="vm.disabled()" ng-style="{background: vm.color()}" ng-attr-title="{{ vm.title() }}" ng-click="vm.setDueDate()" ng-class="{'active': vm.color(), 'disabled': !!vm.disabled()}" class="btn-icon due-date-button is-editable" role="button" tabindex="0" title="Set due date" aria-disabled="false">
+              <tg-svg svg-icon="icon-clock">
+                  <svg class="icon icon-clock" style="fill: ">
+                    <use xlink:href="#icon-clock" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-clock">
+                    </use>
+                  </svg>
+              </tg-svg>
+            </label>
+        </tg-due-date>
+
+        <tg-block-button tg-check-permission="modify_issue" ng-model="issue" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
+            <button ng-class="{'item-unblock': item.is_blocked,'item-block': !item.is_blocked}" title="Block this item, for example if it has a dependency that can not be satisfied" class="btn-icon button-lock item-block editable">
+              <tg-svg svg-icon="icon-lock">
+                  <svg class="icon icon-lock" style="fill: ">
+                    <use xlink:href="#icon-lock" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-lock">
+                    </use>
+                  </svg>
+              </tg-svg>
+            </button>
+        </tg-block-button>
+        <tg-delete-button tg-check-permission="delete_issue" on-delete-title="Delete issue" on-delete-go-to-url="onDeleteGoToUrl" ng-model="issue" class="ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false">
+            <button variant="primary" class="btn-icon button-delete">
+              <tg-svg svg-icon="icon-trash">
+                  <svg class="icon icon-trash" style="fill: ">
+                    <use xlink:href="#icon-trash" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-trash">
+                    </use>
+                  </svg>
+              </tg-svg>
+            </button>
+        </tg-delete-button>
+      </section>
+    </sidebar>
+  </div>
+</div>
+
 
 <div>
   <%= link_to "Edit this issue", edit_project_issue_path(@project, @issue) %>

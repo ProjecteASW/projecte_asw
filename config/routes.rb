@@ -21,6 +21,12 @@ Rails.application.routes.draw do
   get 'projects/new', to: 'projects#new', as: 'new_projecto'
   root "home#index"
 
+  get '/projects/:project_id/issues/:id', to: 'issues#show'
+  put '/projects/:project_id/issues/:id/status', to: 'issues#update_status'
+  put '/projects/:project_id/issues/:id/type', to: 'issues#update_type'
+  put '/projects/:project_id/issues/:id/severity', to: 'issues#update_severity'
+  put '/projects/:project_id/issues/:id/priority', to: 'issues#update_priority'
+
   #Routes for profiles
   resources :profiles, only: [:show, :edit, :update]
   get '/profile/:email', to: 'profile#show', constraints: { email: /[^\/]+/}

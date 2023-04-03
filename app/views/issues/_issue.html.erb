@@ -18,7 +18,7 @@
      <% if issue.wishlist? %>
         <div class="level" style="background-color: rgb(112, 114, 143);" title="Wishlist"></div>
       <% elsif issue.minor? %>
-        <div class="level" style="background-color: rgb(64, 168, 228);" title="Minar"></div>
+        <div class="level" style="background-color: rgb(64, 168, 228);" title="Minor"></div>
       <% elsif issue.norm? %>
         <div class="level" style="background-color: rgb(64, 228, 124);" title="Normal"></div>
       <% elsif issue.important? %>
@@ -43,7 +43,7 @@
     </div>
   </div>
   <div data-fieldname="ref" class="subject">
-    <%= link_to edit_project_issue_path(@project, issue) do %>
+    <%= link_to "/projects/" + @project.id.to_s + "/issues/" + issue.id.to_s do %>
       <div>
         <%= issue.subject %>
       </div>

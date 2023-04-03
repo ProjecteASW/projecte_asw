@@ -19,6 +19,7 @@ class IssuesController < ApplicationController
   # GET /issues/1 or /issues/1.json
   def show
     @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
   end
 
   # GET /issues/new
@@ -66,7 +67,55 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
     if @issue.update(issue_params)
-      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has updated the state of the issue")
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has updated the issue")
+      redirect_to project_issues_path(@project)
+    else
+      render 'edit'
+    end
+  end
+
+  def update_status
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentStatus = @issue.status
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has changed the status from " + @currentStatus.capitalize() + " to " + @issue.status.capitalize() + " on issue")
+      redirect_to project_issues_path(@project)
+    else
+      render 'edit'
+    end
+  end
+
+  def update_type
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentType = @issue.issue_type
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has changed the type from " + @currentType.capitalize() + " to " + @issue.issue_type.capitalize() + " on issue")
+      redirect_to project_issues_path(@project)
+    else
+      render 'edit'
+    end
+  end
+
+  def update_severity
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentSeverity = @issue.severity
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has changed the severity from " + @currentSeverity.capitalize() + " to " + @issue.severity.capitalize() + " on issue")
+      redirect_to project_issues_path(@project)
+    else
+      render 'edit'
+    end
+  end
+
+  def update_priority
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @currentPriority = @issue.priority
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "has changed the priority from " + @currentPriority.capitalize() + " to " + @issue.priority.capitalize() + " on issue")
       redirect_to project_issues_path(@project)
     else
       render 'edit'
