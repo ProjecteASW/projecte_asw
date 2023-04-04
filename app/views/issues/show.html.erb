@@ -227,15 +227,10 @@
                 <% @watchedIssues.each do |issue| %>
                   <div class="user-list-single">
                       <div class="user-list-avatar"><img tg-avatar="watcher" alt="xaviergarciaorihuela" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="xaviergarciaorihuela" style="background: rgb(178, 176, 204);"></div>
-                      <div class="user-list-name"><span><%= issue.user.username %></span></div>
-                      <tg-svg ng-if="isEditable" svg-icon="icon-close" svg-title-translate="COMMON.WATCHERS.DELETE" data-watcher-id="550442" class="js-delete-watcher remove-user">
-                        <svg class="icon icon-close" style="fill: ">
-                            <use xlink:href="#icon-close" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-close">
-                              <title ng-if="svgTitleTranslate">Delete watcher</title>
-                            </use>
-                        </svg>
-                      </tg-svg>
+                      <a href="/profile/<%= issue.user.email %>" class="user-list-name"><span><%= issue.user.username %></span></a>
+                      <%= button_to 'X', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/delete_watcher/' + issue.user.id.to_s, method: :delete %>
                   </div>
+                  
                 <% end %>
 
               </div>
