@@ -99,10 +99,33 @@
         <section ng-if="vm.showHistorySection()" class="history">
           <tg-history-tabs show-comment-tab="vm.showCommentTab()" show-activity-tab="vm.showActivityTab()" on-active-comments="vm.onActiveHistoryTab(true)" on-active-activities="vm.onActiveHistoryTab(false)" active-tab="vm.viewComments" on-order-comments="vm.onOrderComments()" comments-num="vm.commentsNum" activities-num="vm.activitiesNum" on-reverse="vm.reverse">
               <nav class="history-tabs">
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="" ng-click="onActiveComments()" ng-class="{active: activeTab}" translate="COMMENTS.COMMENTS_COUNT" translate-values="{comments: commentsNum}" class="history-tab active" style="">Comments</a>
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/activities" title="Activities" class="history-tab" style="">Activities</a>
+                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="" ng-click="onActiveComments()" ng-class="{active: activeTab}" translate="COMMENTS.COMMENTS_COUNT" translate-values="{comments: commentsNum}" class="history-tab" style="">Comments</a>
+                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/activities" title="Activities" class="history-tab active" style="">Activities</a>
               </nav>
           </tg-history-tabs>
+        </section>
+
+        <section class="activities">
+            <div class="activities wrapper" style="display: flex; flex-direction: column;">
+
+                <% @activities.each do |activity| %>
+                    <div class="activity">
+                        <div class="activity-main">
+                            <div class="activity-data">
+                                <span class="activity-creator"><%= activity.user.username %></span><span class="activity-date"><%= (activity.created_at + time = Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></span>
+                            </div>
+                            <div class="activity-diff">
+                                <div class="diff-wrapper">
+                                    <div class="diff-status-wrapper">
+                                        <span class="key"><%= activity.message.capitalize() %></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% end %>
+
+            </div>
         </section>
 
 
