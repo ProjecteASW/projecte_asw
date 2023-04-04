@@ -23,12 +23,14 @@ Rails.application.routes.draw do
 
   get '/projects/:project_id/issues/:id', to: 'issues#show'
   get '/projects/:project_id/issues/:id/date', to: 'issues#date'
+  get '/projects/:project_id/issues/:id/add_watchers_view', to: 'issues#add_watchers_view'
   put '/projects/:project_id/issues/:id/status', to: 'issues#update_status'
   put '/projects/:project_id/issues/:id/type', to: 'issues#update_type'
   put '/projects/:project_id/issues/:id/severity', to: 'issues#update_severity'
   put '/projects/:project_id/issues/:id/priority', to: 'issues#update_priority'
   put '/projects/:project_id/issues/:id/block', to: 'issues#update_block'
   put '/projects/:project_id/issues/:id/date', to: 'issues#update_deadline'
+  put '/projects/:project_id/issues/:id/add_watcher', to: 'issues#add_watcher'
   delete '/projects/:project_id/issues/:id', to: 'issues#destroy'
   delete '/projects/:project_id/issues/:id/date', to: 'issues#delete_deadline'
 

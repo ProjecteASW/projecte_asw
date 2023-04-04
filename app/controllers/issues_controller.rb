@@ -1,5 +1,5 @@
 class IssuesController < ApplicationController
-  layout 'bar_layout'
+  layout 'bar_layout', except: [:date, :add_watchers_view]
   before_action :authenticate_user!
 
   before_action :set_issue, only: %i[ show edit update destroy ]
@@ -19,6 +19,7 @@ class IssuesController < ApplicationController
   def show
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
+    @watchedIssues = WatchedIssue.where(issue: @issue)
   end
 
   # GET /issues/new
@@ -44,6 +45,17 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
   end
+
+  def add_watchers_view
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @users = User.all
+    @possibleWatchers = @users
+    WatchedIssue.where(issue: @issue).all.each do |curentWatcher|
+      @possibleWatchers = @possibleWatchers - [curentWatcher.user]
+    end
+  end
+
   # POST /issues or /issues.json
   def create
     @project = Project.find(params[:project_id])
@@ -135,6 +147,14 @@ class IssuesController < ApplicationController
     @issue = @project.issues.find(params[:id])
     @issue.update_attribute(:limitDate, params[:limitDate])
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the deadline")
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
+  def add_watcher
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @watcher = User.find(params[:user_id])
+    WatchedIssue.create(:issue => @issue, :user => @watcher)
     redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
