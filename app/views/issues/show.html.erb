@@ -223,9 +223,24 @@
         <div class="ticket-user-list-container">
             <div class="ticket-user-list-content">
               <div class="ticket-user-list">
+
+                <% @watchedIssues.each do |issue| %>
+                  <div class="user-list-single">
+                      <div class="user-list-avatar"><img tg-avatar="watcher" alt="xaviergarciaorihuela" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="xaviergarciaorihuela" style="background: rgb(178, 176, 204);"></div>
+                      <div class="user-list-name"><span><%= issue.user.username %></span></div>
+                      <tg-svg ng-if="isEditable" svg-icon="icon-close" svg-title-translate="COMMON.WATCHERS.DELETE" data-watcher-id="550442" class="js-delete-watcher remove-user">
+                        <svg class="icon icon-close" style="fill: ">
+                            <use xlink:href="#icon-close" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-close">
+                              <title ng-if="svgTitleTranslate">Delete watcher</title>
+                            </use>
+                        </svg>
+                      </tg-svg>
+                  </div>
+                <% end %>
+
               </div>
               <div class="ticket-users-actions">
-                  <a ng-if="isEditable" ng-click="vm.openWatchers()" class="ticket-users-action" style="">
+                  <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/add_watchers_view" class="ticket-users-action" style="">
                     <tg-svg svg-icon="icon-add" class="users-action icon">
                         <svg class="icon icon-add" style="fill: ">
                           <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
@@ -270,13 +285,4 @@
       </section>
     </sidebar>
   </div>
-</div>
-
-
-<div>
-  <%= link_to "Edit this issue", edit_project_issue_path(@project, @issue) %>
-  |
-  <%= link_to "Back to issues", project_issues_path(@project) %>
-
-  <%= button_to "Destroy this issue", [@project, @issue], method: :delete %>
 </div>

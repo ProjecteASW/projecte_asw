@@ -1,0 +1,29 @@
+<tg-lightbox-close style="display: inline;">
+   <a class="close" ng-click="onClose()" href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="close">
+      <tg-svg svg-icon="icon-close">
+         <svg class="icon icon-close" style="fill: ">
+            <use xlink:href="#icon-close" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-close">
+            </use>
+         </svg>
+      </tg-svg>
+   </a>
+</tg-lightbox-close>
+<div class="form lb-select-user-form" style="display: block;">
+   <h2 class="title">Add watchers</h2>
+   <div class="lb-user-list lb-select-user-list">
+
+      <% @possibleWatchers.each do |watcher| %>
+
+         <form action="/projects/<%= @project.id %>/issues/<%= @issue.id %>/add_watcher" method="put" class="">
+            <input type="hidden" id="user_id" name="user_id" value="<%= watcher.id %>"/>
+            <button type="submit" class="user-list-item" style="width:100%">
+               <div class="user-list-avatar">
+                  <img style="background: rgba( 178, 176, 204, 1 )" ng-src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" ng-if="item.type == 'user'" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png">
+               </div>
+               <div ng-if="item.type == 'user'" class="user-list-name"><%= watcher.username %></div>
+            </button>
+         </form>
+      
+      <% end %>
+   </div>
+</div>
