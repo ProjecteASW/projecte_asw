@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   put '/projects/:project_id/issues/:id/add_watcher', to: 'issues#add_watcher'
   delete '/projects/:project_id/issues/:id', to: 'issues#destroy'
   delete '/projects/:project_id/issues/:id/date', to: 'issues#delete_deadline'
+  delete '/projects/:project_id/issues/:id/delete_watcher/:user_id', to: 'issues#delete_watcher'
+
 
   #Routes for profiles
   resources :profiles, only: [:show, :edit, :update]

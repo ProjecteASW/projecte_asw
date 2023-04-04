@@ -181,6 +181,18 @@ class IssuesController < ApplicationController
     redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
+  def delete_watcher
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @watcher = User.find(params[:user_id])
+    @watchedIssue = WatchedIssue.find_by(issue: @issue, user: @watcher)
+    if @watchedIssue.delete
+      redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    else
+      raise error
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_issue
