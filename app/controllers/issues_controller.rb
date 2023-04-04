@@ -20,7 +20,7 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
     @watchedIssues = WatchedIssue.where(issue: @issue)
-    @comments = Comment.where(issue: @issue)
+    @comments = Comment.where(issue: @issue).order(created_at: :desc)
   end
 
   # GET /issues/new
@@ -171,6 +171,7 @@ class IssuesController < ApplicationController
     @issue = @project.issues.find(params[:id])
     Comment.create(:issue => @issue, :user => current_user, :text => params[:text])
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "wrote a new comment")
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
   # DELETE /issues/1 or /issues/1.json

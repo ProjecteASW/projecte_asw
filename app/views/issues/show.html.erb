@@ -110,6 +110,28 @@
               <textarea id="text" name="text" placeholder="Type a new comment here"></textarea>
               <button type="submit" value="Submit">Post</button>
             </form>
+
+            <div class="comments wrapper" style="display: flex; flex-direction: column;">
+
+                <% @comments.each do |comment| %>
+                  <div class="comment">
+                    <div class="comment-wrapper">
+                        <img class="comment-avatar" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" style="background: rgb(178, 176, 204);">
+                        <div class="comment-main">
+                            <div class="comment-data">
+                                <span class="comment-creator"><%= comment.user.username %></span><span class="comment-date"><%= (comment.created_at + time = Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></span>
+                            </div>
+                            <div class="comment-container">
+                                <div class="comment-text wysiwyg">
+                                        <p><%= comment.text.capitalize() %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                <% end %>
+
+            </div>
         </section>
 
       </div>
