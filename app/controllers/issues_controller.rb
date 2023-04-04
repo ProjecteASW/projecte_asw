@@ -56,6 +56,13 @@ class IssuesController < ApplicationController
     end
   end
 
+  def activities
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @watchedIssues = WatchedIssue.where(issue: @issue)
+    @activities = TimelineEvent.where(issue: @issue).order(created_at: :desc)
+  end
+
   # POST /issues or /issues.json
   def create
     @project = Project.find(params[:project_id])
