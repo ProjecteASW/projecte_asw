@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   put '/projects/:project_id/issues/:id/block', to: 'issues#update_block'
   put '/projects/:project_id/issues/:id/date', to: 'issues#update_deadline'
   put '/projects/:project_id/issues/:id/add_watcher', to: 'issues#add_watcher'
+  put '/projects/:project_id/issues/:id/add_comment', to: 'issues#add_comment'
   delete '/projects/:project_id/issues/:id', to: 'issues#destroy'
   delete '/projects/:project_id/issues/:id/date', to: 'issues#delete_deadline'
   delete '/projects/:project_id/issues/:id/delete_watcher/:user_id', to: 'issues#delete_watcher'

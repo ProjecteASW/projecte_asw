@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_31_142058) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_04_153156) do
+  create_table "comments", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "issue_id", null: false
+    t.string "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issue_id"], name: "index_comments_on_issue_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "issues", force: :cascade do |t|
     t.string "subject", null: false
     t.text "description"
@@ -19,11 +29,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_142058) do
     t.integer "priority"
     t.integer "status"
     t.date "limitDate"
+    t.boolean "blocked", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "project_id", null: false
     t.integer "user_id", null: false
-    t.boolean "blocked", default: false
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["user_id"], name: "index_issues_on_user_id"
   end
@@ -88,6 +98,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_31_142058) do
     t.index ["user_id"], name: "index_watched_issues_on_user_id"
   end
 
+  add_foreign_key "comments", "issues"
+  add_foreign_key "comments", "users"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "users"
   add_foreign_key "memberships", "projects"

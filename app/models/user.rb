@@ -6,6 +6,7 @@ class User < ApplicationRecord
     has_many :issues, dependent: :destroy
     has_many :watched_issues, dependent: :destroy
     has_many :timeline_events, dependent: :destroy
+    has_many :comments, dependent: :destroy
     validates :bio, length: {in: 0..210}
   
     def create_project(name)

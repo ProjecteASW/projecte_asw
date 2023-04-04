@@ -105,7 +105,12 @@
           </tg-history-tabs>
         </section>
 
-
+        <section class="comments">
+            <form action="/projects/<%= @project.id %>/issues/<%= @issue.id %>/add_comment" method="put">
+              <textarea id="text" name="text" placeholder="Type a new comment here"></textarea>
+              <button type="submit" value="Submit">Post</button>
+            </form>
+        </section>
 
       </div>
     </div>

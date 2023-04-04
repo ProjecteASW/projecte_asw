@@ -20,6 +20,7 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.find(params[:id])
     @watchedIssues = WatchedIssue.where(issue: @issue)
+    @comments = Comment.where(issue: @issue)
   end
 
   # GET /issues/new
@@ -165,6 +166,13 @@ class IssuesController < ApplicationController
     redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
+  def add_comment
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    Comment.create(:issue => @issue, :user => current_user, :text => params[:text])
+    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "wrote a new comment")
+  end
+
   # DELETE /issues/1 or /issues/1.json
   def destroy
     @project = Project.find(params[:project_id])
@@ -172,6 +180,7 @@ class IssuesController < ApplicationController
     @issue.timeline_events.clear
     @issue.watched_issue.clear
     @issue.tags.clear
+    @issue.comments.clear
     @issue.delete
 
     respond_to do |format|
