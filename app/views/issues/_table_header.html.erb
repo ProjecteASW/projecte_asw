@@ -1,21 +1,22 @@
 <div class="row title">
   <div data-fieldname="type" class="level-field">
-    <span class="wide">Type</span>
+    <%= link_to 'Type', { sort_by: 'issue_type' } %>
   </div>
   <div data-fieldname="severity" class="level-field">
-    <span>Severity</span>
+    <%= link_to 'Severity', { sort_by: 'severity' } %>
   </div>
   <div data-fieldname="priority" class="level-field">
-    <span>Priority</span>
+    <%= link_to 'Priority', { sort_by: 'priority' } %>
   </div>
   <div data-fieldname="ref" class="subject">
-    <span>Issue</span>
+    <%= link_to 'Issue', { sort_by: 'subject' } %>
   </div>
   <div data-fieldname="status" class="level-field">
-    <span>Status</span>
+    <%= link_to 'Status', { sort_by: 'status' } %>
   </div>
   <div data-fieldname="modified_date" class="level-field">
-    <span>Modified</span>
+      <%= link_to 'Modified', { sort_by: 'updated_at' } %>
+
   </div>
   <div data-fieldname="assigned_to" class="level-field">
     <span>Assign to</span>

@@ -12,6 +12,25 @@ class IssuesController < ApplicationController
     else
       @issues = Issue.all
     end
+
+  if params[:sort_by] == 'issue_type'
+    @issues = @issues.order(issue_type: :asc)
+  end
+  if params[:sort_by] == 'severity'
+    @issues = @issues.order(severity: :asc)
+  end
+  if params[:sort_by] == 'priority'
+    @issues = @issues.order(priority: :asc)
+  end
+ if params[:sort_by] == 'subject'
+    @issues = @issues.order(subject: :asc)
+  end
+  if params[:sort_by] == 'status'
+    @issues = @issues.order(status: :asc)
+  end
+  if params[:sort_by] == 'updated_at'
+    @issues = @issues.order(updated_at: :asc)
+  end
   end
   
 
