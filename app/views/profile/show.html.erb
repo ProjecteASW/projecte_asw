@@ -2,7 +2,7 @@
     <div ng-if="vm.user" class="profile centered">
         <tg-profile-bar user="vm.user" iscurrentuser="vm.isCurrentUser">
             <section class="profile-bar">
-                <div class="profile-image-wrapper is-current-user"><img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="Profile picture" style="background: rgb(178, 176, 204);">
+                <div class="profile-image-wrapper is-current-user"><img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
                     <% if @profile.email == current_user.email %>
                         <a title="User Settings" tg-nav="user-settings-user-profile" translate="USER.PROFILE.USER_SETTINGS" class="profile-edition" href="/profile/<%= @profile.email %>/edit">User Settings</a>
                     <% end %>
@@ -49,7 +49,7 @@
                                                         <div class="activity-info">
 
                                                             <div ng-if="timeline.getIn(['data', 'user', 'is_profile_visible'])" class="profile-contact-picture">
-                                                                <a tg-nav="user-profile:username=timeline.getIn(['data', 'user', 'username'])" title="<%= @profile.email %>" href="/profile/<%= @profile.email %>"><img tg-avatar="timeline.getIn(['data', 'user'])" alt="undefined" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="undefined" style="background: rgb(178, 176, 204);"></a>
+                                                                <a tg-nav="user-profile:username=timeline.getIn(['data', 'user', 'username'])" title="<%= @profile.email %>" href="/profile/<%= @profile.email %>"><img tg-avatar="timeline.getIn(['data', 'user'])" alt="undefined" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="undefined" style="background: rgb(183, 203, 131);"></a>
                                                             </div>
                                                             
                                                             <p tg-compile-html="timeline.get('title_html')">
@@ -57,7 +57,7 @@
                                                                     <span ng-non-bindable="true"><%= @profile.username %></span>
                                                                 </a>
                                                                 <span><%= timelineEvent.message %> on issue </span>
-                                                                <a tg-nav="project-tasks-detail:project=timeline.getIn(['data', 'project', 'slug']),ref=timeline.getIn(['obj', 'ref'])" href="#">
+                                                                <a href="/projects/<%= timelineEvent.issue.project_id %>/issues/<%= timelineEvent.issue.id %>">
                                                                     <span ng-non-bindable="true">#<%= timelineEvent.issue.id %> <%= timelineEvent.issue.subject %></span>
                                                                 </a>
                                                             </p>

@@ -5,7 +5,8 @@ class ProjectsController < ApplicationController
 
   # GET /projects or /projects.json
   def index
-    @projects = current_user.projects
+    #@projects = current_user.projects
+    @projects = Project.order(:name).all
   end
   
   def add_member
