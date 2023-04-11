@@ -112,7 +112,7 @@
                     <div class="activity">
                         <div class="activity-main">
                             <div class="activity-data">
-                                <span class="activity-creator"><%= activity.user.username %></span><span class="activity-date"><%= (activity.created_at + time = Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></span>
+                                <span class="activity-creator"><a href="/profile/<%= activity.user.email %>"><%= activity.user.username %></a></span><span class="activity-date"><%= (activity.created_at + time = Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></span>
                             </div>
                             <div class="activity-diff">
                                 <div class="diff-wrapper">

@@ -2,7 +2,7 @@
     <div ng-if="vm.user" class="profile centered">
         <tg-profile-bar user="vm.user" iscurrentuser="vm.isCurrentUser">
             <section class="profile-bar">
-                <div class="profile-image-wrapper is-current-user"><img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="Profile picture" style="background: rgb(178, 176, 204);">
+                <div class="profile-image-wrapper is-current-user"><img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
                     <% if @profile.email == current_user.email %>
                         <a title="User Settings" tg-nav="user-settings-user-profile" translate="USER.PROFILE.USER_SETTINGS" class="profile-edition" href="/profile/<%= @profile.email %>/edit">User Settings</a>
                     <% end %>
@@ -51,17 +51,19 @@
                                                                 <span class="ticket-type">Issue</span>
                                                                 <% if watchedIssue.issue.open?  %>
                                                                     <span class="ticket-status" style="color: grey";">Open</span>
-                                                                <% elsif watchedIssue.issue.status.in_progress? %>
+                                                                <% elsif watchedIssue.issue.in_progress? %>
                                                                     <span class="ticket-status" style="color: lightblue";">In Progress</span>
-                                                                <% elsif watchedIssue.issue.status.testing? %>
+                                                                <% elsif watchedIssue.issue.testing? %>
                                                                     <span class="ticket-status" style="color: yellow";">Testing</span> 
-                                                                <% elsif watchedIssue.issue.status.resolved? %>
+                                                                <% elsif watchedIssue.issue.reopened? %>
+                                                                    <span class="ticket-status" style="color: purple";">Reopened</span>
+                                                                <% elsif watchedIssue.issue.resolved? %>
                                                                     <span class="ticket-status" style="color: lightgreen";">Closed</span>
                                                                 <% end %>
                                                             </div>
                                                             <div class="list-itemtype-data-title">
                                                                 <span tg-bo-ref="vm.item.get('ref')" class="ticket-id">#<%= watchedIssue.issue.id %></span>
-                                                                <a href="#" class="ticket-title"><%= watchedIssue.issue.subject %></a>
+                                                                <a href="/projects/<%= watchedIssue.issue.project_id %>/issues/<%= watchedIssue.issue.id %>" class="ticket-title"><%= watchedIssue.issue.subject %></a>
                                                             </div>
                                                         </div>
                                                     </div>
