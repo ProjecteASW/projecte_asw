@@ -64,10 +64,10 @@
                 <div ng-class="{'edit-mode': editMode, 'read-mode': !editMode, 'html-read-mode': htmlReadMode}" class="editor read-mode html-read-mode">
                     <div ng-if="!markdown.length" class="wysiwyg js-wysiwyg-html">
                       <%= form_for @issue, url: {action: 'update', id: @issue.id}, method: :put do |f| %>
-                        <% if @issue.description.length() != 0 %>
-                          <%= f.text_area :description, :value => @issue.description %>
-                        <% else %>
+                        <% if @issue.description.nil? || @issue.description.length() == 0 %>
                           <%= f.text_area :description, :placeholder => 'Empty space is so boring... go on, be descriptive...' %>
+                        <% else %>
+                          <%= f.text_area :description, :value => @issue.description %>
                         <% end %>
                         <%= f.submit 'Update description' %>
                       <% end %>
@@ -99,7 +99,7 @@
         <section ng-if="vm.showHistorySection()" class="history">
           <tg-history-tabs show-comment-tab="vm.showCommentTab()" show-activity-tab="vm.showActivityTab()" on-active-comments="vm.onActiveHistoryTab(true)" on-active-activities="vm.onActiveHistoryTab(false)" active-tab="vm.viewComments" on-order-comments="vm.onOrderComments()" comments-num="vm.commentsNum" activities-num="vm.activitiesNum" on-reverse="vm.reverse">
               <nav class="history-tabs">
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="" ng-click="onActiveComments()" ng-class="{active: activeTab}" translate="COMMENTS.COMMENTS_COUNT" translate-values="{comments: commentsNum}" class="history-tab" style="">Comments</a>
+                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="Comments" class="history-tab" style="">Comments</a>
                 <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/activities" title="Activities" class="history-tab active" style="">Activities</a>
               </nav>
           </tg-history-tabs>
@@ -127,8 +127,6 @@
 
             </div>
         </section>
-
-
 
       </div>
     </div>
@@ -223,17 +221,29 @@
         <div class="ticket-user-list-container">
             <div class="ticket-user-list-content">
               <div class="ticket-user-list">
+
+                <% if !@issue.assigned_to.nil? %>
+                  <div class="user-list-single">
+                      <div class="user-list-avatar"><img tg-avatar="watcher" alt="xaviergarciaorihuela" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="xaviergarciaorihuela" style="background: rgb(183, 203, 131);"></div>
+                      <a href="/profile/<%= @issue.assigned_to.email %>" class="user-list-name"><span><%= @issue.assigned_to.username %></span></a>
+                  </div>
+                <% end %>
+
               </div>
-              <div ng-if="isEditable" class="ticket-users-actions" style="">
-                  <a ng-click="openAssignedUsers()" class="ticket-users-action">
-                    <tg-svg svg-icon="icon-add" class="users-action icon">
-                        <svg class="icon icon-add" style="fill: ">
-                          <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
-                          </use>
-                        </svg>
-                    </tg-svg>
-                    <span>Add assigned</span>
-                  </a>
+              <div class="ticket-users-actions">
+                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/change_assigned_view" class="ticket-users-action">
+                  <% if @issue.assigned_to.nil? %>
+                      <tg-svg svg-icon="icon-add" class="users-action icon">
+                          <svg class="icon icon-add" style="fill: ">
+                            <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
+                            </use>
+                          </svg>
+                      </tg-svg>
+                      <span>Add assigned</span>
+                  <% else %>
+                      <span>Change assigned</span>
+                  <% end %>
+                </a>
               </div>
             </div>
         </div>
@@ -249,7 +259,7 @@
 
                 <% @watchedIssues.each do |issue| %>
                   <div class="user-list-single">
-                      <div class="user-list-avatar"><img tg-avatar="watcher" alt="xaviergarciaorihuela" src="https://www.gravatar.com/avatar/b135e04df04c071ac561da05d2f955e4?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-02.png" title="xaviergarciaorihuela" style="background: rgb(178, 176, 204);"></div>
+                      <div class="user-list-avatar"><img tg-avatar="watcher" alt="xaviergarciaorihuela" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="xaviergarciaorihuela" style="background: rgb(183, 203, 131);"></div>
                       <a href="/profile/<%= issue.user.email %>" class="user-list-name"><span><%= issue.user.username %></span></a>
                       <%= button_to 'X', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/delete_watcher/' + issue.user.id.to_s, method: :delete %>
                   </div>

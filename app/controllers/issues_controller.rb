@@ -1,5 +1,5 @@
 class IssuesController < ApplicationController
-  layout 'bar_layout', except: [:date, :add_watchers_view]
+  layout 'bar_layout', except: [:date, :add_watchers_view, :change_assigned_view]
   before_action :authenticate_user!
 
   before_action :set_issue, only: %i[ show edit update destroy ]
@@ -100,6 +100,16 @@ class IssuesController < ApplicationController
     @possibleWatchers = @users
     WatchedIssue.where(issue: @issue).all.each do |curentWatcher|
       @possibleWatchers = @possibleWatchers - [curentWatcher.user]
+    end
+  end
+
+  def change_assigned_view
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @users = User.all
+    @possibleAssigned = @users
+    if !@issue.assigned_to.nil?
+      @possibleAssigned = @possibleAssigned - [@issue.assigned_to]
     end
   end
 
@@ -218,6 +228,15 @@ class IssuesController < ApplicationController
     @issue = @project.issues.find(params[:id])
     Comment.create(:issue => @issue, :user => current_user, :text => params[:text])
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "wrote a new comment")
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
+  def change_assigned
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @assigned = User.find(params[:user_id])
+    @issue.assigned_to = @assigned
+    @issue.save
     redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 

@@ -24,25 +24,27 @@
           </div>
         </div>
 
-        <div tg-check-permission="add_issue" class="new-issue">
-          <%= button_to raw(
-      '<svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg> NEW ISSUE'
-    ),
-              new_project_issue_path(params[:project_id]),
-    method: "get",
-    class: "btn-small" %>
+        <div style="display: flex;">
+          <div tg-check-permission="add_issue" class="new-issue">
+            <%= button_to raw(
+        '<svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg> NEW ISSUE'
+      ),
+                new_project_issue_path(params[:project_id]),
+      method: "get",
+      class: "btn-small" %>
 
 
-        </div>
-        <div tg-check-permission="add_issue" class="new-issue">
-          <%= button_to raw(
-            '<svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg> Bulk'
-          ),
-              new_bulk_project_issues_path(params[:project_id]),
+          </div>
+          <div tg-check-permission="add_issue" class="new-issue">
+            <%= button_to raw(
+              '<svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg> Bulk'
+            ),
+                new_bulk_project_issues_path(params[:project_id]),
 
-          method: "get",
-          class: "btn-small" %>
+            method: "get",
+            class: "btn-small" %>
 
+          </div>
         </div>
       </div>
       <div class="issue-container">
