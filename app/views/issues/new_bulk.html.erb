@@ -1,0 +1,23 @@
+<div
+  tg-lb-create-edit=""
+  class="lightbox lightbox-generic-form lightbox-create-edit open"
+  style="display: flex;"
+><%= link_to project_issues_path(@project), class: "close" do %>
+    <tg-svg svg-icon="icon-close">
+      <svg>
+        <use xlink:href="#icon-close"></use>
+      </svg>
+    </tg-svg>
+  <% end %>
+<%= form_tag bulk_create_project_issues_path do %>
+  <div class="form-group">
+    <%= label_tag :issue_names, "Enter issue names, one per line" %>
+    <%= text_area_tag :issue_names, nil, class: "form-control" %>
+  </div>
+  <%= submit_tag "Create Issues", class: "btn btn-primary" %>
+<% end %>
+
+
+
+
+</div>

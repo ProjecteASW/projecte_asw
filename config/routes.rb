@@ -14,7 +14,12 @@ Rails.application.routes.draw do
       get 'add_member'
     end
     resources :memberships, only: [:create, :destroy]
-    resources :issues
+    resources :issues do
+      collection do
+        get :new_bulk
+        post :bulk_create
+      end
+    end
   end
   
   # Ruta para la acción de crear proyectos

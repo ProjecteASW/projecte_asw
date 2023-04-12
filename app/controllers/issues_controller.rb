@@ -57,6 +57,30 @@ class IssuesController < ApplicationController
     end
 
   end
+  def new_bulk
+    @project = Project.find(params[:project_id])
+    @user = current_user
+    @issue = Issue.new
+  end
+  
+  def bulk_create
+    issue_names = params[:issue_names].split("\n")
+    @project = Project.find(params[:project_id])
+
+    issue_names.each do |issue_name|
+      @issue = @project.issues.build()
+      @issue.user_id = current_user.id
+      @issue.assigned_to_id = current_user.id
+      @issue.subject = issue_name
+        if @issue.save
+          TimelineEvent.create(:issue => @issue, :user => current_user, :message => "created a new issue")
+        end
+    end
+  
+    redirect_to project_issues_path(@project)
+  end
+  
+  
 
   # GET /issues/1/edit
   def edit
