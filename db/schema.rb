@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_04_153156) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_12_084520) do
   create_table "comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "issue_id", null: false
@@ -34,6 +34,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_04_153156) do
     t.datetime "updated_at", null: false
     t.integer "project_id", null: false
     t.integer "user_id", null: false
+    t.integer "assigned_to_id", null: false
+    t.index ["assigned_to_id"], name: "index_issues_on_assigned_to_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["user_id"], name: "index_issues_on_user_id"
   end
@@ -102,6 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_04_153156) do
   add_foreign_key "comments", "users"
   add_foreign_key "issues", "projects"
   add_foreign_key "issues", "users"
+  add_foreign_key "issues", "users", column: "assigned_to_id"
   add_foreign_key "memberships", "projects"
   add_foreign_key "memberships", "users"
   add_foreign_key "projects", "users"

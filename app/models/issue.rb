@@ -7,6 +7,7 @@ class Issue < ApplicationRecord
     enum priority: { low: 0, normal: 1, high: 2 }
     belongs_to :project, dependent: :destroy
     belongs_to :user, dependent: :destroy
+    belongs_to :assigned_to, class_name: 'User', foreign_key: 'assigned_to_id'
     has_many :tags, dependent: :destroy
     has_many :watched_issue, dependent: :destroy
     has_many :timeline_events, dependent: :destroy

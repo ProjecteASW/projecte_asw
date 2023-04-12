@@ -131,6 +131,18 @@
     pointer-events: none;
     cursor: default;
  }
+ .lock-checkbox-container {
+    padding: 20px 0;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .icon-lock {
+    width: 20px; /* adjust the size as needed */
+    height: 20px;
+    margin-right: 5px; /* adjust the spacing between the icon and the checkbox */
+  }
+  
 
 .introjs-helperNumberLayer {
     box-sizing: content-box;

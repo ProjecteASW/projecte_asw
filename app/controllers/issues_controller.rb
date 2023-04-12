@@ -31,6 +31,9 @@ class IssuesController < ApplicationController
   if params[:sort_by] == 'updated_at'
     @issues = @issues.order(updated_at: :asc)
   end
+  if params[:sort_by] == 'assigned_to'
+    @issues = @issues.joins(:assigned_to).order('users.username ASC')
+  end  
   end
   
 
@@ -88,6 +91,7 @@ class IssuesController < ApplicationController
     @project = Project.find(params[:project_id])
     @issue = @project.issues.build(issue_params)
     @issue.user_id = current_user.id
+    @issue.assigned_to_id = current_user.id
   
     respond_to do |format|
       if @issue.save
@@ -237,6 +241,6 @@ class IssuesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def issue_params
-      params.require(:issue).permit(:subject, :description, :issue_type, :severity, :priority, :blocked, :status, :limitDate, tag_ids: [])
+      params.require(:issue).permit(:subject, :description, :issue_type, :severity, :priority, :blocked, :status, :limitDate, :assigned_to_id, tag_ids: [])
     end    
 end

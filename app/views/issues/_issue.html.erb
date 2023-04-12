@@ -58,8 +58,18 @@
   <div data-fieldname="modified_date" class="level-field">
     <%= issue.updated_at.strftime("%d %b %Y") %>
   </div>
-  <div data-fieldname="modified_date" class="level-field">
-    <%= User.find(issue.user_id).username %>
-  </div>
+<div data-fieldname="assigned_to" class="level-field">
+  <%= form_for issue, url: { action: "update", id: issue.id }, method: :put do |f| %>
+    <% if issue.assigned_to.nil? %>
+      Not assigned
+      <%= f.collection_select(:assigned_to_id, User.all, :id, :username, prompt: "Select a user") %>
+    <% else %>
+      <%= f.collection_select(:assigned_to_id, User.all, :id, :username, { selected: issue.assigned_to.id }, prompt: "Select a user") %>
+    <% end %>
+    <%= f.submit "Update" %>
+  <% end %>
+</div>
+
+
 
 </div>
