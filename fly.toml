@@ -1,6 +1,6 @@
-# fly.toml file generated for sparkling-lake-6100 on 2023-03-25T21:09:52+01:00
+# fly.toml file generated for projecte-asw on 2023-04-13T20:23:47+02:00
 
-app = "sparkling-lake-6100"
+app = "projecte-asw"
 kill_signal = "SIGINT"
 kill_timeout = 5
 primary_region = "mad"
