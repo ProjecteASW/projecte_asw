@@ -57,12 +57,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_141858) do
     t.integer "priority"
     t.integer "status"
     t.date "limitDate"
+    t.boolean "blocked", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "project_id", null: false
     t.integer "user_id", null: false
-    t.boolean "blocked", default: false
-    t.integer "assigned_to_id"
+    t.integer "assigned_to_id", null: false
     t.index ["assigned_to_id"], name: "index_issues_on_assigned_to_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["user_id"], name: "index_issues_on_user_id"

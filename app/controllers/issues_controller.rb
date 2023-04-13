@@ -13,7 +13,7 @@ class IssuesController < ApplicationController
       @issues = if params[:search].present?
         @project.issues.where("subject LIKE ?", "%#{params[:search]}%")
       else
-        Issue.all
+        @issues = @project.issues.all
       end
     else
       @issues = Issue.all
