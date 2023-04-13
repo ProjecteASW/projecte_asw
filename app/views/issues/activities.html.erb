@@ -52,7 +52,15 @@
               <a href="/profile/<%= @issue.user.email %>" title="Asier Escofet" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
               <div class="created-date"><%= (@issue.created_at + Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></div>
           </div>
-          <div class="user-avatar"><a href="profile/asieresco" title="Asier Escofet"><img ng-style="{'background': owner.bg}" alt="Asier Escofet" ng-src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" style="background: rgb(183, 203, 131);"></a></div>
+          <div class="user-avatar">
+            <a href="profile/asieresco" title="Asier Escofet">
+              <% if @issue.user.avatar.attached? %>
+                <%= image_tag @issue.user.avatar.variant(:profileShow) %>
+              <% else %>
+                <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
+              <% end %>
+            </a>
+          </div>
         </tg-created-by-display>
 
       </div>
@@ -224,7 +232,13 @@
 
                 <% if !@issue.assigned_to.nil? %>
                   <div class="user-list-single">
-                      <div class="user-list-avatar"><img tg-avatar="watcher" alt="xaviergarciaorihuela" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="xaviergarciaorihuela" style="background: rgb(183, 203, 131);"></div>
+                      <div class="user-list-avatar">
+                        <% if @issue.assigned_to.avatar.attached? %>
+                          <%= image_tag @issue.assigned_to.avatar.variant(:profileShow) %>
+                        <% else %>
+                          <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
+                        <% end %>
+                      </div>
                       <a href="/profile/<%= @issue.assigned_to.email %>" class="user-list-name"><span><%= @issue.assigned_to.username %></span></a>
                   </div>
                 <% end %>
@@ -259,7 +273,13 @@
 
                 <% @watchedIssues.each do |issue| %>
                   <div class="user-list-single">
-                      <div class="user-list-avatar"><img tg-avatar="watcher" alt="xaviergarciaorihuela" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="xaviergarciaorihuela" style="background: rgb(183, 203, 131);"></div>
+                      <div class="user-list-avatar">
+                        <% if issue.user.avatar.attached? %>
+                          <%= image_tag issue.user.avatar.variant(:profileShow) %>
+                        <% else %>
+                          <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
+                        <% end %>
+                      </div>
                       <a href="/profile/<%= issue.user.email %>" class="user-list-name"><span><%= issue.user.username %></span></a>
                       <%= button_to 'X', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/delete_watcher/' + issue.user.id.to_s, method: :delete %>
                   </div>

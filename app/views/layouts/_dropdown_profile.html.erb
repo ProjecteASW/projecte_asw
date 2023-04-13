@@ -1,12 +1,13 @@
 <div tg-dropdown-user="tg-dropdown-user">
   <div class="dropdown-user-inner">
-    <div class="dropdown-user-navbar"><a tg-nav="profile" title="Asier Escofet" class="user-avatar" href="/profile/<%= current_user.email %>"><img
-          tg-avatar="vm.user"
-          alt="Asier Escofet"
-          src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png"
-          title="Asier Escofet"
-          style="background: rgb(183, 203, 131);"
-        ></a>
+    <div class="dropdown-user-navbar">
+      <a tg-nav="profile" title="Asier Escofet" class="user-avatar" href="/profile/<%= current_user.email %>">
+        <% if current_user.avatar.attached? %>
+          <%= image_tag current_user.avatar.variant(:profileShow) %>
+        <% else %>
+          <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
+        <% end %>
+      </a>
       <button class="chevron">
         <tg-svg svg-icon="icon-chevron-down"><svg class="icon icon-chevron-down" style="fill: ">
             <use
@@ -21,13 +22,14 @@
       </button>
     </div>
     <div class="navbar-dropdown dropdown-user">
-      <div class="dropdown-user-profile"><a tg-nav="profile" href="#" class="profile-link avatar"><img
-            tg-avatar="vm.user"
-            alt="Asier Escofet"
-            src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png"
-            title="Asier Escofet"
-            style="background: rgb(183, 203, 131);"
-          ></a>
+      <div class="dropdown-user-profile">
+        <a tg-nav="profile" href="#" class="profile-link avatar">
+          <% if current_user.avatar.attached? %>
+            <%= image_tag current_user.avatar.variant(:profileShow) %>
+          <% else %>
+            <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
+          <% end %>
+        </a>
         <div class="dropdown-user-data"><a tg-nav="profile" href="/profile/<%= current_user.email %>" class="profile-link full-name"><%= current_user.username %></a>
           <div class="profile-link email"><%= current_user.email %></div>
           <p><a
