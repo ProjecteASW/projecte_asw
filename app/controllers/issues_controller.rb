@@ -4,11 +4,17 @@ class IssuesController < ApplicationController
 
   before_action :set_issue, only: %i[ show edit update destroy ]
 
+  
+  
   # GET /issues or /issues.json
   def index
     if params[:project_id]
       @project = Project.find(params[:project_id])
-      @issues = @project.issues
+      @issues = if params[:search].present?
+        @project.issues.where("subject LIKE ?", "%#{params[:search]}%")
+      else
+        Issue.all
+      end
     else
       @issues = Issue.all
     end
@@ -34,6 +40,7 @@ class IssuesController < ApplicationController
   if params[:sort_by] == 'assigned_to'
     @issues = @issues.joins(:assigned_to).order('users.username ASC')
   end  
+  
   end
   
 
