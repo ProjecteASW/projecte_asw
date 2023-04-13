@@ -18,7 +18,11 @@
             <input type="hidden" id="user_id" name="user_id" value="<%= watcher.id %>"/>
             <button type="submit" class="user-list-item" style="width:100%">
                <div class="user-list-avatar">
-                  <img src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" style="background: rgb(183, 203, 131);">
+                  <% if watcher.avatar.attached? %>
+                     <%= image_tag watcher.avatar.variant(:comment)%>
+                  <% else %>
+                     <img tg-avatar-big="vm.user" alt="Profile picture" class="comment-avatar" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
+                  <% end %>
                </div>
                <div ng-if="item.type == 'user'" class="user-list-name"><%= watcher.username %></div>
             </button>

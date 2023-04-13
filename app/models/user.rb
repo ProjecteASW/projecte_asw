@@ -8,6 +8,13 @@ class User < ApplicationRecord
     has_many :timeline_events, dependent: :destroy
     has_many :comments, dependent: :destroy
     validates :bio, length: {in: 0..210}
+    has_one_attached :avatar do |attachable|
+      attachable.variant :profileShow, resize_to_limit: [200, 200]
+      attachable.variant :profileEdit, resize_to_limit: [180, 180]
+      attachable.variant :timeline, resize_to_limit: [32, 32]
+      attachable.variant :comment, resize_to_limit: [60, 60]
+      attachable.variant :thumb, resize_to_limit: [100, 100]
+    end
   
     def create_project(name)
       projects.create(name: name)
