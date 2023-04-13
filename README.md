@@ -15,7 +15,7 @@ Clone dels Issues de Taiga
 
 ## Taiga
 
-https://tree.taiga.io/profile/xaviergarciaorihuela
+https://tree.taiga.io/project/oriolmoreno-asw/timeline
 
 ## Deployment
 
