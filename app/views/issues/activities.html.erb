@@ -306,9 +306,9 @@
 
         <div>
           <% if @issue.limitDate? %>
-            <%= link_to 'Date', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon due-date-button is-editable active' %>
+            <%= link_to 'Deadline -> ' + @issue.limitDate.strftime('%d/%m/%Y'), '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon due-date-button is-editable active' %>
           <% else %>
-            <%= link_to 'Date', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon button-delete' %>
+            <%= link_to 'Deadline', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon button-delete' %>
           <% end %>
           
         </div>
