@@ -11,7 +11,7 @@ class IssuesController < ApplicationController
     if params[:project_id]
       @project = Project.find(params[:project_id])
       @issues = if params[:search].present?
-        @project.issues.where("subject LIKE ?", "%#{params[:search]}%")
+        @project.issues.where("subject LIKE :search OR description LIKE :search", search: "%#{params[:search]}%")
       else
         @issues = @project.issues.all
       end
