@@ -71,7 +71,7 @@
               <tg-wysiwyg ng-if="editableDescription &amp;&amp; project" html-read-mode="true" project="project" placeholder="'COMMON.DESCRIPTION.EMPTY '| translate" version="version" storage-key="storageKey" content="item.description" on-save="saveDescription(text, cb)" on-upload-file="uploadFiles">
                 <div ng-class="{'edit-mode': editMode, 'read-mode': !editMode, 'html-read-mode': htmlReadMode}" class="editor read-mode html-read-mode">
                     <div ng-if="!markdown.length" class="wysiwyg js-wysiwyg-html">
-                      <%= form_for @issue, url: {action: 'update', id: @issue.id}, method: :put do |f| %>
+                      <%= form_for @issue, url: {action: 'update_description', id: @issue.id}, method: :put do |f| %>
                         <% if @issue.description.nil? || @issue.description.length() == 0 %>
                           <%= f.text_area :description, :placeholder => 'Empty space is so boring... go on, be descriptive...' %>
                         <% else %>
@@ -107,8 +107,8 @@
         <section ng-if="vm.showHistorySection()" class="history">
           <tg-history-tabs show-comment-tab="vm.showCommentTab()" show-activity-tab="vm.showActivityTab()" on-active-comments="vm.onActiveHistoryTab(true)" on-active-activities="vm.onActiveHistoryTab(false)" active-tab="vm.viewComments" on-order-comments="vm.onOrderComments()" comments-num="vm.commentsNum" activities-num="vm.activitiesNum" on-reverse="vm.reverse">
               <nav class="history-tabs">
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="Comments" class="history-tab" style="">Comments</a>
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/activities" title="Activities" class="history-tab active" style="">Activities</a>
+                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="Comments" class="history-tab" style=""><%= @comments.length %> Comments</a>
+                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/activities" title="Activities" class="history-tab active" style=""><%= @activities.length %> Activities</a>
               </nav>
           </tg-history-tabs>
         </section>
