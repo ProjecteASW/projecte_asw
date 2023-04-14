@@ -4,6 +4,8 @@ class IssuesController < ApplicationController
 
   before_action :set_issue, only: %i[ show edit update destroy ]
 
+  protect_from_forgery with: :null_session
+
   
   
   # GET /issues or /issues.json
@@ -258,6 +260,14 @@ class IssuesController < ApplicationController
     redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
+  def attach_files
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @files = params[:files]
+    @issue.files.attach(@files)
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+
   # DELETE /issues/1 or /issues/1.json
   def destroy
     @project = Project.find(params[:project_id])
@@ -302,6 +312,6 @@ class IssuesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def issue_params
-      params.require(:issue).permit(:subject, :description, :issue_type, :severity, :priority, :blocked, :status, :limitDate, :assigned_to_id, tag_ids: [])
+      params.require(:issue).permit(:subject, :description, :issue_type, :severity, :priority, :blocked, :status, :limitDate, :assigned_to_id, tag_ids: [], files: [])
     end    
 end

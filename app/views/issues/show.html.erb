@@ -49,11 +49,11 @@
         </tg-tag-line>
         <tg-created-by-display ng-model="issue" class="ticket-created-by ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
           <div class="created-by">
-              <a href="/profile/<%= @issue.user.email %>" title="Asier Escofet" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
+              <a href="/profile/<%= @issue.user.email %>" title="<%= @issue.user.username %>" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
               <div class="created-date"><%= (@issue.created_at + Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></div>
           </div>
           <div class="user-avatar">
-            <a href="profile/asieresco" title="Asier Escofet">
+            <a href="/profile/<%= @issue.user.email %>" title="<%= @issue.user.username %>">
               <% if @issue.user.avatar.attached? %>
                 <%= image_tag @issue.user.avatar.variant(:profileShow) %>
               <% else %>
@@ -87,21 +87,54 @@
 
         <section tg-attachments-drop="vm.addAttachments(files, false)" ng-show="vm.showAttachments()" class="attachments attachment-full" aria-hidden="false">
           <div class="attachments-header">
-              <h3 class="attachments-title"><span class="attachments-num">0</span> <span translate="ATTACHMENT.SECTION_NAME" class="attachments-text">Attachments</span></h3>
+              <h3 class="attachments-title"><span class="attachments-num"><%= @issue.files.length %></span> <span translate="ATTACHMENT.SECTION_NAME" class="attachments-text">Attachments</span></h3>
               <div class="options">
                 <div tg-check-permission="modify_issue" title="Add new attachment. " class="add-attach">
-                    <button type="button" variant="primary" ng-click="displayAttachmentInput()" class="btn-icon add-attachment-button">
-                      <tg-svg svg-icon="icon-add">
-                          <svg class="icon icon-add" style="fill: ">
-                            <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
-                            </use>
-                          </svg>
-                      </tg-svg>
-                    </button>
-                    <input id="add-attach" type="file" ng-model="files" multiple="multiple" tg-file-change="vm.addAttachments(files, true)" class="ng-pristine ng-untouched ng-valid ng-empty" aria-invalid="false">
+                  <form action="/projects/<%= @project.id %>/issues/<%= @issue.id %>/files" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                      <label for="files" class="btn-icon add-attachment-button" style="width: 32px;">+</label>
+                      <input type="file" id="files" name="files[]" multiple onchange="form.submit()" style="visibility:hidden; display: none;">
+                    </fieldset>
+                  </form>
                 </div>
               </div>
           </div>
+
+          <div ng-if="vm.mode == 'list'" class="attachment-list sortable">
+            <div tg-attachments-sortable="vm.reorderAttachment(attachment, index)">
+              <% @issue.files.each do |file|  %>
+                <div tg-repeat="attachment in vm.attachmentsVisible track by attachment.getIn(['file', 'id'])" tg-bind-scope="tg-bind-scope" class="tg-scope" style="">
+                  <tg-attachment attachment="attachment" on-delete="vm.deleteAttachment(attachment)" on-update="vm.updateAttachment(attachment)" type="vm.type">
+                      <form ng-class="{deprecated: vm.attachment.getIn(['file', 'is_deprecated'])}" ng-if="vm.attachment.getIn(['file', 'id'])" ng-submit="vm.save()" class="single-attachment ng-pristine ng-valid" style="">
+                        <div class="attachment-name">
+                            <a tg-attachment-link="vm.attachment" href="<%= rails_blob_path(file, disposition: "attachment") %>" title="" target="_blank" class="">
+                              <tg-svg svg-icon="icon-attachment">
+                                  <svg class="icon icon-attachment" style="fill: ">
+                                    <use xlink:href="#icon-attachment" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-attachment">
+                                    </use>
+                                  </svg>
+                              </tg-svg>
+                              <span><%= file.blob.filename %></span>
+                            </a>
+                        </div>
+                        <div class="attachment-size"><span></span></div>
+                        <div ng-if="!vm.attachment.get('editable')" tg-check-permission="modify_issue" class="attachment-settings" style="">
+                            <a href="" title="Delete" ng-click="vm.delete()" class="settings ">
+                              <tg-svg svg-icon="icon-trash" class="drag">
+                                  <svg class="icon icon-trash" style="fill: ">
+                                    <use xlink:href="#icon-trash" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-trash">
+                                    </use>
+                                  </svg>
+                              </tg-svg>
+                            </a>
+                        </div>
+                      </form>
+                  </tg-attachment>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
         </section>
 
         <section ng-if="vm.showHistorySection()" class="history">

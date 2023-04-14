@@ -12,6 +12,7 @@ class Issue < ApplicationRecord
     has_many :watched_issue, dependent: :destroy
     has_many :timeline_events, dependent: :destroy
     has_many :comments, dependent: :destroy
+    has_many_attached :files, dependent: :destroy
     def update_status(params)
         update(status: params[:status])
     end
