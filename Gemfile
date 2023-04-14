@@ -46,7 +46,7 @@ gem 'erb-formatter'
 gem 'devise'
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem "omniauth-rails_csrf_protection"
-
+gem 'omniauth-google-oauth2'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
@@ -81,4 +81,3 @@ gem "dockerfile-rails", ">= 1.2", :group => :development
 
 gem "pg", "~> 1.4"
 gem "image_processing", ">= 1.2"
-gem "ruby-vips"

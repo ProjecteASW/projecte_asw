@@ -14,7 +14,7 @@
                 </div>
                 <div class="profile-data">
                     <h1 class="not-full-name"><%= @profile.username %></h1>
-                    <div class="username"><%= @profile.email %></div>
+                    <div class="username" style="word-wrap: break-word;"><%= @profile.email %></div>
                 </div>
                 <% if @profile.bio.length != 0 %>
                     <div class="profile-quote" style="background: url(https://tree.taiga.io/v-1678696193151/images/quote.png) no-repeat top left">

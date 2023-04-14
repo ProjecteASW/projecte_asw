@@ -51,4 +51,7 @@ Rails.application.routes.draw do
   get '/profile/:email/issues_watched', to: 'profile#issues_watched', constraints: { email: /[^\/]+/}
   get '/profile/:email/edit', to: 'profile#edit', constraints: { email: /[^\/]+/}
   patch '/profile/:email', to: 'profile#update', constraints: { email: /[^\/]+/}
+
+
+  get '/projects' => "projects#index", :as => :user_root
 end
