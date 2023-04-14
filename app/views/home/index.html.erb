@@ -27,7 +27,7 @@
         </div>
         <div ng-if="authPlugins.length" class="contrib-plugins-wrapper">
           <label translate="LOGIN_COMMON.ALT_LOGIN" ng-if="defaultLoginEnabled">Sign in with</label>
-          <%= button_to "Sign in with Github", omniauth_authorize_path(User, :github), method: :post, data: { turbo: false }, class: "button button-auth" %>
+          <%= button_to "Sign in with Google", omniauth_authorize_path(User, :google_oauth2), method: :post, data: { turbo: false }, class: "button button-auth" %>
         </div>
       </div>
     </div>
