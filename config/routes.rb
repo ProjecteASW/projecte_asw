@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   put '/projects/:project_id/issues/:id/add_watcher', to: 'issues#add_watcher'
   put '/projects/:project_id/issues/:id/add_comment', to: 'issues#add_comment'
   put '/projects/:project_id/issues/:id/change_assigned', to: 'issues#change_assigned'
+  post '/projects/:project_id/issues/:id/files', to: 'issues#attach_files'
   delete '/projects/:project_id/issues/:id', to: 'issues#destroy'
   delete '/projects/:project_id/issues/:id/date', to: 'issues#delete_deadline'
   delete '/projects/:project_id/issues/:id/delete_watcher/:user_id', to: 'issues#delete_watcher'
