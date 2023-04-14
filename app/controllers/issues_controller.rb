@@ -50,6 +50,7 @@ class IssuesController < ApplicationController
     @issue = @project.issues.find(params[:id])
     @watchedIssues = WatchedIssue.where(issue: @issue)
     @comments = Comment.where(issue: @issue).order(created_at: :desc)
+    @activities = TimelineEvent.where(issue: @issue)
   end
 
   # GET /issues/new
@@ -125,6 +126,7 @@ class IssuesController < ApplicationController
     @issue = @project.issues.find(params[:id])
     @watchedIssues = WatchedIssue.where(issue: @issue)
     @activities = TimelineEvent.where(issue: @issue).order(created_at: :desc)
+    @comments = Comment.where(issue: @issue)
   end
 
   # POST /issues or /issues.json
@@ -160,6 +162,15 @@ class IssuesController < ApplicationController
     else
       render 'edit'
     end
+  end
+
+  def update_description
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    if @issue.update(issue_params)
+      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the description")
+    end
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
   def update_status

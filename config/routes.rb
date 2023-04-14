@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   get '/projects/:project_id/issues/:id/add_watchers_view', to: 'issues#add_watchers_view'
   get '/projects/:project_id/issues/:id/change_assigned_view', to: 'issues#change_assigned_view'
   get '/projects/:project_id/issues/:id/activities', to: 'issues#activities'
+  put '/projects/:project_id/issues/:id/description', to: 'issues#update_description'
   put '/projects/:project_id/issues/:id/status', to: 'issues#update_status'
   put '/projects/:project_id/issues/:id/type', to: 'issues#update_type'
   put '/projects/:project_id/issues/:id/severity', to: 'issues#update_severity'
