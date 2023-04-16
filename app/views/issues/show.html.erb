@@ -102,10 +102,11 @@
 
           <div ng-if="vm.mode == 'list'" class="attachment-list sortable">
             <div tg-attachments-sortable="vm.reorderAttachment(attachment, index)">
+
               <% @issue.files.each do |file|  %>
                 <div tg-repeat="attachment in vm.attachmentsVisible track by attachment.getIn(['file', 'id'])" tg-bind-scope="tg-bind-scope" class="tg-scope" style="">
                   <tg-attachment attachment="attachment" on-delete="vm.deleteAttachment(attachment)" on-update="vm.updateAttachment(attachment)" type="vm.type">
-                      <form ng-class="{deprecated: vm.attachment.getIn(['file', 'is_deprecated'])}" ng-if="vm.attachment.getIn(['file', 'id'])" ng-submit="vm.save()" class="single-attachment ng-pristine ng-valid" style="">
+                      <div class="single-attachment ng-pristine ng-valid" style="">
                         <div class="attachment-name">
                             <a tg-attachment-link="vm.attachment" href="<%= rails_blob_path(file, disposition: "attachment") %>" title="" target="_blank" class="">
                               <tg-svg svg-icon="icon-attachment">
@@ -118,20 +119,14 @@
                             </a>
                         </div>
                         <div class="attachment-size"><span></span></div>
-                        <div ng-if="!vm.attachment.get('editable')" tg-check-permission="modify_issue" class="attachment-settings" style="">
-                            <a href="" title="Delete" ng-click="vm.delete()" class="settings ">
-                              <tg-svg svg-icon="icon-trash" class="drag">
-                                  <svg class="icon icon-trash" style="fill: ">
-                                    <use xlink:href="#icon-trash" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-trash">
-                                    </use>
-                                  </svg>
-                              </tg-svg>
-                            </a>
+                        <div class="attachment-settings" style="">
+                            <%= button_to 'Delete', "/projects/" + @project.id.to_s + "/issues/" + @issue.id.to_s + "/delete_attachment/" + file.id.to_s, method: :delete %>
                         </div>
-                      </form>
+                      </div>
                   </tg-attachment>
                 </div>
               <% end %>
+              
             </div>
           </div>
 

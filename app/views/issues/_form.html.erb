@@ -3,60 +3,12 @@
     <div class="form-wrapper">
       <div class="main">
         <fieldset>
-          <%= form.text_field :subject %>
+          <%= form.text_field :subject, placeholder: 'Subject' %>
         </fieldset>
 
         <fieldset>
 
-          <%= form.text_area :description %>
-        </fieldset>
-        <fieldset>
-          <section></section>
-          <tg-attachments-simple
-            attachments="attachments"
-            on-add="addAttachment(attachment)"
-            on-delete="deleteAttachment(attachment)"
-          >
-            <section
-              tg-attachments-drop="vm.addAttachments(files)"
-              class="attachments attachment-simple"
-            >
-              <div class="attachments-header">
-                <h3 class="attachments-title"><span class="attachments-num"></span>
-                  <span translate="ATTACHMENT.SECTION_NAME" class="attachments-text">Attachments</span></h3>
-                <div id="a11y-add-attach" title="Add new attachment. " class="add-attach">
-                  <button
-                    type="button"
-                    variant="primary"
-                    ng-click="displayAttachmentInput()"
-                    class="btn-icon add-attachment-button"
-                  >
-                    <tg-svg svg-icon="icon-add">
-                      <svg>
-                        <use xlink:href="#icon-add"></use>
-                      </svg>
-                    </tg-svg>
-                  </button>
-
-                  <input
-                    aria-label="Add new attachment. "
-                    id="add-attach"
-                    type="file"
-                    multiple="multiple"
-                    ng-model="files"
-                    tg-file-change="vm.addAttachments(files)"
-                    class="ng-pristine ng-untouched ng-valid ng-empty"
-                    aria-invalid="false"
-                  >
-                </div>
-              </div>
-              <!----><div ng-if="!vm.attachments.size" class="attachments-empty">
-                <div>Drop attachments here!</div>
-              </div><!---->
-              <div class="attachment-body attachment-list">
-                <!---->
-              </div>
-            </section></tg-attachments-simple>
+          <%= form.text_area :description , placeholder: 'Description'%>
         </fieldset>
       </div>
       <sidebar class="sidebar ticket-data">
