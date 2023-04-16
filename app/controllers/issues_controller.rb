@@ -265,6 +265,7 @@ class IssuesController < ApplicationController
     @issue = @project.issues.find(params[:id])
     @files = params[:files]
     @issue.files.attach(@files)
+    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "attached " + @files.length.to_s + " new file/s")
     redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
   end
 
@@ -300,9 +301,19 @@ class IssuesController < ApplicationController
     if @watchedIssue.delete
       redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
     else
-      raise error
+      raise "error"
     end
   end
+
+  def delete_attachment
+    @project = Project.find(params[:project_id])
+    @issue = @project.issues.find(params[:id])
+    @file = @issue.files.find(params[:file_id])
+    @file.purge
+    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "deleted an attachment")
+    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.

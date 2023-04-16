@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   delete '/projects/:project_id/issues/:id', to: 'issues#destroy'
   delete '/projects/:project_id/issues/:id/date', to: 'issues#delete_deadline'
   delete '/projects/:project_id/issues/:id/delete_watcher/:user_id', to: 'issues#delete_watcher'
+  delete '/projects/:project_id/issues/:id/delete_attachment/:file_id', to: 'issues#delete_attachment'
 
 
   #Routes for profiles
