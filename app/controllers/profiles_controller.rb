@@ -1,4 +1,4 @@
-class ProfileController < ApplicationController
+class ProfilesController < ApplicationController
   protect_from_forgery with: :null_session
   layout 'topbar_layout'
   def show
@@ -19,9 +19,9 @@ class ProfileController < ApplicationController
     @profile = get_profile
     respond_to do |format|
       if @profile.update(update_params)
-        format.html { redirect_to "/profile/" + @profile.email, notice: "Profile updated successfully." }
+        format.html { redirect_to profile_page_path(@profile.email), notice: "Profile updated successfully." }
       else
-        format.html { redirect_to "/profile/" + @profile.email, notice: "Profile could not be updated" }
+        format.html { redirect_to profile_page_path(@profile.email), notice: "Profile could not be updated" }
       end
     end
   end

@@ -1,5 +1,5 @@
 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <form action="/projects/<%= @project.id.to_s %>/issues/<%= @issue.id.to_s %>/date", method="put", class="ng-pristine ng-valid" style="display: block;">
+    <form action="<%= issue_update_deadline_path(@project.id, @issue.id) %>", method="put", class="ng-pristine ng-valid" style="display: block;">
         <h2 translate="LIGHTBOX.SET_DUE_DATE.TITLE" class="title">Set due date</h2>
         <% if @issue.limitDate %>
             <fieldset class="date">
@@ -13,7 +13,7 @@
 
         <button type="submit" title="Save" translate="COMMON.SAVE" class="submit-button btn-big">Save</button>
     </form>
-    <form action="/projects/<%= @project.id.to_s %>/issues/<%= @issue.id.to_s %>/date", method="delete", class="ng-pristine ng-valid" style="display: block;">
+    <form action="<%= issue_delete_deadline_path(@project.id, @issue.id) %>", method="delete", class="ng-pristine ng-valid" style="display: block;">
         <% if @issue.limitDate %>
             <button type="submit" title="Delete deadline", class="submit-button btn-big", style="background: #e44057; color: whitesmoke;">Delete deadline</button>
         <% end %>

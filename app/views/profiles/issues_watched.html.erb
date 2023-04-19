@@ -9,7 +9,7 @@
                         <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
                     <% end %>
                     <% if @profile.email == current_user.email %>
-                        <a title="User Settings" tg-nav="user-settings-user-profile" translate="USER.PROFILE.USER_SETTINGS" class="profile-edition" href="/profile/<%= @profile.email %>/edit">User Settings</a>
+                        <a title="User Settings" tg-nav="user-settings-user-profile" translate="USER.PROFILE.USER_SETTINGS" class="profile-edition" href="<%= profile_edit_view_path(@profile.email) %>">User Settings</a>
                     <% end %>
                 </div>
                 <div class="profile-data">
@@ -29,10 +29,10 @@
             <tg-profile-tabs class="timeline-wrapper">
                 <div>
                 <nav class="profile-content-tabs">
-                    <a href="/profile/<%= @profile.email %>" ng-repeat="tab in ::vm.tabs" title="Show all the activity of this user" ng-click="vm.toggleTab(tab)" ng-class="{active: tab.active}" class="tab" style="">
+                    <a href="<%= profile_page_path(@profile.email) %>"title="Show all the activity of this user" class="tab" style="">
                     <span>Timeline</span>
                     </a>
-                    <a href="/profile/<%= @profile.email %>/issues_watched" ng-repeat="tab in ::vm.tabs" title="List all issues watched by this user" ng-click="vm.toggleTab(tab)" ng-class="{active: tab.active}" class="tab active" style="">
+                    <a href="<%= profile_issues_watched_path(@profile.email) %>"title="List all issues watched by this user" class="tab active" style="">
                     <span>Issues Watched</span>
                     </a>
                 </nav>
@@ -68,7 +68,7 @@
                                                             </div>
                                                             <div class="list-itemtype-data-title">
                                                                 <span tg-bo-ref="vm.item.get('ref')" class="ticket-id">#<%= watchedIssue.issue.id %></span>
-                                                                <a href="/projects/<%= watchedIssue.issue.project_id %>/issues/<%= watchedIssue.issue.id %>" class="ticket-title"><%= watchedIssue.issue.subject %></a>
+                                                                <a href="<%= issue_path(watchedIssue.issue.project_id, watchedIssue.issue.id) %>" class="ticket-title"><%= watchedIssue.issue.subject %></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -91,7 +91,7 @@
                     <div ng-if="::vm.isCurrentUser">
                         <h4 translate="USER.PROFILE_SIDEBAR.TITLE">Your profile</h4>
                         <p translate="USER.PROFILE_SIDEBAR.DESCRIPTION">People can see everything you do and what you are working on. Add a nice bio to give an enhanced version of your information.</p>
-                        <a href="/profile/<%= @profile.email %>/edit" class=btn-big edit-profile">Edit bio</a>
+                        <a href="<%= profile_edit_view_path(@profile.email) %>" class=btn-big edit-profile">Edit bio</a>
                     </div>
                 <% end %>
                 <div tg-profile-hints="tg-profile-hints" class="profile-hints">
