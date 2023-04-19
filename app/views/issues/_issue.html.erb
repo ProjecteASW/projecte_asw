@@ -43,7 +43,7 @@
     </div>
   </div>
   <div data-fieldname="ref" class="subject">
-    <%= link_to "/projects/" + @project.id.to_s + "/issues/" + issue.id.to_s do %>
+    <%= link_to issue_path(@project.id, issue.id) do %>
       <div>
         <%= issue.subject %>
       </div>

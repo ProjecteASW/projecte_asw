@@ -49,11 +49,11 @@
         </tg-tag-line>
         <tg-created-by-display ng-model="issue" class="ticket-created-by ng-pristine ng-untouched ng-valid ng-not-empty" aria-invalid="false" style="">
           <div class="created-by">
-              <a href="/profile/<%= @issue.user.email %>" title="<%= @issue.user.username %>" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
+              <a href="<%= profile_page_path(@issue.user.email) %>" title="<%= @issue.user.username %>" translate="COMMON.CREATED_BY" translate-values="{ 'fullDisplayName': owner.full_name_display}" class="created-title">Created by <%= @issue.user.username %></a>
               <div class="created-date"><%= (@issue.created_at + Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></div>
           </div>
           <div class="user-avatar">
-            <a href="/profile/<%= @issue.user.email %>" title="<%= @issue.user.username %>">
+            <a href="<%= profile_page_path(@issue.user.email) %>" title="<%= @issue.user.username %>">
               <% if @issue.user.avatar.attached? %>
                 <%= image_tag @issue.user.avatar.variant(:profileShow) %>
               <% else %>
@@ -90,7 +90,7 @@
               <h3 class="attachments-title"><span class="attachments-num"><%= @issue.files.length %></span> <span translate="ATTACHMENT.SECTION_NAME" class="attachments-text">Attachments</span></h3>
               <div class="options">
                 <div tg-check-permission="modify_issue" title="Add new attachment. " class="add-attach">
-                  <form action="/projects/<%= @project.id %>/issues/<%= @issue.id %>/files" method="post" enctype="multipart/form-data">
+                  <form action="<%= issue_add_attachment_path(@project.id, @issue.id) %>" method="post" enctype="multipart/form-data">
                     <fieldset>
                       <label for="files" class="btn-icon add-attachment-button" style="width: 32px;">+</label>
                       <input type="file" id="files" name="files[]" multiple onchange="form.submit()" style="visibility:hidden; display: none;">
@@ -120,7 +120,7 @@
                         </div>
                         <div class="attachment-size"><span></span></div>
                         <div class="attachment-settings" style="">
-                            <%= button_to 'Delete', "/projects/" + @project.id.to_s + "/issues/" + @issue.id.to_s + "/delete_attachment/" + file.id.to_s, method: :delete %>
+                            <%= button_to 'Delete', issue_delete_attachment_path(@project.id, @issue.id, file.id), method: :delete %>
                         </div>
                       </div>
                   </tg-attachment>
@@ -135,8 +135,8 @@
         <section ng-if="vm.showHistorySection()" class="history">
           <tg-history-tabs show-comment-tab="vm.showCommentTab()" show-activity-tab="vm.showActivityTab()" on-active-comments="vm.onActiveHistoryTab(true)" on-active-activities="vm.onActiveHistoryTab(false)" active-tab="vm.viewComments" on-order-comments="vm.onOrderComments()" comments-num="vm.commentsNum" activities-num="vm.activitiesNum" on-reverse="vm.reverse">
               <nav class="history-tabs">
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="Comments" class="history-tab" style=""><%= @comments.length %> Comments</a>
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/activities" title="Activities" class="history-tab active" style=""><%= @activities.length %> Activities</a>
+                <a href="<%= issue_path(@project.id, @issue.id) %>" title="Comments" class="history-tab" style=""><%= @comments.length %> Comments</a>
+                <a href="<%= issue_activities_path(@project.id, @issue.id) %>" title="Activities" class="history-tab active" style=""><%= @activities.length %> Activities</a>
               </nav>
           </tg-history-tabs>
         </section>
@@ -148,7 +148,7 @@
                     <div class="activity">
                         <div class="activity-main">
                             <div class="activity-data">
-                                <span class="activity-creator"><a href="/profile/<%= activity.user.email %>"><%= activity.user.username %></a></span><span class="activity-date"><%= (activity.created_at + time = Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></span>
+                                <span class="activity-creator"><a href="<%= profile_page_path(activity.user.email) %>"><%= activity.user.username %></a></span><span class="activity-date"><%= (activity.created_at + time = Time.parse("02:00:00").seconds_since_midnight.seconds).strftime('%H:%M - %d/%m/%Y') %></span>
                             </div>
                             <div class="activity-diff">
                                 <div class="diff-wrapper">
@@ -173,7 +173,7 @@
       <span class="ticket-title ng-pristine ng-untouched ng-valid ng-not-empty">
         <span translate="COMMON.STATUS.CLOSED"><%= @issue.status.capitalize() %></span>
         <span>
-          <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/status', method: :put do |f| %>
+          <%= form_for @issue, url: issue_update_status_path(@project.id, @issue.id), method: :put do |f| %>
             <%= f.select :status, options_for_select(Issue.statuses.keys, @issue.status), {}, :onchange => 'this.form.submit();' %>
           <% end %>
         </span>
@@ -186,7 +186,7 @@
 
               <div class="level-field" style="display: flex; align-items:center;">
 
-                <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/type', method: :put do |f| %>
+                <%= form_for @issue, url: issue_update_type_path(@project.id, @issue.id), method: :put do |f| %>
                   <%= f.select :issue_type, options_for_select(Issue.issue_types.keys, @issue.issue_type), {}, :onchange => 'this.form.submit();' %>
                 <% end %>
 
@@ -208,7 +208,7 @@
 
                 <div class="level-field" style="display: flex; align-items:center;">
 
-                  <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/severity', method: :put do |f| %>
+                  <%= form_for @issue, url: issue_update_severity_path(@project.id, @issue.id), method: :put do |f| %>
                     <%= f.select :severity, options_for_select(Issue.severities.keys, @issue.severity), {}, :onchange => 'this.form.submit();' %>
                   <% end %>
 
@@ -234,7 +234,7 @@
               
                 <div class="level-field" style="display: flex; align-items:center;">
 
-                  <%= form_for @issue, url: '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/priority', method: :put do |f| %>
+                  <%= form_for @issue, url: issue_update_priority_path(@project.id, @issue.id), method: :put do |f| %>
                     <%= f.select :priority, options_for_select(Issue.priorities.keys, @issue.priority), {}, :onchange => 'this.form.submit();' %>
                   <% end %>
 
@@ -267,13 +267,13 @@
                           <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
                         <% end %>
                       </div>
-                      <a href="/profile/<%= @issue.assigned_to.email %>" class="user-list-name"><span><%= @issue.assigned_to.username %></span></a>
+                      <a href="<%= profile_page_path(@issue.assigned_to.email) %>" class="user-list-name"><span><%= @issue.assigned_to.username %></span></a>
                   </div>
                 <% end %>
 
               </div>
               <div class="ticket-users-actions">
-                <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/change_assigned_view" class="ticket-users-action">
+                <a href="<%= issue_change_assigned_view_path(@project.id, @issue.id) %>" class="ticket-users-action">
                   <% if @issue.assigned_to.nil? %>
                       <tg-svg svg-icon="icon-add" class="users-action icon">
                           <svg class="icon icon-add" style="fill: ">
@@ -308,15 +308,15 @@
                           <img tg-avatar-big="vm.user" alt="Profile picture" class="profile-img" src="https://www.gravatar.com/avatar/75bc64a04cf29ae6dd87d3958455e16d?s=200&amp;d=https%3A%2F%2Ftree.taiga.io%2Fv-1678696193151%2Fimages%2Fuser-avatars%2Fuser-avatar-05.png" title="Profile picture" style="background: rgb(183, 203, 131);">
                         <% end %>
                       </div>
-                      <a href="/profile/<%= issue.user.email %>" class="user-list-name"><span><%= issue.user.username %></span></a>
-                      <%= button_to 'X', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/delete_watcher/' + issue.user.id.to_s, method: :delete %>
+                      <a href="<%= profile_page_path(issue.user.email) %>" class="user-list-name"><span><%= issue.user.username %></span></a>
+                      <%= button_to 'X', issue_delete_watcher_path(@project.id, @issue.id, issue.user.id), method: :delete %>
                   </div>
                   
                 <% end %>
 
               </div>
               <div class="ticket-users-actions">
-                  <a href="/projects/<%= @project.id %>/issues/<%= @issue.id %>/add_watchers_view" class="ticket-users-action" style="">
+                  <a href="<%= issue_add_watchers_view_path(@project.id, @issue.id) %>" class="ticket-users-action" style="">
                     <tg-svg svg-icon="icon-add" class="users-action icon">
                         <svg class="icon icon-add" style="fill: ">
                           <use xlink:href="#icon-add" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-add">
@@ -334,9 +334,9 @@
 
         <div>
           <% if @issue.limitDate? %>
-            <%= link_to 'Deadline -> ' + @issue.limitDate.strftime('%d/%m/%Y'), '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon due-date-button is-editable active' %>
+            <%= link_to 'Deadline -> ' + @issue.limitDate.strftime('%d/%m/%Y'), issue_date_view_path(@project.id, @issue.id), class: 'btn-icon due-date-button is-editable active' %>
           <% else %>
-            <%= link_to 'Deadline', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/date', class: 'btn-icon button-delete' %>
+            <%= link_to 'Deadline', issue_date_view_path(@project.id, @issue.id), class: 'btn-icon button-delete' %>
           <% end %>
           
         </div>
@@ -346,9 +346,9 @@
         <div>
           <div style="float: right; width: auto;">
             <% if @issue.blocked? %>
-                <%= button_to 'Unblock', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/block', method: :put, class: 'btn-icon button-lock editable item-unblock' %>
+                <%= button_to 'Unblock', issue_update_block_path(@project.id, @issue.id), method: :put, class: 'btn-icon button-lock editable item-unblock' %>
             <% else %>
-              <%= button_to 'Block', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s + '/block', method: :put, class: 'btn-icon button-delete' %>
+              <%= button_to 'Block', issue_update_block_path(@project.id, @issue.id), method: :put, class: 'btn-icon button-delete' %>
             <% end %>
           </div>
         </div>
@@ -356,7 +356,7 @@
         <p></p>
 
         <div>
-            <%= button_to 'Delete', '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s, method: :delete, class: 'btn-icon button-delete' %>
+            <%= button_to 'Delete', issue_delete_path(@project.id, @issue.id), method: :delete, class: 'btn-icon button-delete' %>
         </div>
       </section>
     </sidebar>

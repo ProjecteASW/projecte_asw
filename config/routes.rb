@@ -26,34 +26,34 @@ Rails.application.routes.draw do
   get 'projects/new', to: 'projects#new', as: 'new_projecto'
   root "home#index"
 
-  get '/projects/:project_id/issues/:id', to: 'issues#show'
-  get '/projects/:project_id/issues/:id/date', to: 'issues#date'
-  get '/projects/:project_id/issues/:id/add_watchers_view', to: 'issues#add_watchers_view'
-  get '/projects/:project_id/issues/:id/change_assigned_view', to: 'issues#change_assigned_view'
-  get '/projects/:project_id/issues/:id/activities', to: 'issues#activities'
-  put '/projects/:project_id/issues/:id/description', to: 'issues#update_description'
-  put '/projects/:project_id/issues/:id/status', to: 'issues#update_status'
-  put '/projects/:project_id/issues/:id/type', to: 'issues#update_type'
-  put '/projects/:project_id/issues/:id/severity', to: 'issues#update_severity'
-  put '/projects/:project_id/issues/:id/priority', to: 'issues#update_priority'
-  put '/projects/:project_id/issues/:id/block', to: 'issues#update_block'
-  put '/projects/:project_id/issues/:id/date', to: 'issues#update_deadline'
-  put '/projects/:project_id/issues/:id/add_watcher', to: 'issues#add_watcher'
-  put '/projects/:project_id/issues/:id/add_comment', to: 'issues#add_comment'
-  put '/projects/:project_id/issues/:id/change_assigned', to: 'issues#change_assigned'
-  post '/projects/:project_id/issues/:id/files', to: 'issues#attach_files'
-  delete '/projects/:project_id/issues/:id', to: 'issues#destroy'
-  delete '/projects/:project_id/issues/:id/date', to: 'issues#delete_deadline'
-  delete '/projects/:project_id/issues/:id/delete_watcher/:user_id', to: 'issues#delete_watcher'
-  delete '/projects/:project_id/issues/:id/delete_attachment/:file_id', to: 'issues#delete_attachment'
+  get '/projects/:project_id/issues/:id', to: 'issues#show', as: 'issue'
+  get '/projects/:project_id/issues/:id/change_date', to: 'issues#date', as: 'issue_date_view'
+  get '/projects/:project_id/issues/:id/add_watchers', to: 'issues#add_watchers_view', as: 'issue_add_watchers_view'
+  get '/projects/:project_id/issues/:id/change_assigned', to: 'issues#change_assigned_view', as: 'issue_change_assigned_view'
+  get '/projects/:project_id/issues/:id/activities', to: 'issues#activities', as: 'issue_activities'
+  put '/projects/:project_id/issues/:id/description', to: 'issues#update_description', as: 'issue_update_description'
+  put '/projects/:project_id/issues/:id/status', to: 'issues#update_status', as:'issue_update_status'
+  put '/projects/:project_id/issues/:id/type', to: 'issues#update_type', as: 'issue_update_type'
+  put '/projects/:project_id/issues/:id/severity', to: 'issues#update_severity', as: 'issue_update_severity'
+  put '/projects/:project_id/issues/:id/priority', to: 'issues#update_priority', as: 'issue_update_priority'
+  put '/projects/:project_id/issues/:id/block', to: 'issues#update_block', as: 'issue_update_block'
+  put '/projects/:project_id/issues/:id/date', to: 'issues#update_deadline', as: 'issue_update_deadline'
+  post '/projects/:project_id/issues/:id/watchers', to: 'issues#add_watcher', as: 'issue_add_watcher'
+  post '/projects/:project_id/issues/:id/comments', to: 'issues#add_comment', as: 'issue_add_comment'
+  put '/projects/:project_id/issues/:id/assigned', to: 'issues#change_assigned', as: 'issue_change_assigned'
+  post '/projects/:project_id/issues/:id/attachments', to: 'issues#attach_files', as: 'issue_add_attachment'
+  delete '/projects/:project_id/issues/:id', to: 'issues#destroy', as: 'issue_delete'
+  delete '/projects/:project_id/issues/:id/date', to: 'issues#delete_deadline', as: 'issue_delete_deadline'
+  delete '/projects/:project_id/issues/:id/watchers/:user_id', to: 'issues#delete_watcher', as: 'issue_delete_watcher'
+  delete '/projects/:project_id/issues/:id/attachments/:file_id', to: 'issues#delete_attachment', as: 'issue_delete_attachment'
 
 
   #Routes for profiles
-  resources :profiles, only: [:show, :edit, :update]
-  get '/profile/:email', to: 'profile#show', constraints: { email: /[^\/]+/}
-  get '/profile/:email/issues_watched', to: 'profile#issues_watched', constraints: { email: /[^\/]+/}
-  get '/profile/:email/edit', to: 'profile#edit', constraints: { email: /[^\/]+/}
-  patch '/profile/:email', to: 'profile#update', constraints: { email: /[^\/]+/}
+  resources :profiles, only: []
+  get '/profiles/:email', to: 'profiles#show', as: 'profile_page', constraints: { email: /[^\/]+/}
+  get '/profiles/:email/issues_watched', to: 'profiles#issues_watched', as: 'profile_issues_watched', constraints: { email: /[^\/]+/}
+  get '/profiles/:email/edit', to: 'profiles#edit', as: 'profile_edit_view', constraints: { email: /[^\/]+/}
+  put '/profiles/:email', to: 'profiles#update', as: 'profile_update', constraints: { email: /[^\/]+/}
 
 
   get '/projects' => "projects#index", :as => :user_root

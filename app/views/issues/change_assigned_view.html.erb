@@ -1,5 +1,5 @@
 <tg-lightbox-close style="display: inline;">
-   <a class="close" ng-click="onClose()" href="/projects/<%= @project.id %>/issues/<%= @issue.id %>" title="close">
+   <a class="close" ng-click="onClose()" href="<%= issue_path(@project.id, @issue.id) %>" title="close">
       <tg-svg svg-icon="icon-close">
          <svg class="icon icon-close" style="fill: ">
             <use xlink:href="#icon-close" ng-attr-xlink:href="{{ '#' + svgIcon }}" ng-attr-href="{{ '#' + svgIcon }}" href="#icon-close">
@@ -14,7 +14,7 @@
 
       <% @possibleAssigned.each do |assigned| %>
 
-         <form action="/projects/<%= @project.id %>/issues/<%= @issue.id %>/change_assigned" method="put" class="">
+         <form action="<%= issue_change_assigned_path(@project.id, @issue.id) %>" method="put" class="">
             <input type="hidden" id="user_id" name="user_id" value="<%= assigned.id %>"/>
             <button type="submit" class="user-list-item" style="width:100%">
                <div class="user-list-avatar">
