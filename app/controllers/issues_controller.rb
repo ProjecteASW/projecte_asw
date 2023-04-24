@@ -6,6 +6,10 @@ class IssuesController < ApplicationController
 
   protect_from_forgery with: :null_session
 
+  def filter
+    @project = Project.find(params[:project_id])
+  end
+
   
   
   # GET /issues or /issues.json
@@ -13,37 +17,47 @@ class IssuesController < ApplicationController
     if params[:project_id]
       @project = Project.find(params[:project_id])
       @issues = if params[:search].present?
-        @project.issues.where("subject LIKE ?", "%#{params[:search]}%")
+        @project.issues.where("subject LIKE ? OR description LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
       else
-        @issues = @project.issues.all
+        @project.issues.all
       end
     else
       @issues = Issue.all
     end
-
-  if params[:sort_by] == 'issue_type'
-    @issues = @issues.order(issue_type: :asc)
-  end
-  if params[:sort_by] == 'severity'
-    @issues = @issues.order(severity: :asc)
-  end
-  if params[:sort_by] == 'priority'
-    @issues = @issues.order(priority: :asc)
-  end
- if params[:sort_by] == 'subject'
-    @issues = @issues.order(subject: :asc)
-  end
-  if params[:sort_by] == 'status'
-    @issues = @issues.order(status: :asc)
-  end
-  if params[:sort_by] == 'updated_at'
-    @issues = @issues.order(updated_at: :asc)
-  end
-  if params[:sort_by] == 'assigned_to'
-    @issues = @issues.joins(:assigned_to).order('users.username ASC')
-  end  
   
+    if params[:issue_type].present?
+      @issues = @issues.where(issue_type: params[:issue_type])
+    end
+  
+    if params[:severity].present?
+      @issues = @issues.where(severity: params[:severity])
+    end
+  
+    if params[:priority].present?
+      @issues = @issues.where(priority: params[:priority])
+    end
+  
+    if params[:status].present?
+      @issues = @issues.where(status: params[:status])
+    end
+  
+    if params[:sort_by] == 'issue_type'
+      @issues = @issues.order(issue_type: :asc)
+    elsif params[:sort_by] == 'severity'
+      @issues = @issues.order(severity: :asc)
+    elsif params[:sort_by] == 'priority'
+      @issues = @issues.order(priority: :asc)
+    elsif params[:sort_by] == 'subject'
+      @issues = @issues.order(subject: :asc)
+    elsif params[:sort_by] == 'status'
+      @issues = @issues.order(status: :asc)
+    elsif params[:sort_by] == 'updated_at'
+      @issues = @issues.order(updated_at: :asc)
+    elsif params[:sort_by] == 'assigned_to'
+      @issues = @issues.joins(:assigned_to).order('users.username ASC')
+    end
   end
+  
   
 
   # GET /issues/1 or /issues/1.json

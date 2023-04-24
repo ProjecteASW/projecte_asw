@@ -11,6 +11,9 @@
         <div class="issue-table-options-start">
 
           <%= render "issues/searchbar" %>
+<a href="<%= filter_issues_path(params[:project_id]) %>">Filter Issues</a>
+
+
           <div class="display-tags-button">
             <input
               id="show-tags-input"
@@ -59,6 +62,8 @@
       </div>
 
     </div>
+
+
   </body>
 </section>
 

@@ -1,0 +1,60 @@
+<h1>Filter issue</h1>
+
+<div
+  tg-lb-create-edit=""
+  class="lightbox lightbox-generic-form lightbox-create-edit open"
+  style="display: flex;"
+>
+  <%= link_to project_issues_path(@project), class: "close" do %>
+    <tg-svg svg-icon="icon-close">
+      <svg>
+        <use xlink:href="#icon-close"></use>
+      </svg>
+    </tg-svg>
+  <% end %>
+  <form action="<%= project_issues_path(@project) %>" method="get">
+  <div class="mb-3">
+            <label for="issue-type-filter" class="form-label">Issue Type</label>
+            <select id="issue-type-filter" name="issue_type" class="form-select">
+              <option value="">All</option>
+              <option value="bug">Bug</option>
+              <option value="question">Question</option>
+              <option value="enhancement">Enhancement</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="severity-filter" class="form-label">Severity</label>
+            <select id="severity-filter" name="severity" class="form-select">
+              <option value="">All</option>
+              <option value="wishlist">Wishlist</option>
+              <option value="minor">Minor</option>
+              <option value="norm">Normal</option>
+              <option value="important">Important</option>
+              <option value="critical">Critical</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="priority-filter" class="form-label">Priority</label>
+            <select id="priority-filter" name="priority" class="form-select">
+              <option value="">All</option>
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="status-filter" class="form-label">Status</label>
+            <select id="status-filter" name="status" class="form-select">
+              <option value="">All</option>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="testing">Testing</option>
+              <option value="reopened">Reopened</option>
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+  <button type="submit" class="btn btn-primary">Apply</button>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+</form>
+
+</div>

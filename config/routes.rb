@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   # Ruta para la acción de crear proyectos
   get 'projects/new', to: 'projects#new', as: 'new_projecto'
   root "home#index"
+  get '/projects/:project_id/filter', to: 'issues#filter', as: 'filter_issues'
+
 
   get '/projects/:project_id/issues/:id', to: 'issues#show', as: 'issue'
   get '/projects/:project_id/issues/:id/change_date', to: 'issues#date', as: 'issue_date_view'
