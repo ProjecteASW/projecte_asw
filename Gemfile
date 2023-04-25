@@ -81,3 +81,4 @@ gem "dockerfile-rails", ">= 1.2", :group => :development
 
 gem "pg", "~> 1.4"
 gem "image_processing", ">= 1.2"
+gem "aws-sdk-s3"

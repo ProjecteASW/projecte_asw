@@ -9,11 +9,11 @@ local:
 #Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 amazon:
   service: S3
-  access_key_id: ASIA2G6M3VT3BI5R72QF
-  secret_access_key: bCPDBX560WMqR+CPoEOr1hmY9OchnRxNqJplqXhb
-  session_token: FwoGZXIvYXdzEAMaDGmV+U9LrcPcet99syLWAfwA3/WMJxTMRms3070D9QJvylGCbeJmSUXdxvCovE7fACS6QzEqgUX3faa9dQYARf8qQ5xDF4tDzCS0AVFVi3NqrwpGdNxMJGQZmSdoQaWKkOEVEAdrWCISqTjYWMLXljadL83Ce7l5nPZI/PIArnWsxRfzRTtjUYeMSk6fKy+EQFwnynwfmtOryNSMEIjTyK2OgaS/5zQcQm0fhohpotiMEza/6yuebqrp+/UUhgB9yJ3Rq4+RBFbe9KP2pVlTE5+lWCGCPCQloTO2KA368RUEru0JlEwoiPjgoQYyLXUCwzYseQlvjYQxoP5xOAVhDCyoggfYShSn5xDFJkEW2W73ieyccwasrh2jBg
+  access_key_id: ASIAUHAROOYGIPRXNLFP
+  secret_access_key: zVvERwuVG06qV80m5csH1gnJ0ikSS0VyF+/1N32i
+  session_token: FwoGZXIvYXdzEBoaDKTm2DJ5zN5fzCwI7yLbAXaSOgjiNp0UntKAoy4M6Czx/2VaPE99l7BpG7SCvjoAtHWmt3nLyT6tIQmWT2ebU0I9y39WGsMTz1CCsVVm3Cky9YogpZxHA+fJadNqaQAxY6k1rbpGEHf4ukH+pSWqsol5iQBQR1y/pgx/oEcfZTCBDgjkODoMwoocAqgj0W7wbeQA8a9G8xqYhks5rsic8QErTbGMoFef4WvF4nIdAlAvyQjmWY5uzv4l+DDuxx+a5/sMOZ0Ugs+CPkGbVLYKuKuq3tnNu6NgwSyK06IwpuxVT1xxruXY+ytJgii4rp6iBjIt1Ae/EaHzmn9qoZXvIb7PcEptv45gr7qgHlZVeXGqxTCnYfJD6JKgz7ppIf9l
   region: us-east-1
-  bucket: your_own_bucket-<%= Rails.env %>
+  bucket: bucketasw
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
