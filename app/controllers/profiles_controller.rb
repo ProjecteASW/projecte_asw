@@ -4,6 +4,10 @@ class ProfilesController < ApplicationController
   def show
     @profile = get_profile
     @timelineEvents = TimelineEvent.where(user: @profile).order(created_at: :desc)
+    respond_to do |format|
+      format.json { render json: @profile, serializer: UserSerializer }
+      format.html { render :show }
+    end
   end
 
   def issues_watched
@@ -19,8 +23,10 @@ class ProfilesController < ApplicationController
     @profile = get_profile
     respond_to do |format|
       if @profile.update(update_params)
+        format.json { render json: @profile, serializer: UserSerializer }
         format.html { redirect_to profile_page_path(@profile.email), notice: "Profile updated successfully." }
       else
+        format.json { render json: @profile, serializer: UserSerializer }
         format.html { redirect_to profile_page_path(@profile.email), notice: "Profile could not be updated" }
       end
     end
@@ -36,7 +42,7 @@ class ProfilesController < ApplicationController
       if User.where(email: email).present?
         User.find_by(email: email)
       else
-        raise "Error: Profile cannot be found"
+        raise ActionController::RoutingError.new('Not Found')
     end        
   end
 end

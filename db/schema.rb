@@ -62,7 +62,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_141858) do
     t.datetime "updated_at", null: false
     t.integer "project_id", null: false
     t.integer "user_id", null: false
-    t.integer "assigned_to_id", null: false
+    t.integer "assigned_to_id"
     t.index ["assigned_to_id"], name: "index_issues_on_assigned_to_id"
     t.index ["project_id"], name: "index_issues_on_project_id"
     t.index ["user_id"], name: "index_issues_on_user_id"
