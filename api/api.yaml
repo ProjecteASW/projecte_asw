@@ -43,11 +43,13 @@ paths:
                     items:
                       type: object
                       properties:
+                        project_id:
+                          type: integer
                         project:
                           type: string
+                        issue_id:
+                          type: integer
                         issue:
-                          type: string
-                        profile:
                           type: string
                         message:
                           type: string
@@ -58,11 +60,13 @@ paths:
                     items:
                       type: object
                       properties:
+                        project_id:
+                          type: integer
                         project:
                           type: string
+                        issue_id:
+                          type: integer
                         issue:
-                          type: string
-                        profile:
                           type: string
         '404':
           description: Usuari no existent
@@ -104,11 +108,13 @@ paths:
                     items:
                       type: object
                       properties:
+                        project_id:
+                          type: integer
                         project:
                           type: string
+                        issue_id:
+                          type: integer
                         issue:
-                          type: string
-                        profile:
                           type: string
                         message:
                           type: string
@@ -119,11 +125,13 @@ paths:
                     items:
                       type: object
                       properties:
+                        project_id:
+                          type: integer
                         project:
                           type: string
+                        issue_id:
+                          type: integer
                         issue:
-                          type: string
-                        profile:
                           type: string
         '404':
           description: Usuari no existent
@@ -139,20 +147,25 @@ paths:
                   type: string
                 avatar:
                   type: file
-  "/api/v1/pets/{id}/":
+  "/projects/{project_id}/issues/{issue_id}/":
     get:
-      summary: Retrieves a pet
+      summary: Obté la informació d'una Issue
       tags:
-      - Pets
+      - Issues
       parameters:
-      - name: id
+      - name: project_id
         in: path
         required: true
         schema:
-          type: string
+          type: integer
+      - name: issue_id
+        in: path
+        required: true
+        schema:
+          type: integer
       responses:
         '200':
-          description: name found
+          description: Operació exitosa
           content:
             application/json:
               schema:
@@ -160,33 +173,51 @@ paths:
                 properties:
                   id:
                     type: integer
-                  name:
+                  subject:
                     type: string
-                  photo_url:
+                  description:
                     type: string
                   status:
                     type: string
-                required:
-                - id
-                - name
-                - status
-            application/xml:
-              schema:
-                type: object
-                properties:
-                  id:
+                  created_by_user_id:
                     type: integer
-                  name:
+                  created_at:
                     type: string
-                  photo_url:
+                  issue_type:
                     type: string
-                  status:
+                  severity:
                     type: string
-                required:
-                - id
-                - name
-                - status
+                  priority:
+                    type: string
+                  limitDate:
+                    type: string
+                  blocked:
+                    type: boolean
+                  assigned_profile:
+                    type: integer
+                  timeline_events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        profile_id:
+                          type: integer
+                        profile:
+                          type: string
+                        message:
+                          type: string
+                        date:
+                          type: string
+                  watched_issues:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        profile_id:
+                          type: integer
+                        profile:
+                          type: string
         '404':
-          description: pet not found
+          description: Projecte o Issue no existent
 servers:
 - url: http://127.0.0.1:3000
