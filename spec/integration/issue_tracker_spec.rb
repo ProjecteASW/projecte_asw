@@ -24,9 +24,10 @@ describe 'Issue Tracker API' do
             items: {
               type: :object,
               properties: {
+                project_id: { type: :integer },
                 project: { type: :string },
+                issue_id: { type: :integer },
                 issue: { type: :string },
-                profile: { type: :string },
                 message: { type: :string },
                 data: { type: :string }
               }
@@ -37,9 +38,10 @@ describe 'Issue Tracker API' do
             items: {
               type: :object,
               properties: {
+                project_id: { type: :integer },
                 project: { type: :string },
-                issue: { type: :string },
-                profile: { type: :string }
+                issue_id: { type: :integer },
+                issue: { type: :string }
               }
             }
           }
@@ -84,9 +86,10 @@ describe 'Issue Tracker API' do
             items: {
               type: :object,
               properties: {
+                project_id: { type: :integer },
                 project: { type: :string },
+                issue_id: { type: :integer },
                 issue: { type: :string },
-                profile: { type: :string },
                 message: { type: :string },
                 data: { type: :string }
               }
@@ -97,9 +100,10 @@ describe 'Issue Tracker API' do
             items: {
               type: :object,
               properties: {
+                project_id: { type: :integer },
                 project: { type: :string },
-                issue: { type: :string },
-                profile: { type: :string }
+                issue_id: { type: :integer },
+                issue: { type: :string }
               }
             }
           }
@@ -113,29 +117,57 @@ describe 'Issue Tracker API' do
     end
   end
 
-  path '/api/v1/pets/{id}/' do
+  path '/projects/{project_id}/issues/{issue_id}/' do
 
-    get 'Retrieves a pet' do
-      tags 'Pets'
-      produces 'application/json', 'application/xml'
-      parameter name: :id, :in => :path, :type => :string
+    get 'Obté la informació d\'una Issue' do
+      tags 'Issues'
+      consumes 'application/json', 'application/xml'
+      produces 'application/json'
+      parameter name: :project_id, :in => :path, :type => :integer
+      parameter name: :issue_id, :in => :path, :type => :integer
 
-      response '200', 'name found' do
+      response '200', 'Operació exitosa' do
         schema type: :object,
-          properties: {
-            id: { type: :integer, },
-            name: { type: :string },
-            photo_url: { type: :string },
-            status: { type: :string }
+        properties: {
+          id: { type: :integer },
+          subject: { type: :string },
+          description: { type: :string },
+          status: { type: :string },
+          created_by_user_id: {type: :integer},
+          created_at: { type: :string },
+          issue_type: { type: :string },
+          severity: { type: :string },
+          priority: { type: :string },
+          limitDate: { type: :string },
+          blocked: { type: :boolean },
+          assigned_profile: { type: :integer },
+          timeline_events: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                profile_id: { type: :integer },
+                profile: { type: :string },
+                message: { type: :string },
+                date: { type: :string }
+              }
+            }
           },
-          required: [ 'id', 'name', 'status' ]
-
-        let(:id) { Pet.create(name: 'foo', status: 'bar', photo_url: 'http://example.com/avatar.jpg').id }
+          watched_issues: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                profile_id: { type: :integer },
+                profile: { type: :string },
+              }
+            }
+          }
+        }
         run_test!
       end
 
-      response '404', 'pet not found' do
-        let(:id) { 'invalid' }
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end

@@ -67,6 +67,10 @@ class IssuesController < ApplicationController
     @watchedIssues = WatchedIssue.where(issue: @issue)
     @comments = Comment.where(issue: @issue).order(created_at: :desc)
     @activities = TimelineEvent.where(issue: @issue)
+    respond_to do |format|
+      format.json { render json: @issue, serializer: IssueSerializer }
+      format.html { render :show }
+    end
   end
 
   # GET /issues/new
