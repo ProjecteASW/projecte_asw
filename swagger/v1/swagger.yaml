@@ -1,0 +1,192 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/profiles/{email_prefix}@{email_sufix}/":
+    get:
+      summary: Obté la informació d'un perfil
+      tags:
+      - Perfils
+      parameters:
+      - name: email_prefix
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: email_sufix
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Operació exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  bio:
+                    type: string
+                  profile_picture:
+                    type: string
+                  timeline_events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        issue:
+                          type: string
+                        profile:
+                          type: string
+                        message:
+                          type: string
+                        data:
+                          type: string
+                  watched_issues:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        issue:
+                          type: string
+                        profile:
+                          type: string
+        '404':
+          description: Usuari no existent
+    put:
+      summary: Actualitza la informació d'un perfil
+      tags:
+      - Perfils
+      parameters:
+      - name: email_prefix
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: email_sufix
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Operació exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  bio:
+                    type: string
+                  profile_picture:
+                    type: string
+                  timeline_events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        issue:
+                          type: string
+                        profile:
+                          type: string
+                        message:
+                          type: string
+                        data:
+                          type: string
+                  watched_issues:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        project:
+                          type: string
+                        issue:
+                          type: string
+                        profile:
+                          type: string
+        '404':
+          description: Usuari no existent
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                bio:
+                  type: string
+                avatar:
+                  type: file
+  "/api/v1/pets/{id}/":
+    get:
+      summary: Retrieves a pet
+      tags:
+      - Pets
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: name found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  photo_url:
+                    type: string
+                  status:
+                    type: string
+                required:
+                - id
+                - name
+                - status
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  photo_url:
+                    type: string
+                  status:
+                    type: string
+                required:
+                - id
+                - name
+                - status
+        '404':
+          description: pet not found
+servers:
+- url: http://127.0.0.1:3000

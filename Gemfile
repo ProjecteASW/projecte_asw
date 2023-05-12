@@ -82,3 +82,10 @@ gem "dockerfile-rails", ">= 1.2", :group => :development
 gem "pg", "~> 1.4"
 gem "image_processing", ">= 1.2"
 gem "aws-sdk-s3"
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.5'
+end
+gem 'rswag'
+gem 'active_model_serializers', '~> 0.10.0'
+gem 'rack-cors'
