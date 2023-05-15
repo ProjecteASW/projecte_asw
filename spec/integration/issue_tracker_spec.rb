@@ -123,6 +123,7 @@ describe 'Issue Tracker API' do
       tags 'Issues'
       consumes 'application/json', 'application/xml'
       produces 'application/json'
+      security [ApiKeyAuth: []]
       parameter name: :project_id, :in => :path, :type => :integer
       parameter name: :issue_id, :in => :path, :type => :integer
 

@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get '/profiles/:email', to: 'profiles#show', as: 'profile_page', constraints: { email: /[^\/]+/}
   get '/profiles/:email/issues_watched', to: 'profiles#issues_watched', as: 'profile_issues_watched', constraints: { email: /[^\/]+/}
   get '/profiles/:email/edit', to: 'profiles#edit', as: 'profile_edit_view', constraints: { email: /[^\/]+/}
+  get '/profiles/:email/api_key', to: 'profiles#api_key', as: 'profile_api_key_view', constraints: { email: /[^\/]+/}
   put '/profiles/:email', to: 'profiles#update', as: 'profile_update', constraints: { email: /[^\/]+/}
 
 

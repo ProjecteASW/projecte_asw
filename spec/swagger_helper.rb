@@ -26,7 +26,16 @@ RSpec.configure do |config|
         {
           url: 'http://127.0.0.1:3000'
         }
-      ]
+      ],
+      components: {
+        securitySchemes: {
+          ApiKeyAuth: {
+            type: :apiKey,
+            name: 'API_KEY',
+            in: :header
+          }
+        }
+      }
     }
   }
 

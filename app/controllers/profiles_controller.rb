@@ -32,6 +32,10 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def api_key
+    @profile = get_profile
+  end
+
   private
     def update_params
       params.permit(:email, :username, :bio, :avatar)
@@ -43,7 +47,7 @@ class ProfilesController < ApplicationController
         User.find_by(email: email)
       else
         raise ActionController::RoutingError.new('Not Found')
-    end        
-  end
+      end   
+    end
 end
 
