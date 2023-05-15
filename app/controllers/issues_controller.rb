@@ -1,6 +1,5 @@
 class IssuesController < ApplicationController
   layout 'bar_layout', except: [:date, :add_watchers_view, :change_assigned_view]
-  before_action :authenticate_user!
 
   before_action :set_issue, only: %i[ show edit update destroy ]
 
