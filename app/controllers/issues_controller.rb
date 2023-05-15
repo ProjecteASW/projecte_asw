@@ -6,22 +6,18 @@ class IssuesController < ApplicationController
   protect_from_forgery with: :null_session
 
   def filter
-    @project = Project.find(params[:project_id])
+    @project = get_project
   end
 
   
   
   # GET /issues or /issues.json
   def index
-    if params[:project_id]
-      @project = Project.find(params[:project_id])
-      @issues = if params[:search].present?
-        @project.issues.where("subject LIKE ? OR description LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
-      else
-        @project.issues.all
-      end
+    @project = get_project
+    @issues = if params[:search].present?
+      @project.issues.where("subject LIKE ? OR description LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
     else
-      @issues = Issue.all
+      @project.issues.all
     end
   
     if params[:issue_type].present?
@@ -55,13 +51,17 @@ class IssuesController < ApplicationController
     elsif params[:sort_by] == 'assigned_to'
       @issues = @issues.joins(:assigned_to).order('users.username ASC')
     end
+    respond_to do |format|
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issues, serializer: IssueBriefSerializer) }
+      format.html { render :index }
+    end
   end
   
   
 
   # GET /issues/1 or /issues/1.json
   def show
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @watchedIssues = WatchedIssue.where(issue: @issue)
     @comments = Comment.where(issue: @issue).order(created_at: :desc)
@@ -75,7 +75,7 @@ class IssuesController < ApplicationController
   # GET /issues/new
   def new
     if params[:project_id]
-      @project = Project.find(params[:project_id])
+      @project = get_project
       @user = current_user
       @issue = Issue.new
     else
@@ -85,14 +85,14 @@ class IssuesController < ApplicationController
 
   end
   def new_bulk
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @user = current_user
     @issue = Issue.new
   end
   
   def bulk_create
     issue_names = params[:issue_names].split("\n")
-    @project = Project.find(params[:project_id])
+    @project = get_project
 
     issue_names.each do |issue_name|
       @issue = @project.issues.build()
@@ -111,17 +111,17 @@ class IssuesController < ApplicationController
 
   # GET /issues/1/edit
   def edit
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
   end
 
   def date
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
   end
 
   def add_watchers_view
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @users = User.all
     @possibleWatchers = @users
@@ -131,7 +131,7 @@ class IssuesController < ApplicationController
   end
 
   def change_assigned_view
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @users = User.all
     @possibleAssigned = @users
@@ -141,7 +141,7 @@ class IssuesController < ApplicationController
   end
 
   def activities
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @watchedIssues = WatchedIssue.where(issue: @issue)
     @activities = TimelineEvent.where(issue: @issue).order(created_at: :desc)
@@ -150,7 +150,7 @@ class IssuesController < ApplicationController
 
   # POST /issues or /issues.json
   def create
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.build(issue_params)
     @issue.user_id = current_user.id
     @issue.assigned_to_id = current_user.id
@@ -173,7 +173,7 @@ class IssuesController < ApplicationController
 
   # PATCH/PUT /issues/1 or /issues/1.json
   def update
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     if @issue.update(issue_params)
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the issue")
@@ -184,7 +184,7 @@ class IssuesController < ApplicationController
   end
 
   def update_description
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     if @issue.update(issue_params)
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the description")
@@ -193,7 +193,7 @@ class IssuesController < ApplicationController
   end
 
   def update_status
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @currentStatus = @issue.status
     if @issue.update(issue_params)
@@ -203,7 +203,7 @@ class IssuesController < ApplicationController
   end
 
   def update_type
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @currentType = @issue.issue_type
     if @issue.update(issue_params)
@@ -213,7 +213,7 @@ class IssuesController < ApplicationController
   end
 
   def update_severity
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @currentSeverity = @issue.severity
     if @issue.update(issue_params)
@@ -223,7 +223,7 @@ class IssuesController < ApplicationController
   end
 
   def update_priority
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @currentPriority = @issue.priority
     if @issue.update(issue_params)
@@ -233,7 +233,7 @@ class IssuesController < ApplicationController
   end
 
   def update_block
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @issue.update_attribute(:blocked, !@issue.blocked)
     if @issue.blocked?
@@ -245,7 +245,7 @@ class IssuesController < ApplicationController
   end
 
   def update_deadline
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @issue.update_attribute(:limitDate, params[:limitDate])
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the deadline")
@@ -253,7 +253,7 @@ class IssuesController < ApplicationController
   end
 
   def add_watcher
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @watcher = User.find(params[:user_id])
     WatchedIssue.create(:issue => @issue, :user => @watcher)
@@ -261,7 +261,7 @@ class IssuesController < ApplicationController
   end
 
   def add_comment
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     Comment.create(:issue => @issue, :user => current_user, :text => params[:text])
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "wrote a new comment")
@@ -269,7 +269,7 @@ class IssuesController < ApplicationController
   end
 
   def change_assigned
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @assigned = User.find(params[:user_id])
     @issue.assigned_to = @assigned
@@ -278,7 +278,7 @@ class IssuesController < ApplicationController
   end
 
   def attach_files
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @files = params[:files]
     @issue.files.attach(@files)
@@ -288,7 +288,7 @@ class IssuesController < ApplicationController
 
   # DELETE /issues/1 or /issues/1.json
   def destroy
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @issue.timeline_events.clear
     @issue.watched_issue.clear
@@ -303,7 +303,7 @@ class IssuesController < ApplicationController
   end
 
   def delete_deadline
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @issue.update_attribute(:limitDate, nil)
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "deleted the deadline")
@@ -311,7 +311,7 @@ class IssuesController < ApplicationController
   end
 
   def delete_watcher
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @watcher = User.find(params[:user_id])
     @watchedIssue = WatchedIssue.find_by(issue: @issue, user: @watcher)
@@ -323,7 +323,7 @@ class IssuesController < ApplicationController
   end
 
   def delete_attachment
-    @project = Project.find(params[:project_id])
+    @project = get_project
     @issue = @project.issues.find(params[:id])
     @file = @issue.files.find(params[:file_id])
     @file.purge
@@ -333,6 +333,14 @@ class IssuesController < ApplicationController
   
 
   private
+    def get_project
+      project_id = params[:project_id]
+      if Project.where(id: project_id).present?
+        Project.find(project_id)
+      else
+        raise ActionController::RoutingError.new('Not Found')
+      end   
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_issue
       @issue = Issue.find(params[:id])
