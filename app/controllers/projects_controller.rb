@@ -1,5 +1,4 @@
 class ProjectsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_project, only: %i[ show edit update destroy ]
   layout 'topbar_layout'
 
@@ -7,6 +6,10 @@ class ProjectsController < ApplicationController
   def index
     #@projects = current_user.projects
     @projects = Project.order(:name).all
+    respond_to do |format|
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@projects, serializer: ProjectBriefSerializer) }
+      format.html { render :index }
+    end
   end
   
   def add_member
