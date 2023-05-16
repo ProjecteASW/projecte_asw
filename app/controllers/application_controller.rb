@@ -14,13 +14,12 @@ protected
   def authenticate
     if request.format.html? 
       authenticate_user!
-    end
-    if request.format.json?
+    else
       if request.method != "GET"
-        if request.headers["API_KEY"].nil?
+        if request.headers["HTTP_API_KEY"].nil?
           raise "API_KEY not provided."
         else
-          user = User.find_by_api_key(api_key)
+          user = User.find_by_api_key(request.headers["HTTP_API_KEY"])
           if user.nil?
             raise "The API_KEY does not belong to any user."
           end
