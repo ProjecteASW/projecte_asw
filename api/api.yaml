@@ -856,7 +856,7 @@ paths:
                     type: string
         '404':
           description: Issue no existent
-  "/projects/{project_id}/issues/status/":
+  "/projects/{project_id}/issues/{issue_id}/status/":
     put:
       summary: Edita una Issue
       tags:
@@ -875,7 +875,7 @@ paths:
         schema:
           type: integer
       responses:
-        '201':
+        '200':
           description: Issue creada
           content:
             application/json:

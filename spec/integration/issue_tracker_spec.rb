@@ -570,7 +570,98 @@ describe 'Issue Tracker API' do
   end
 
 
+  path '/projects/{project_id}/issues/{issue_id}/status/' do
+    put 'Edita una Issue' do
+      tags 'Issues'
+      consumes 'application/json', 'multipart/form-data'
+      produces 'application/json'
+      security [ApiKeyAuth: []]
+      parameter name: :project_id, :in => :path, :type => :integer
+      parameter name: :issue_id, :in => :path, :type => :integer
+      parameter name: :issue, :in => :body, schema: {
+        type: :object,
+        properties: {
+          status: { 
+              type: :string,
+              enum: ['open', 'in_progress', 'testing', 'reopened', 'resolved'],
+              default: 'open'
+          }
+        },
+        required: [:status]
+      }
 
+
+      response '200', 'Issue creada' do
+        schema type: :object,
+        properties: {
+          id: { type: :integer },
+          subject: { type: :string },
+          description: { type: :string },
+          status: { type: :string },
+          created_by_user_id: {type: :integer},
+          created_by_user_username: {type: :string},
+          creation_date: { type: :string },
+          issue_type: { type: :string },
+          severity: { type: :string },
+          priority: { type: :string },
+          limitDate: { type: :string },
+          blocked: { type: :boolean },
+          assigned_profile_id: { type: :integer },
+          assigned_profile_username: { type: :string },
+          watchers: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                profile_id: { type: :integer },
+                profile: { type: :string }
+              }
+            }
+          },
+          attachments: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                id: { type: :integer },
+                name: { type: :string },
+                path: { type: :string }
+              }
+            }
+          },
+          activities: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                profile_id: { type: :integer },
+                profile: { type: :string },
+                message: { type: :string },
+                date: { type: :string }
+              }
+            }
+          },
+          comments: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                profile_id: { type: :integer },
+                profile: { type: :string },
+                text: { type: :string },
+                date: { type: :string },
+              }
+            }
+          }
+        }
+        run_test!
+      end
+
+      response '404', 'Usuari no existent' do
+        run_test!
+      end
+    end
+  end
 
 
 
