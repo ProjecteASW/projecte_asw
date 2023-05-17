@@ -41,6 +41,8 @@ Rails.application.routes.draw do
   put '/projects/:project_id/issues/:id/severity', to: 'issues#update_severity', as: 'issue_update_severity'
   put '/projects/:project_id/issues/:id/priority', to: 'issues#update_priority', as: 'issue_update_priority'
   put '/projects/:project_id/issues/:id/block', to: 'issues#update_block', as: 'issue_update_block'
+  put '/projects/:project_id/issues/:id/block_issue', to: 'issues#block', as: 'issue_block'
+  put '/projects/:project_id/issues/:id/unblock_issue', to: 'issues#unblock', as: 'issue_unblock'
   put '/projects/:project_id/issues/:id/date', to: 'issues#update_deadline', as: 'issue_update_deadline'
   post '/projects/:project_id/issues/:id/watchers', to: 'issues#add_watcher', as: 'issue_add_watcher'
   post '/projects/:project_id/issues/:id/comments', to: 'issues#add_comment', as: 'issue_add_comment'

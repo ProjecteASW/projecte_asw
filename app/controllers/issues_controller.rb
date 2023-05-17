@@ -199,7 +199,7 @@ class IssuesController < ApplicationController
     user = get_user
     respond_to do |format|
       if @issue.update(issue_params)
-        TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the description")
+        TimelineEvent.create(:issue => @issue, :user => user, :message => "updated the description")
         format.json { render json: @issue, serializer: IssueSerializer }
           format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
       else
@@ -281,12 +281,41 @@ class IssuesController < ApplicationController
     @project = get_project
     @issue = get_issue
     @issue.update_attribute(:blocked, !@issue.blocked)
+    user = get_user
     if @issue.blocked?
-      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "blocked the issue")
+      TimelineEvent.create(:issue => @issue, :user => user, :message => "blocked the issue")
     else
-      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "unblocked the issue")
+      TimelineEvent.create(:issue => @issue, :user => user, :message => "unblocked the issue")
     end
     redirect_to issue_path(@project.id, @issue.id)
+  end
+
+  def block
+    @project = get_project
+    @issue = get_issue
+    user = get_user
+    if !@issue.blocked?
+      @issue.update_attribute(:blocked, true)
+      TimelineEvent.create(:issue => @issue, :user => user, :message => "blocked the issue")
+    end
+    respond_to do |format|
+      format.json { render json: @issue, serializer: IssueSerializer }
+      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully blocked." }
+    end
+  end
+
+  def unblock
+    @project = get_project
+    @issue = get_issue
+    user = get_user
+    if @issue.blocked?
+      @issue.update_attribute(:blocked, false)
+      TimelineEvent.create(:issue => @issue, :user => user, :message => "unblocked the issue")
+    end
+    respond_to do |format|
+      format.json { render json: @issue, serializer: IssueSerializer }
+      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully unblocked." }
+    end
   end
 
   def update_deadline
