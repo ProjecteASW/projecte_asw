@@ -61,6 +61,7 @@ describe 'Issue Tracker API' do
       tags 'Perfils'
       consumes 'multipart/form-data'
       produces 'application/json'
+      security [ApiKeyAuth: []]
       parameter name: :email_prefix, :in => :path, :type => :string
       parameter name: :email_sufix, :in => :path, :type => :string
       parameter name: :'', in: :formData, schema: {
@@ -422,6 +423,38 @@ describe 'Issue Tracker API' do
         run_test!
       end
     end
+
+
+    delete 'Elimina una Issue' do
+      tags 'Issues'
+      consumes 'application/json', 'multipart/form-data'
+      produces 'application/json'
+      security [ApiKeyAuth: []]
+      parameter name: :project_id, :in => :path, :type => :integer
+      parameter name: :issue_id, :in => :path, :type => :integer
+      
+      response '200', 'Issue eliminada' do
+        schema type: :object,
+        properties: {
+          id: { type: :integer },
+          subject: { type: :string },
+          status: { type: :string },
+          creation_date: { type: :string },
+          issue_type: { type: :string },
+          severity: { type: :string },
+          priority: { type: :string },
+          blocked: { type: :boolean },
+          assigned_profile_id: { type: :integer },
+          assigned_profile_username: { type: :string }
+        }
+        run_test!
+      end
+
+      response '404', 'Issue no existent' do
+        run_test!
+      end
+    end
+
   end
 
 

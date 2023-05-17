@@ -74,6 +74,8 @@ paths:
       summary: Actualitza la informació d'un perfil
       tags:
       - Perfils
+      security:
+      - ApiKeyAuth: []
       parameters:
       - name: email_prefix
         in: path
@@ -604,6 +606,53 @@ paths:
                           type: string
         '404':
           description: Projecte o Issue no existent
+    delete:
+      summary: Elimina una Issue
+      tags:
+      - Issues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: issue_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Issue eliminada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  subject:
+                    type: string
+                  status:
+                    type: string
+                  creation_date:
+                    type: string
+                  issue_type:
+                    type: string
+                  severity:
+                    type: string
+                  priority:
+                    type: string
+                  blocked:
+                    type: boolean
+                  assigned_profile_id:
+                    type: integer
+                  assigned_profile_username:
+                    type: string
+        '404':
+          description: Issue no existent
 servers:
 - url: http://127.0.0.1:3000
 components:
