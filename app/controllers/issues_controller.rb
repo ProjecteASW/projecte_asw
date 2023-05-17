@@ -193,7 +193,7 @@ class IssuesController < ApplicationController
     if @issue.update(issue_params)
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the description")
     end
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_status
@@ -203,7 +203,7 @@ class IssuesController < ApplicationController
     if @issue.update(issue_params)
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the status from " + @currentStatus.capitalize() + " to " + @issue.status.capitalize())
     end
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_type
@@ -213,7 +213,7 @@ class IssuesController < ApplicationController
     if @issue.update(issue_params)
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the type from " + @currentType.capitalize() + " to " + @issue.issue_type.capitalize())
     end
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_severity
@@ -223,7 +223,7 @@ class IssuesController < ApplicationController
     if @issue.update(issue_params)
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the severity from " + @currentSeverity.capitalize() + " to " + @issue.severity.capitalize())
     end
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_priority
@@ -233,7 +233,7 @@ class IssuesController < ApplicationController
     if @issue.update(issue_params)
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the priority from " + @currentPriority.capitalize() + " to " + @issue.priority.capitalize())
     end
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_block
@@ -245,7 +245,7 @@ class IssuesController < ApplicationController
     else
       TimelineEvent.create(:issue => @issue, :user => current_user, :message => "unblocked the issue")
     end
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_deadline
@@ -253,7 +253,7 @@ class IssuesController < ApplicationController
     @issue = get_issue
     @issue.update_attribute(:limitDate, params[:limitDate])
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the deadline")
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def add_watcher
@@ -261,7 +261,7 @@ class IssuesController < ApplicationController
     @issue = get_issue
     @watcher = User.find(params[:user_id])
     WatchedIssue.create(:issue => @issue, :user => @watcher)
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def add_comment
@@ -269,7 +269,7 @@ class IssuesController < ApplicationController
     @issue = get_issue
     Comment.create(:issue => @issue, :user => current_user, :text => params[:text])
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "wrote a new comment")
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def change_assigned
@@ -278,7 +278,7 @@ class IssuesController < ApplicationController
     @assigned = User.find(params[:user_id])
     @issue.assigned_to = @assigned
     @issue.save
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def attach_files
@@ -287,7 +287,7 @@ class IssuesController < ApplicationController
     @files = params[:files]
     @issue.files.attach(@files)
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "attached " + @files.length.to_s + " new file/s")
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   # DELETE /issues/1 or /issues/1.json
@@ -301,8 +301,8 @@ class IssuesController < ApplicationController
     @issue.delete
 
     respond_to do |format|
-      format.html { redirect_to '/projects/' + @project.id.to_s + '/issues', notice: "Issue was successfully destroyed." }
-      format.json { head :no_content }
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@project.issues, serializer: IssueBriefSerializer) }
+      format.html { redirect_to project_issues_path(@project), notice: "Issue was successfully destroyed." }
     end
   end
 
@@ -311,7 +311,7 @@ class IssuesController < ApplicationController
     @issue = get_issue
     @issue.update_attribute(:limitDate, nil)
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "deleted the deadline")
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def delete_watcher
@@ -320,7 +320,7 @@ class IssuesController < ApplicationController
     @watcher = User.find(params[:user_id])
     @watchedIssue = WatchedIssue.find_by(issue: @issue, user: @watcher)
     if @watchedIssue.delete
-      redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+      redirect_to issue_path(@project.id, @issue.id)
     else
       raise "error"
     end
@@ -332,7 +332,7 @@ class IssuesController < ApplicationController
     @file = @issue.files.find(params[:file_id])
     @file.purge
     TimelineEvent.create(:issue => @issue, :user => current_user, :message => "deleted an attachment")
-    redirect_to '/projects/' + @project.id.to_s + '/issues/' + @issue.id.to_s
+    redirect_to issue_path(@project.id, @issue.id)
   end
   
 
