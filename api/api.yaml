@@ -276,8 +276,8 @@ paths:
         schema:
           type: integer
       responses:
-        '200':
-          description: Operació exitosa
+        '201':
+          description: Issue creada
           content:
             application/json:
               schema:
@@ -361,6 +361,49 @@ paths:
           description: Usuari no existent
       requestBody:
         content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject:
+                  type: string
+                description:
+                  type: string
+                issue_type:
+                  type: string
+                  enum:
+                  - bug
+                  - question
+                  - enhancement
+                  default: bug
+                severity:
+                  type: string
+                  enum:
+                  - wishlist
+                  - minor
+                  - norm
+                  - important
+                  - critical
+                  default: wishlist
+                priority:
+                  type: string
+                  enum:
+                  - low
+                  - normal
+                  - high
+                  default: low
+                blocked:
+                  type: boolean
+                  default: 'false'
+                limitDate:
+                  type: string
+                  format: date
+              required:
+              - subject
+              - issue_type
+              - severity
+              - priority
+              - blocked
           multipart/form-data:
             schema:
               type: object
@@ -394,9 +437,6 @@ paths:
                   default: low
                 blocked:
                   type: boolean
-                  enum:
-                  - 'false'
-                  - 'true'
                   default: 'false'
                 limitDate:
                   type: string
@@ -407,6 +447,63 @@ paths:
               - severity
               - priority
               - blocked
+  "/projects/{project_id}/issues/bulk_create/":
+    post:
+      summary: Crea un conjunt de noves Issues
+      tags:
+      - Issues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '201':
+          description: Issues creades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  subject:
+                    type: string
+                  status:
+                    type: string
+                  creation_date:
+                    type: string
+                  issue_type:
+                    type: string
+                  severity:
+                    type: string
+                  priority:
+                    type: string
+                  blocked:
+                    type: boolean
+                  assigned_profile_id:
+                    type: integer
+                  assigned_profile_username:
+                    type: string
+        '404':
+          description: Usuari no existent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                issue_names:
+                  type: string
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                issue_names:
+                  type: string
   "/projects/{project_id}/issues/{issue_id}/":
     get:
       summary: Obté la informació d'una Issue

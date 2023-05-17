@@ -92,18 +92,21 @@ class IssuesController < ApplicationController
   def bulk_create
     issue_names = params[:issue_names].split("\n")
     @project = get_project
-
+    user = get_user
     issue_names.each do |issue_name|
       @issue = @project.issues.build()
-      @issue.user_id = current_user.id
-      @issue.assigned_to_id = current_user.id
+      @issue.user_id = user.id
+      @issue.assigned_to_id = user.id
       @issue.subject = issue_name
         if @issue.save
-          TimelineEvent.create(:issue => @issue, :user => current_user, :message => "created a new issue")
+          TimelineEvent.create(:issue => @issue, :user => user, :message => "created a new issue")
         end
     end
-  
-    redirect_to project_issues_path(@project)
+    
+    respond_to do |format|
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@project.issues, serializer: IssueBriefSerializer) }
+      format.html { redirect_to project_issues_path(@project) }
+    end
   end
   
   
