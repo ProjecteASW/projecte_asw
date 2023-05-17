@@ -178,11 +178,18 @@ class IssuesController < ApplicationController
   def update
     @project = get_project
     @issue = get_issue
-    if @issue.update(issue_params)
-      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the issue")
-      redirect_to project_issues_path(@project)
-    else
-      render 'edit'
+    user = get_user
+    respond_to do |format|
+      if @issue.update(issue_params)
+        TimelineEvent.create(:issue => @issue, :user => user, :message => "updated the issue")
+        format.json { render json: @issue, serializer: IssueSerializer }
+        format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
+      else
+        format.json { render json: @issue.errors, status: :unprocessable_entity }
+          format.html do
+            render 'edit', status: :unprocessable_entity
+          end
+      end
     end
   end
 
