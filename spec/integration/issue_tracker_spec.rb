@@ -197,7 +197,7 @@ describe 'Issue Tracker API' do
 
     post 'Crea una nova Issue' do
       tags 'Issues'
-      consumes 'multipart/form-data'
+      consumes 'application/json', 'multipart/form-data'
       produces 'application/json'
       security [ApiKeyAuth: []]
       parameter name: :project_id, :in => :path, :type => :integer
@@ -223,7 +223,6 @@ describe 'Issue Tracker API' do
           },
           blocked: { 
               type: :boolean,
-              enum: ['false', 'true'],
               default: 'false'
           },
           limitDate: { type: :string, format: :date }
@@ -232,7 +231,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Operació exitosa' do
+      response '201', 'Issue creada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -294,6 +293,46 @@ describe 'Issue Tracker API' do
               }
             }
           }
+        }
+        run_test!
+      end
+
+      response '404', 'Usuari no existent' do
+        run_test!
+      end
+    end
+  end
+
+  path '/projects/{project_id}/issues/bulk_create/' do
+
+    post 'Crea un conjunt de noves Issues' do
+      tags 'Issues'
+      consumes 'application/json', 'multipart/form-data'
+      produces 'application/json'
+      security [ApiKeyAuth: []]
+      parameter name: :project_id, :in => :path, :type => :integer
+      parameter name: :'', :in => :body, schema: {
+        type: :object,
+        properties: {
+          issue_names: { :type => :string }
+        }
+      }
+      
+
+
+      response '201', 'Issues creades' do
+        schema type: :object,
+        properties: {
+          id: { type: :integer },
+          subject: { type: :string },
+          status: { type: :string },
+          creation_date: { type: :string },
+          issue_type: { type: :string },
+          severity: { type: :string },
+          priority: { type: :string },
+          blocked: { type: :boolean },
+          assigned_profile_id: { type: :integer },
+          assigned_profile_username: { type: :string }
         }
         run_test!
       end
