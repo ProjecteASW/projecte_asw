@@ -320,10 +320,13 @@ class IssuesController < ApplicationController
   def change_assigned
     @project = get_project
     @issue = get_issue
-    @assigned = User.find(params[:user_id])
+    @assigned = find_user
     @issue.assigned_to = @assigned
     @issue.save
-    redirect_to issue_path(@project.id, @issue.id)
+    respond_to do |format|
+      format.json { render json: @issue, serializer: IssueSerializer }
+      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Assigned was successfully changed." }
+    end
   end
 
   def attach_files
@@ -412,6 +415,15 @@ class IssuesController < ApplicationController
         current_user
       else
         user = User.find_by_api_key(request.headers["HTTP_API_KEY"])
+      end
+    end
+
+    def find_user
+      user_id = params[:user_id]
+      if User.where(id: user_id).present?
+        User.find(user_id)
+      else
+        raise ActionController::RoutingError.new('Not Found')
       end
     end
 
