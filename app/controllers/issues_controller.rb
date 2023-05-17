@@ -304,9 +304,14 @@ class IssuesController < ApplicationController
   def add_watcher
     @project = get_project
     @issue = get_issue
-    @watcher = User.find(params[:user_id])
-    WatchedIssue.create(:issue => @issue, :user => @watcher)
-    redirect_to issue_path(@project.id, @issue.id)
+    @watcher = find_user
+    if !WatchedIssue.where(issue: @issue, user: @watcher).present?
+      WatchedIssue.create(:issue => @issue, :user => @watcher)
+    end
+    respond_to do |format|
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issue.watched_issue, serializer: WatchedIssueIssueSerializer) }
+      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Watcher was successfully added." }
+    end
   end
 
   def add_comment
@@ -426,6 +431,16 @@ class IssuesController < ApplicationController
       user_id = params[:user_id]
       if User.where(id: user_id).present?
         User.find(user_id)
+      else
+        raise ActionController::RoutingError.new('Not Found')
+      end
+    end
+
+    def find_watcher
+      watcher = find_user 
+      issue = get_issue
+      if WatchedIssue.where(issue: issue, user: watcher).present?
+        WatchedIssue.find(issue: issue, user: watcher)
       else
         raise ActionController::RoutingError.new('Not Found')
       end
