@@ -370,10 +370,18 @@ class IssuesController < ApplicationController
   def attach_files
     @project = get_project
     @issue = get_issue
-    @files = params[:files]
+    if request.format.html? 
+      @files = params[:files]
+    else
+      @files = [params[:files]]
+    end
     @issue.files.attach(@files)
-    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "attached " + @files.length.to_s + " new file/s")
-    redirect_to issue_path(@project.id, @issue.id)
+    user = get_user
+    TimelineEvent.create(:issue => @issue, :user => user, :message => "attached " + @files.length.to_s + " new file/s")
+    respond_to do |format|
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issue.files, serializer: AttachmentSerializer) }
+      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "File attached successfully." }
+    end
   end
 
   # DELETE /issues/1 or /issues/1.json
@@ -423,10 +431,14 @@ class IssuesController < ApplicationController
   def delete_attachment
     @project = get_project
     @issue = get_issue
-    @file = @issue.files.find(params[:file_id])
+    @file = get_file
     @file.purge
-    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "deleted an attachment")
-    redirect_to issue_path(@project.id, @issue.id)
+    user = get_user
+    TimelineEvent.create(:issue => @issue, :user => user, :message => "deleted an attachment")
+    respond_to do |format|
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issue.files, serializer: AttachmentSerializer) }
+      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
+    end
   end
   
 
@@ -455,6 +467,16 @@ class IssuesController < ApplicationController
         current_user
       else
         user = User.find_by_api_key(request.headers["HTTP_API_KEY"])
+      end
+    end
+
+    def get_file
+      issue = get_issue
+      attachment_id = params[:file_id]
+      if @issue.files.where(id: attachment_id).present?
+        @issue.files.find(attachment_id)
+      else
+        raise ActionController::RoutingError.new('Not Found')
       end
     end
 
