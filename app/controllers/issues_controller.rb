@@ -197,10 +197,16 @@ class IssuesController < ApplicationController
     @project = get_project
     @issue = get_issue
     user = get_user
-    if @issue.update(issue_params)
-      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the description")
+    respond_to do |format|
+      if @issue.update(issue_params)
+        TimelineEvent.create(:issue => @issue, :user => current_user, :message => "updated the description")
+        format.json { render json: @issue, serializer: IssueSerializer }
+          format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
+      else
+        format.json { render json: @issue.errors, status: :unprocessable_entity }
+        format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was unsuccessfully updated." }
+      end
     end
-    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_status
@@ -213,9 +219,10 @@ class IssuesController < ApplicationController
         TimelineEvent.create(:issue => @issue, :user => user, :message => "changed the status from " + @currentStatus.capitalize() + " to " + @issue.status.capitalize())
         format.json { render json: @issue, serializer: IssueSerializer }
         format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
+      else
+        format.json { render json: @issue.errors, status: :unprocessable_entity }
+        format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was unsuccessfully updated." }
       end
-      format.json { render json: @issue.errors, status: :unprocessable_entity }
-      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was unsuccessfully updated." }
     end
   end
 
