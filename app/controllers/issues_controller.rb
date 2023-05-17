@@ -293,8 +293,12 @@ class IssuesController < ApplicationController
     @project = get_project
     @issue = get_issue
     @issue.update_attribute(:limitDate, params[:limitDate])
-    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the deadline")
-    redirect_to issue_path(@project.id, @issue.id)
+    user = get_user
+    TimelineEvent.create(:issue => @issue, :user => user, :message => "changed the deadline")
+    respond_to do |format|
+      format.json { render json: @issue, serializer: IssueSerializer }
+        format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
+    end
   end
 
   def add_watcher
