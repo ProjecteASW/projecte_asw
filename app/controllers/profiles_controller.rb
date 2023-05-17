@@ -21,6 +21,12 @@ class ProfilesController < ApplicationController
 
   def update
     @profile = get_profile
+    if !request.format.html? 
+      user = User.find_by_api_key(request.headers["HTTP_API_KEY"])
+      if user.email != @profile.email
+        raise "No es pot editar un perfil que no sigui el teu"
+      end
+    end
     respond_to do |format|
       if @profile.update(update_params)
         format.json { render json: @profile, serializer: UserSerializer }
