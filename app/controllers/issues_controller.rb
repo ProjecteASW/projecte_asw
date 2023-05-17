@@ -312,9 +312,13 @@ class IssuesController < ApplicationController
   def add_comment
     @project = get_project
     @issue = get_issue
-    Comment.create(:issue => @issue, :user => current_user, :text => params[:text])
-    TimelineEvent.create(:issue => @issue, :user => current_user, :message => "wrote a new comment")
-    redirect_to issue_path(@project.id, @issue.id)
+    user = get_user
+    Comment.create(:issue => @issue, :user => user, :text => params[:text])
+    TimelineEvent.create(:issue => @issue, :user => user, :message => "wrote a new comment")
+    respond_to do |format|
+      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issue.comments, serializer: CommentSerializer) }
+      format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Comment was successfully uploaded." }
+    end
   end
 
   def change_assigned

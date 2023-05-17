@@ -1292,4 +1292,42 @@ describe 'Issue Tracker API' do
     end
   end
 
+
+  path '/projects/{project_id}/issues/{issue_id}/comments/' do
+    post 'Publica un nou comentari a la Issue' do
+      tags 'Issues'
+      consumes 'application/json', 'multipart/form-data'
+      produces 'application/json'
+      security [ApiKeyAuth: []]
+      parameter name: :project_id, :in => :path, :type => :integer
+      parameter name: :issue_id, :in => :path, :type => :integer
+      parameter name: :issue, :in => :body, schema: {
+        type: :object,
+        properties: {
+          text: { type: :string }
+        },
+        required: [:text]
+      }
+
+
+      response '200', 'Issue creada' do
+        schema type: :array,
+        items: {
+          type: :object,
+          properties: {
+            profile_id: { type: :integer },
+            profile: { type: :string },
+            text: { type: :string },
+            date: { type: :string }
+          }
+        }
+        run_test!
+      end
+
+      response '404', 'Usuari no existent' do
+        run_test!
+      end
+    end
+  end
+
 end
