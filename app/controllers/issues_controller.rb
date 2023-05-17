@@ -380,12 +380,14 @@ class IssuesController < ApplicationController
   def delete_watcher
     @project = get_project
     @issue = get_issue
-    @watcher = User.find(params[:user_id])
-    @watchedIssue = WatchedIssue.find_by(issue: @issue, user: @watcher)
-    if @watchedIssue.delete
-      redirect_to issue_path(@project.id, @issue.id)
-    else
-      raise "error"
+    @watchedIssue = find_watcher
+    respond_to do |format|
+      if @watchedIssue.delete
+        format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issue.watched_issue, serializer: WatchedIssueIssueSerializer) }
+        format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Watcher was successfully removed." }
+      else
+        raise "error"
+      end
     end
   end
 
@@ -440,7 +442,7 @@ class IssuesController < ApplicationController
       watcher = find_user 
       issue = get_issue
       if WatchedIssue.where(issue: issue, user: watcher).present?
-        WatchedIssue.find(issue: issue, user: watcher)
+        WatchedIssue.find_by(issue: issue, user: watcher)
       else
         raise ActionController::RoutingError.new('Not Found')
       end

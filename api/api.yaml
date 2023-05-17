@@ -1895,6 +1895,45 @@ paths:
                   type: integer
               required:
               - user_id
+  "/projects/{project_id}/issues/{issue_id}/watchers/{user_id}/":
+    delete:
+      summary: Elimina un watcher a la Issue
+      tags:
+      - Issues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: issue_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Issue creada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    profile_id:
+                      type: integer
+                    profile:
+                      type: string
+        '404':
+          description: Usuari no existent
   "/projects/{project_id}/issues/{issue_id}/comments/":
     post:
       summary: Publica un nou comentari a la Issue
