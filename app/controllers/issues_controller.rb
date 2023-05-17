@@ -264,10 +264,17 @@ class IssuesController < ApplicationController
     @project = get_project
     @issue = get_issue
     @currentPriority = @issue.priority
-    if @issue.update(issue_params)
-      TimelineEvent.create(:issue => @issue, :user => current_user, :message => "changed the priority from " + @currentPriority.capitalize() + " to " + @issue.priority.capitalize())
+    user = get_user
+    respond_to do |format|
+      if @issue.update(issue_params)
+        TimelineEvent.create(:issue => @issue, :user => user, :message => "changed the priority from " + @currentPriority.capitalize() + " to " + @issue.priority.capitalize())
+        format.json { render json: @issue, serializer: IssueSerializer }
+        format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
+      else
+        format.json { render json: @issue.errors, status: :unprocessable_entity }
+        format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was unsuccessfully updated." }
+      end
     end
-    redirect_to issue_path(@project.id, @issue.id)
   end
 
   def update_block
