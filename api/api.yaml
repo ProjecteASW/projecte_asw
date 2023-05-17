@@ -148,7 +148,8 @@ paths:
                 bio:
                   type: string
                 avatar:
-                  type: file
+                  type: string
+                  fromat: binary
   "/projects/":
     get:
       summary: Obté tots els projectes

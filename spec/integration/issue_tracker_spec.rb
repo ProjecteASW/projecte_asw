@@ -69,7 +69,7 @@ describe 'Issue Tracker API' do
         properties: {
           username: { type: :string },
           bio: { type: :string },
-          avatar: { type: :file },
+          avatar: { type: :string, fromat: :binary },
         }
       }
       
