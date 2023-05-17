@@ -2138,6 +2138,94 @@ paths:
                           type: string
         '404':
           description: Usuari no existent
+  "/projects/{project_id}/issues/{issue_id}/attachments/":
+    post:
+      summary: Adjunta un nou File Attachment a una Issue
+      tags:
+      - Issues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: issue_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Issue creada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    path:
+                      type: string
+        '404':
+          description: Usuari no existent
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: string
+                  format: binary
+              required:
+              - files
+  "/projects/{project_id}/issues/{issue_id}/attachments/{attachment_id}":
+    delete:
+      summary: Elimina un File Attachment d'una Issue
+      tags:
+      - Issues
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: issue_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: attachment_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Issue creada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    path:
+                      type: string
+        '404':
+          description: Usuari no existent
   "/projects/{project_id}/issues/{issue_id}/comments/":
     post:
       summary: Publica un nou comentari a la Issue

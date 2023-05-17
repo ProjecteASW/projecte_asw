@@ -1524,6 +1524,73 @@ describe 'Issue Tracker API' do
   end
 
 
+  path '/projects/{project_id}/issues/{issue_id}/attachments/' do
+    post 'Adjunta un nou File Attachment a una Issue' do
+      tags 'Issues'
+      consumes 'multipart/form-data'
+      produces 'application/json'
+      security [ApiKeyAuth: []]
+      parameter name: :project_id, :in => :path, :type => :integer
+      parameter name: :issue_id, :in => :path, :type => :integer
+      parameter name: :'', :in => :formData, schema: {
+        type: :object,
+        properties: {
+          files: { type: :string, format: :binary },
+        },
+        required: [:files]
+      }
+
+      response '200', 'Issue creada' do
+        schema type: :array,
+        items: {
+          type: :object,
+          properties: {
+            id: { type: :integer },
+            name: { type: :string },
+            path: { type: :string }
+          }
+        }
+        run_test!
+      end
+
+      response '404', 'Usuari no existent' do
+        run_test!
+      end
+    end
+  end
+
+
+  path '/projects/{project_id}/issues/{issue_id}/attachments/{attachment_id}' do
+    delete 'Elimina un File Attachment d\'una Issue' do
+      tags 'Issues'
+      consumes 'application/json', 'multipart/form-data'
+      produces 'application/json'
+      security [ApiKeyAuth: []]
+      parameter name: :project_id, :in => :path, :type => :integer
+      parameter name: :issue_id, :in => :path, :type => :integer
+      parameter name: :attachment_id, :in => :path, :type => :integer
+      
+
+      response '200', 'Issue creada' do
+        schema type: :array,
+        items: {
+          type: :object,
+          properties: {
+            id: { type: :integer },
+            name: { type: :string },
+            path: { type: :string }
+          }
+        }
+        run_test!
+      end
+
+      response '404', 'Usuari no existent' do
+        run_test!
+      end
+    end
+  end
+
+
   path '/projects/{project_id}/issues/{issue_id}/comments/' do
     post 'Publica un nou comentari a la Issue' do
       tags 'Issues'
