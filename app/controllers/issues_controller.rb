@@ -4,6 +4,27 @@ class IssuesController < ApplicationController
 
   protect_from_forgery with: :null_session
 
+  class ProjectNotFoundError < StandardError
+  end
+
+  class IssueNotFoundError < StandardError
+  end
+
+  class FileNotFoundError < StandardError
+  end
+
+  class UserNotFoundError < StandardError
+  end
+
+  class WatcherNotFoundError < StandardError
+  end
+
+  rescue_from ProjectNotFoundError, with: :project_not_found
+  rescue_from IssueNotFoundError, with: :issue_not_found
+  rescue_from FileNotFoundError, with: :file_not_found
+  rescue_from UserNotFoundError, with: :user_not_found
+  rescue_from WatcherNotFoundError, with: :watcher_not_found
+
   def filter
     @project = get_project
   end
@@ -168,7 +189,6 @@ class IssuesController < ApplicationController
           render :new, status: :unprocessable_entity
         end
       end
-      puts @issue.id
     end
   end
   
@@ -395,7 +415,7 @@ class IssuesController < ApplicationController
     @issue.delete
 
     respond_to do |format|
-      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@project.issues, serializer: IssueBriefSerializer) }
+      format.json { head :no_content }
       format.html { redirect_to project_issues_path(@project), notice: "Issue was successfully destroyed." }
     end
   end
@@ -409,7 +429,7 @@ class IssuesController < ApplicationController
       TimelineEvent.create(:issue => @issue, :user => user, :message => "deleted the deadline")
     end 
     respond_to do |format|
-      format.json { render json: @issue, serializer: IssueSerializer }
+      format.json { head :no_content }
       format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
     end
   end
@@ -420,7 +440,7 @@ class IssuesController < ApplicationController
     @watchedIssue = find_watcher
     respond_to do |format|
       if @watchedIssue.delete
-        format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issue.watched_issue, serializer: WatchedIssueIssueSerializer) }
+        format.json { head :no_content }
         format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Watcher was successfully removed." }
       else
         raise "error"
@@ -436,7 +456,7 @@ class IssuesController < ApplicationController
     user = get_user
     TimelineEvent.create(:issue => @issue, :user => user, :message => "deleted an attachment")
     respond_to do |format|
-      format.json { render json: ActiveModel::Serializer::CollectionSerializer.new(@issue.files, serializer: AttachmentSerializer) }
+      format.json { head :no_content }
       format.html { redirect_to issue_path(@project.id, @issue.id), notice: "Issue was successfully updated." }
     end
   end
@@ -448,7 +468,7 @@ class IssuesController < ApplicationController
       if Project.where(id: project_id).present?
         Project.find(project_id)
       else
-        raise ActionController::RoutingError.new('Not Found')
+        raise ProjectNotFoundError.new('Not Found')
       end   
     end
 
@@ -458,7 +478,7 @@ class IssuesController < ApplicationController
       if project.issues.where(id: issue_id).present?
         Issue.find(issue_id)
       else
-        raise ActionController::RoutingError.new('Not Found')
+        raise IssueNotFoundError.new('Not Found')
       end 
     end
 
@@ -476,7 +496,7 @@ class IssuesController < ApplicationController
       if @issue.files.where(id: attachment_id).present?
         @issue.files.find(attachment_id)
       else
-        raise ActionController::RoutingError.new('Not Found')
+        raise FileNotFoundError.new('Not Found')
       end
     end
 
@@ -485,7 +505,7 @@ class IssuesController < ApplicationController
       if User.where(id: user_id).present?
         User.find(user_id)
       else
-        raise ActionController::RoutingError.new('Not Found')
+        raise UserNotFoundError.new('Not Found')
       end
     end
 
@@ -495,7 +515,7 @@ class IssuesController < ApplicationController
       if WatchedIssue.where(issue: issue, user: watcher).present?
         WatchedIssue.find_by(issue: issue, user: watcher)
       else
-        raise ActionController::RoutingError.new('Not Found')
+        raise WatcherNotFoundError.new('Not Found')
       end
     end
 
@@ -508,4 +528,39 @@ class IssuesController < ApplicationController
         params.permit(:subject, :description, :issue_type, :severity, :priority, :blocked, :status, :limitDate, :assigned_to_id, tag_ids: [], files: [])
       end
     end    
+
+    def project_not_found
+      respond_to do |format|
+        format.json { render json: {'error': 'Project not found'}, status: 404}
+        format.html { raise ActionController::RoutingError.new('Not Found') }
+      end
+    end
+
+    def issue_not_found
+      respond_to do |format|
+        format.json { render json: {'error': 'Issue not found'}, status: 404}
+        format.html { raise ActionController::RoutingError.new('Not Found') }
+      end
+    end
+
+    def file_not_found
+      respond_to do |format|
+        format.json { render json: {'error': 'File Attachment not found'}, status: 404}
+        format.html { raise ActionController::RoutingError.new('Not Found') }
+      end
+    end
+
+    def user_not_found
+      respond_to do |format|
+        format.json { render json: {'error': 'User not found'}, status: 404}
+        format.html { raise ActionController::RoutingError.new('Not Found') }
+      end
+    end
+
+    def watcher_not_found
+      respond_to do |format|
+        format.json { render json: {'error': 'Watcher not found'}, status: 404}
+        format.html { raise ActionController::RoutingError.new('Not Found') }
+      end
+    end
 end

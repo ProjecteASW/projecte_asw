@@ -35,9 +35,11 @@
                     <a href="<%= profile_issues_watched_path(@profile.email) %>"title="List all issues watched by this user" class="tab" style="">
                         <span>Issues Watched</span>
                     </a>
-                    <a href="<%= profile_api_key_view_path(@profile.email) %>"title="List all issues watched by this user" class="tab" style="">
-                        <span>API Key</span>
-                    </a>
+                    <% if @profile.email == current_user.email %>
+                        <a href="<%= profile_api_key_view_path(@profile.email) %>"title="List all issues watched by this user" class="tab" style="">
+                            <span>API Key</span>
+                        </a>
+                    <% end %>
                 </nav>
                 <ng-transclude>
                     <div tg-profile-tab="Timeline" tab-title="Show all the activity of this user" tab-icon="icon-timeline" tab-active="tab-active">

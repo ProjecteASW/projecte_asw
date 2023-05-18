@@ -69,12 +69,12 @@ describe 'Issue Tracker API' do
         properties: {
           username: { type: :string },
           bio: { type: :string },
-          avatar: { type: :string, fromat: :binary },
+          avatar: { type: :string, format: :binary },
         }
       }
       
 
-      response '200', 'Operació exitosa' do
+      response '200', 'Perfil actualitzat' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -112,6 +112,14 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '403', 'No pots editar un perfil que no sigui el teu' do
+        run_test!
+      end
+
       response '404', 'Usuari no existent' do
         run_test!
       end
@@ -131,10 +139,6 @@ describe 'Issue Tracker API' do
           id: { type: :integer },
           name: { type: :string }
         }
-        run_test!
-      end
-
-      response '404', 'Usuari no existent' do
         run_test!
       end
     end
@@ -188,7 +192,7 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '404', 'Projecte no existent' do
         run_test!
       end
     end
@@ -298,7 +302,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte no existent' do
         run_test!
       end
     end
@@ -318,8 +326,6 @@ describe 'Issue Tracker API' do
           issue_names: { :type => :string }
         }
       }
-      
-
 
       response '201', 'Issues creades' do
         schema type: :object,
@@ -338,7 +344,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte no existent' do
         run_test!
       end
     end
@@ -466,7 +476,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '201', 'Issue creada' do
+      response '200', 'Issue editada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -532,7 +542,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -546,7 +560,7 @@ describe 'Issue Tracker API' do
       parameter name: :project_id, :in => :path, :type => :integer
       parameter name: :issue_id, :in => :path, :type => :integer
       
-      response '200', 'Issue eliminada' do
+      response '204', 'Issue eliminada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -563,7 +577,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Issue no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -585,7 +603,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Descripció editada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -651,7 +669,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -679,7 +701,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Status editat' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -745,7 +767,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -773,7 +799,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Tipus editat' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -839,7 +865,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -867,7 +897,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Severitat editada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -933,7 +963,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -961,7 +995,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Prioritat editada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -1027,7 +1061,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -1051,7 +1089,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Deadline editada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -1117,7 +1155,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -1131,7 +1173,7 @@ describe 'Issue Tracker API' do
       parameter name: :issue_id, :in => :path, :type => :integer
 
 
-      response '200', 'Issue creada' do
+      response '204', 'Deadline eliminada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -1197,7 +1239,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -1220,7 +1266,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Perfil assignat canviat' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -1286,7 +1332,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -1309,7 +1359,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Watcher afegit' do
         schema type: :array,
         items: {
           type: :object,
@@ -1321,7 +1371,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte, Issue o User no existent' do
         run_test!
       end
     end
@@ -1339,7 +1393,7 @@ describe 'Issue Tracker API' do
       parameter name: :user_id, :in => :path, :type => :integer
 
 
-      response '200', 'Issue creada' do
+      response '204', 'Watcher eliminat' do
         schema type: :array,
         items: {
           type: :object,
@@ -1351,7 +1405,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte, Issue o Watcher no existent' do
         run_test!
       end
     end
@@ -1368,7 +1426,7 @@ describe 'Issue Tracker API' do
       parameter name: :issue_id, :in => :path, :type => :integer
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Issue bloquejada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -1434,7 +1492,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -1451,7 +1513,7 @@ describe 'Issue Tracker API' do
       parameter name: :issue_id, :in => :path, :type => :integer
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Issue desbloquejada' do
         schema type: :object,
         properties: {
           id: { type: :integer },
@@ -1517,7 +1579,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -1540,7 +1606,7 @@ describe 'Issue Tracker API' do
         required: [:files]
       }
 
-      response '200', 'Issue creada' do
+      response '200', 'File Attachment adjuntat' do
         schema type: :array,
         items: {
           type: :object,
@@ -1553,7 +1619,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
@@ -1571,7 +1641,7 @@ describe 'Issue Tracker API' do
       parameter name: :attachment_id, :in => :path, :type => :integer
       
 
-      response '200', 'Issue creada' do
+      response '204', 'File Attachment eliminat' do
         schema type: :array,
         items: {
           type: :object,
@@ -1584,7 +1654,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte, Issue o File Attachment no existent' do
         run_test!
       end
     end
@@ -1608,7 +1682,7 @@ describe 'Issue Tracker API' do
       }
 
 
-      response '200', 'Issue creada' do
+      response '200', 'Comentari publicat' do
         schema type: :array,
         items: {
           type: :object,
@@ -1622,7 +1696,11 @@ describe 'Issue Tracker API' do
         run_test!
       end
 
-      response '404', 'Usuari no existent' do
+      response '401', 'Autorització requerida o no és correcte' do
+        run_test!
+      end
+
+      response '404', 'Projecte o Issue no existent' do
         run_test!
       end
     end
