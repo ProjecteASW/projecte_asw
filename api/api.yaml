@@ -89,7 +89,7 @@ paths:
           type: string
       responses:
         '200':
-          description: Operació exitosa
+          description: Perfil actualitzat
           content:
             application/json:
               schema:
@@ -135,6 +135,10 @@ paths:
                           type: integer
                         issue:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
+        '403':
+          description: No pots editar un perfil que no sigui el teu
         '404':
           description: Usuari no existent
       requestBody:
@@ -149,7 +153,7 @@ paths:
                   type: string
                 avatar:
                   type: string
-                  fromat: binary
+                  format: binary
   "/projects/":
     get:
       summary: Obté tots els projectes
@@ -167,8 +171,6 @@ paths:
                     type: integer
                   name:
                     type: string
-        '404':
-          description: Usuari no existent
   "/projects/{project_id}/issues/":
     get:
       summary: Obté totes les Issues d'un Projecte
@@ -265,7 +267,7 @@ paths:
                   assigned_profile_username:
                     type: string
         '404':
-          description: Usuari no existent
+          description: Projecte no existent
     post:
       summary: Crea una nova Issue
       tags:
@@ -360,8 +362,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte no existent
       requestBody:
         content:
           application/json:
@@ -491,8 +495,10 @@ paths:
                     type: integer
                   assigned_profile_username:
                     type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte no existent
       requestBody:
         content:
           application/json:
@@ -625,8 +631,8 @@ paths:
         schema:
           type: integer
       responses:
-        '201':
-          description: Issue creada
+        '200':
+          description: Issue editada
           content:
             application/json:
               schema:
@@ -706,8 +712,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -828,7 +836,7 @@ paths:
         schema:
           type: integer
       responses:
-        '200':
+        '204':
           description: Issue eliminada
           content:
             application/json:
@@ -855,8 +863,10 @@ paths:
                     type: integer
                   assigned_profile_username:
                     type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Issue no existent
+          description: Projecte o Issue no existent
   "/projects/{project_id}/issues/{issue_id}/description/":
     put:
       summary: Edita la descripció d'una Issue
@@ -877,7 +887,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Descripció editada
           content:
             application/json:
               schema:
@@ -957,8 +967,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -993,7 +1005,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Status editat
           content:
             application/json:
               schema:
@@ -1073,8 +1085,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -1127,7 +1141,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Tipus editat
           content:
             application/json:
               schema:
@@ -1207,8 +1221,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -1257,7 +1273,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Severitat editada
           content:
             application/json:
               schema:
@@ -1337,8 +1353,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -1391,7 +1409,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Prioritat editada
           content:
             application/json:
               schema:
@@ -1471,8 +1489,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -1521,7 +1541,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Deadline editada
           content:
             application/json:
               schema:
@@ -1601,8 +1621,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -1641,8 +1663,8 @@ paths:
         schema:
           type: integer
       responses:
-        '200':
-          description: Issue creada
+        '204':
+          description: Deadline eliminada
           content:
             application/json:
               schema:
@@ -1722,8 +1744,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
   "/projects/{project_id}/issues/{issue_id}/assigned/":
     put:
       summary: Canvia el perfil assignat a la Issue
@@ -1744,7 +1768,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Perfil assignat canviat
           content:
             application/json:
               schema:
@@ -1824,8 +1848,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
@@ -1864,7 +1890,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Watcher afegit
           content:
             application/json:
               schema:
@@ -1876,8 +1902,10 @@ paths:
                       type: integer
                     profile:
                       type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte, Issue o User no existent
       requestBody:
         content:
           application/json:
@@ -1920,8 +1948,8 @@ paths:
         schema:
           type: integer
       responses:
-        '200':
-          description: Issue creada
+        '204':
+          description: Watcher eliminat
           content:
             application/json:
               schema:
@@ -1933,8 +1961,10 @@ paths:
                       type: integer
                     profile:
                       type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte, Issue o Watcher no existent
   "/projects/{project_id}/issues/{issue_id}/block_issue/":
     put:
       summary: Bloqueja una Issue
@@ -1955,7 +1985,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Issue bloquejada
           content:
             application/json:
               schema:
@@ -2035,8 +2065,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
   "/projects/{project_id}/issues/{issue_id}/unblock_issue/":
     put:
       summary: Desbloqueja una Issue
@@ -2057,7 +2089,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Issue desbloquejada
           content:
             application/json:
               schema:
@@ -2137,8 +2169,10 @@ paths:
                           type: string
                         date:
                           type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
   "/projects/{project_id}/issues/{issue_id}/attachments/":
     post:
       summary: Adjunta un nou File Attachment a una Issue
@@ -2159,7 +2193,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: File Attachment adjuntat
           content:
             application/json:
               schema:
@@ -2173,8 +2207,10 @@ paths:
                       type: string
                     path:
                       type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           multipart/form-data:
@@ -2210,8 +2246,8 @@ paths:
         schema:
           type: integer
       responses:
-        '200':
-          description: Issue creada
+        '204':
+          description: File Attachment eliminat
           content:
             application/json:
               schema:
@@ -2225,8 +2261,10 @@ paths:
                       type: string
                     path:
                       type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte, Issue o File Attachment no existent
   "/projects/{project_id}/issues/{issue_id}/comments/":
     post:
       summary: Publica un nou comentari a la Issue
@@ -2247,7 +2285,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: Issue creada
+          description: Comentari publicat
           content:
             application/json:
               schema:
@@ -2263,8 +2301,10 @@ paths:
                       type: string
                     date:
                       type: string
+        '401':
+          description: Autorització requerida o no és correcte
         '404':
-          description: Usuari no existent
+          description: Projecte o Issue no existent
       requestBody:
         content:
           application/json:
