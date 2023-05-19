@@ -19,4 +19,4 @@ https://tree.taiga.io/project/oriolmoreno-asw/timeline
 
 ## Deployment
 
-https://final-asw.fly.dev/
+https://app-asw-api.fly.dev/

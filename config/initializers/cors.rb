@@ -8,3 +8,4 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
 
 Rails.application.config.hosts << "https://editor.swagger.io/"
+Rails.application.config.hosts << "app-asw-api.fly.dev"
