@@ -24,7 +24,8 @@ RSpec.configure do |config|
       paths: {},
       servers: [
         {
-          url: 'http://127.0.0.1:3000'
+          url: 'https://app-asw-api.fly.dev',
+          url: 'http://127.0.0.1:3000',
         }
       ],
       components: {
